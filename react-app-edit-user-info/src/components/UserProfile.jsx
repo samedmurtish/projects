@@ -44,9 +44,9 @@ export function UserProfile({ user, setUser }) {
             setIsEditing(false);
             setUser((currentUser) => {
               return currentUser.map((currentUser) => {
-                if (currentUser.id == user.id) {
-                  return { ...currentUser, name: username, email: email };
-                } else return currentUser;
+                currentUser.id == user.id
+                  ? { ...currentUser, name: username, email: email }
+                  : currentUser;
               });
             });
           }}
@@ -58,7 +58,15 @@ export function UserProfile({ user, setUser }) {
         <button onClick={() => setIsEditing(!isEditing)}>Edit</button>
       )}
 
-      <button>Delete</button>
+      <button
+        onClick={() => {
+          setUser((currentUserState) =>
+            currentUserState.filter((currentUser) => currentUser.id !== user.id)
+          );
+        }}
+      >
+        Delete
+      </button>
       <br />
       <br />
     </>
