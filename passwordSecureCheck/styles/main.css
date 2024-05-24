@@ -1,0 +1,39 @@
+.passwordInput {
+    padding: 10px;
+    border-style: solid;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-color: white;
+    width: 93%;
+}
+
+.main-container {
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    scale: 2;
+}
+
+.info-container {
+    backdrop-filter: blur(2px);
+    background-color: rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.info-container-text {
+    padding: 5px 5px;
+}
+
+.info-container {
+    display: flex;
+    border-style: solid;
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    width: 98.4%;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.length-tick {
+    color: rgb(255, 239, 92);
+}

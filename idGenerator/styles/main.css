@@ -1,0 +1,52 @@
+.main,
+.buttonDiv {
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.buttonDiv:hover {
+    scale: 1;
+}
+
+.buttonDiv {
+    border-top-color: rgb(34, 34, 34);
+    border-top-style: solid;
+    border-bottom-color: rgb(34, 34, 34);
+    border-bottom-style: solid;
+    border-width: 25px;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    box-shadow: black 0px 0px 30px;
+    border-radius: 30px;
+    width: 500px;
+    height: 500px;
+    transition: all 0.15s;
+    scale: .98;
+}
+
+.button:hover {
+    scale: 1.05;
+}
+
+.button:active {
+    scale: 1;
+}
+
+.button {
+    background-color: rgba(0, 0, 0, 0.4);
+    border-style: solid;
+    width: 150px;
+    height: 50px;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 15px;
+    border-top-color: white;
+    border-right-style: none;
+    border-bottom-style: none;
+    border-left-style: none;
+    cursor: pointer;
+    transition: all 0.15s;
+}

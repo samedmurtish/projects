@@ -1,0 +1,139 @@
+.main-container {
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
+    width: 40dvw;
+    height: 45dvw;
+    font-size: 5dvw;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    color: white;
+    border-radius: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.highscore-panel {
+    width: 20dvw;
+    height: 45dvw;
+    background-color: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(5px);
+    margin-left: 15px;
+    display: flex;
+    justify-content: start;
+    flex-direction: column;
+    align-items: center;
+}
+
+.highscore-title {
+    display: flex;
+    justify-content: center;
+    font-size: 2dvw;
+}
+
+.highscore-content {
+    font-size: 1dvw;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    height: 85%;
+    width: 100%;
+    overflow: scroll;
+    overflow-x: hidden;
+    padding-top: 15px;
+}
+
+.content-text {
+    margin: 5px 15px;
+}
+
+.title-stroke {
+    width: 18dvw;
+    height: 2px;
+    background-color: white;
+}
+
+.game-paused {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.6);
+    width: 100%;
+    height: 100%;
+    z-index: 9999999;
+}
+
+.hide {
+    display: none;
+}
+
+.game-paused-text {
+    position: absolute;
+    margin-top: auto;
+    margin-bottom: auto;
+    top: 50%;
+    bottom: 50%;
+    font-size: 25px;
+    height: 10%;
+    width: 100%;
+    cursor: default;
+}
+
+.game-bg {
+    width: 95%;
+    height: 100%;
+    background-color: transparent;
+    border-radius: 3px;
+}
+
+.game-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    background-color: transparent;
+    row-gap: 1px;
+    column-gap: 1px;
+    width: 100%;
+    height: 97%;
+}
+
+.game-square {
+    border-radius: 3px;
+    background-color: rgba(0, 0, 0, 0.25);
+    width: 100%;
+    height: 100%;
+}
+
+.square-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.snake,
+.snakeBody {
+    background-image: url(/projects/snakeGame/sources/snakeHead.png);
+    background-size: 108%;
+    border-radius: 12px;
+    background-position: center;
+    background-repeat: no-repeat;
+    scale: 1.1;
+    box-shadow: rgba(0, 0, 0, .3) 0px 10px 10px;
+}
+
+.snakeBody {
+    background-image: url(/projects/snakeGame/sources/snakeBody.png);
+}
+
+@font-face {
+    font-family: pixel;
+    src: url(/projects/snakeGame/fonts/pixelfont.woff);
+}
+
+.game-info {
+    font-size: 100%;
+    margin-bottom: 15px;
+    font-family: pixel;
+    cursor: default;
+}

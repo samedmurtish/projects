@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Coloring Game</title>
+    <link rel="stylesheet" href="styles/default.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/x-icon" href="/projects/pixelColoringGame/sources/color pallette.png">
+</head>
+
+<body class="body">
+    <div class="bg"></div>
+    <img src="/projects/pixelColoringGame/sources/400x400.png" id="main-image" style="display: none" width="100%">
+    <div class="color-tab-drag">
+        <div class="color-tab-drag-line"></div>
+        <div class="color-tab-drag-line"></div>
+    </div>
+    <div class="color-tab" id="right-panel">
+        <div class="color-container"></div>
+    </div>
+    <div class="move-panel">
+        <div class="left-panel">
+            <div class="selected-color-text">SEÇİLEN RENK</div>
+            <div class="selected-color"></div>
+            <button class="son-hali reveal-pixels">SON HALİ</button>
+            <!-- <div class="reveal-pixels"><span class="reveal-pixels-text">REVEAL</span></div> !-->
+            <!-- 
+            <button class="incdec increase-h">H+</button>
+            <button class="incdec decrease-h">H-</button>
+            <button class="incdec increase-w">W+</button>
+            <button class="incdec decrease-w">W-</button>-->
+
+            <p class="width-height-text"></p>
+        </div>
+        <div class="main-container">
+            <div class="draw-container"></div>
+        </div>
+    </div>
+
+    <script async src="/projects/pixelColoringGame/javascript/mouseMovement.js"></script>
+    <script async src="/projects/pixelColoringGame/javascript/app.js"></script>
+</body>
+
+</html>

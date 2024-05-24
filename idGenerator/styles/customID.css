@@ -1,0 +1,51 @@
+.idText {
+    font-size: 2vw;
+    color: white;
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.letterLabel {
+    font-size: 2vw;
+    display: inline;
+    flex: 2fr;
+    padding: 0px 40px;
+    margin: 18px;
+}
+
+.useLetter {
+    width: 4vw;
+    height: 4vh;
+    flex: 1fr;
+}
+
+.optionDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.generateButton {
+    width: 25vw;
+    height: 5vh;
+    font-size: 2vw;
+}
+
+.idDivisionInput,
+.partLength {
+    width: 25vw;
+    height: 3vh;
+    font-size: 20px;
+}
+
+.mainOfCustomId {
+    background-color: rgba(0, 0, 0, .5);
+    backdrop-filter: blur(5px);
+    padding: 0px 5vw;
+    height: 100%;
+    box-shadow: rgb(8, 8, 8) 0px 0px 20px 1px;
+}
+
+.hide {
+    display: none;
+}

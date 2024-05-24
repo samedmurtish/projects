@@ -1,0 +1,51 @@
+.sun {
+    position: absolute;
+    top: 35px;
+    right: 130vh;
+    height: 15%;
+}
+
+.ground {
+    position: absolute;
+    bottom: -150px;
+    left: -5%;
+    width: 180px;
+}
+
+.player {
+    position: absolute;
+    left: 0px;
+    bottom: 210px;
+}
+
+.tree {
+    top: 35px;
+    height: 100%;
+    position: absolute;
+}
+
+.tree-div {
+    position: absolute;
+}
+
+.welcomeText {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 10dvh;
+    font-weight: lighter;
+    margin: 0;
+    padding: 0;
+}
+
+.vignette {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    box-shadow: inset 0 0 100px 10px #000;
+    overflow: hidden;
+    z-index: 9;
+}

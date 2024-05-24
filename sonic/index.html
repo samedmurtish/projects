@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dgko aybiks</title>
+    <link rel="stylesheet" href="/sonic/styles/default.css">
+    <link rel="stylesheet" href="/sonic/styles/main.css">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        
+        #canvas {
+            display: block;
+            background-color: #f0f0f0;
+            /* Set a background color for the canvas */
+        }
+        
+        .parent-container {
+            position: fixed;
+            overflow-x: visible;
+            overflow-y: visible;
+        }
+        
+        .main-container {
+            position: absolute;
+            /* Position the div absolutely */
+            top: 50px;
+            /* Adjust top position as needed */
+            left: 50px;
+            /* Adjust left position as needed */
+            /* Other styling properties for your div */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="vignette"></div>
+
+    <div class="parent-container">
+        <canvas id="canvas">
+        </canvas>
+
+        <div class="main-container">
+            <img src="/sonic/sources/sun.gif" class="sun" alt="A sun image"></img>
+            <img src="/sonic/sources/treeT.png" class="tree left-sixth-tree" alt="A tree image"></img>
+            <img src="/sonic/sources/treeT1.png" class="tree left-fifth-tree" alt="A tree image"></img>
+            <img src="/sonic/sources/treeT1.png" class="tree left-fourth-tree" alt="A tree image"></img>
+
+            <img src="/sonic/sources/treeT.png" class="tree left-third-tree" alt="A tree image"></img>
+            <img src="/sonic/sources/treeT1.png" class="tree left-second-tree" alt="A tree image"></img>
+            <img src="/sonic/sources/treeT.png" class="tree left-first-tree" alt="A tree image"></img>
+
+
+            <img src="/sonic/sources/treeT.png" class="tree right-sixth-tree" alt="A tree image"></img>
+            <img src="/sonic/sources/treeT1.png" class="tree right-fifth-tree" alt="A tree image"></img>
+            <img src="/sonic/sources/treeT1.png" class="tree right-fourth-tree" alt="A tree image"></img>
+
+            <img src="/sonic/sources/treeT.png" class="tree right-third-tree" alt="A tree image"></img>
+            <img src="/sonic/sources/treeT1.png" class="tree right-second-tree" alt="A tree image"></img>
+            <img src="/sonic/sources/treeT.png" class="tree right-first-tree" alt="A tree image"></img>
+        </div>
+    </div>
+
+    <source src="/sonic/sources/dgko.mp3" type="audio/ogg">
+
+    <script defer src="javascript/app.js"></script>
+    <script defer src="javascript/game.js"></script>
+</body>
+
+</html>

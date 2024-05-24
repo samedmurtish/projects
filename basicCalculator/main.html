@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="icon" type="image/x-icon" href="/projects/basicCalculator/icons/calculator.ico">
+    <title>Basic Calculator</title>
+    <link rel="stylesheet" href="/styles/navigationBar.css">
+    <link rel="stylesheet" href="/projects/basicCalculator/styles/main.css">
+</head>
+
+<body class="main">
+    <div class="nav-bar">
+        <div class="logo">
+            <a class="logoText" href="/index.html#first">smd.</a>
+        </div>
+    </div>
+    <p class="title" style="margin-top: 130px;">BASIC TWO INTEGER CALCULATOR</p>
+    <p id="totalText">0</p>
+    <div class="calculator">
+        <div class="totalGrid" style="padding-bottom: 5px;">
+            <button class="total" style="font-weight: bold; text-align:center;vertical-align: middle; font-size: 70px; justify-self: start; width: 415px;" onclick="backspace()">←</button>
+        </div>
+        <div class="calcGrid">
+            <button class="number" onclick="number('1')">1</button>
+            <button class="number" onclick="number('2')">2</button>
+            <button class="number" onclick="number('3')">3</button>
+            <button class="operator" onclick="operator('x')">x</button>
+            <button class="number" onclick="number('4')">4</button>
+            <button class="number" onclick="number('5')">5</button>
+            <button class="number" onclick="number('6')">6</button>
+            <button class="operator" onclick="operator('/')">/</button>
+            <button class="number" onclick="number('7')">7</button>
+            <button class="number" onclick="number('8')">8</button>
+            <button class="number" onclick="number('9')">9</button>
+            <button class="operator" onclick="operator('+')">+</button>
+        </div>
+        <div class="bottomGrid">
+            <button class="number" style="justify-self: start; width: 310px;" onclick="number('0')">0</button>
+            <button class="operator" onclick="operator('-')">-</button>
+        </div>
+        <div class="totalGrid" style="padding-top: 5px;">
+            <button class="total" style="justify-self: start; width: 415px;" onclick="totalSum(firstNumber, operation)">=</button>
+        </div>
+    </div>
+    <script src="/projects/basicCalculator/scripts/main.js">
+    </script>
+</body>
+
+</html>

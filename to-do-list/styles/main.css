@@ -1,0 +1,276 @@
+.titleInput,
+.dateInput,
+.addTaskButton {
+    height: 50px;
+    font-size: 20px;
+    padding: 0px 15px;
+}
+
+.addTaskButton:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.addTaskButton:active {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.dateInput {
+    margin: 0px 5px;
+}
+
+.addTaskButton,
+.titleInput,
+.dateInput {
+    height: 54px;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-style: none;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    -webkit-text-fill-color: white;
+}
+
+.main-div {
+    height: 70vh;
+    margin-top: 210px;
+    padding: 25px;
+    padding-top: 25px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    position: absolute;
+    border-radius: 25px;
+    border-radius: 25px;
+    flex: 1fr;
+    backdrop-filter: blur(20px);
+}
+
+.top-grid {
+    display: flex;
+    justify-content: space-between;
+    row-gap: 5px;
+}
+
+.top-grid-hide {
+    display: none;
+}
+
+@media only screen and (max-width:700px) {
+    .main-div {
+        width: 85vw;
+    }
+}
+
+.main-grid {
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+}
+
+*::-webkit-scrollbar {
+    width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+    background: #383838;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #1c1c1c;
+    border-radius: 20px;
+    border: 2px solid #575757;
+}
+
+.task-list-overflow {
+    margin-top: 20px;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+.hide-scroll-bar {
+    overflow: hidden;
+}
+
+.setScrollBar {
+    overflow-y: hidden;
+}
+
+.taskList {
+    color: white;
+    font-size: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+.taskButton,
+.taskSorter {
+    display: inline-block;
+}
+
+.sortTask {
+    display: grid;
+    grid-template-columns: 10px 1fr;
+    margin-bottom: 15px;
+    overflow: hidden;
+    text-wrap: wrap;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    height: 100%;
+}
+
+.taskSorter {
+    background-color: rgb(255, 255, 255);
+    height: 100%;
+    width: 2px;
+}
+
+.taskName {
+    display: block;
+}
+
+.removeTaskButton,
+.completeTaskButton {
+    scale: 0.98;
+    transition: all 0.15s;
+}
+
+.removeTaskButton:hover {
+    background-color: rgb(255, 85, 85);
+    scale: 1;
+}
+
+.removeTaskButton:active {
+    background-color: rgb(255, 116, 116);
+    scale: 1;
+}
+
+.completeTaskButton:hover {
+    background-color: rgba(105, 255, 85, .4);
+    scale: 1;
+    border-color: rgb(105, 255, 85);
+    border-style: dashed;
+}
+
+.completeTaskButton:active {
+    scale: 1;
+    border-color: rgb(105, 255, 85);
+    border-style: solid;
+}
+
+.taskButton {
+    height: 30px;
+    width: 35%;
+    background-color: rgb(255, 63, 63);
+    border-style: solid;
+    border: none;
+    color: white;
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: all 0.15s;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    margin-right: 3px;
+}
+
+.returnTaskButton:hover {
+    background-color: rgb(255, 213, 77);
+}
+
+.returnTaskButton:active {
+    background-color: rgb(255, 222, 114);
+}
+
+.returnTaskButton {
+    background-color: rgb(255, 196, 0);
+}
+
+.completeTaskButton {
+    background-color: transparent;
+    border-style: solid;
+    border-width: 2px;
+    border-color: rgb(100, 255, 100);
+}
+
+.taskButtons {
+    display: flex;
+}
+
+.taskDate {
+    color: darkgray;
+}
+
+.tabInfoTitle {
+    flex: 50px;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+    font-size: 23px;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 20px;
+    padding: 10px 0px;
+    text-align: center;
+}
+
+.title-background {
+    margin-top: 120px;
+    position: absolute;
+}
+
+.title-left:hover,
+.title-right:hover {
+    color: darkgray;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+}
+
+.title-left:active,
+.title-right:active {
+    scale: 0.8;
+    color: rgb(216, 216, 216);
+}
+
+.title-left,
+.title-right {
+    flex: 1;
+    width: 100%;
+    scale: 0.7;
+    color: gray;
+    transition: all 0.15s;
+    background-color: transparent;
+    border-style: none;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: lighter;
+    font-size: 23px;
+    margin: 0;
+    padding: 0px 35px;
+    height: 60px;
+}
+
+.title-main:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.title-main {
+    width: 100%;
+    flex: 2;
+    transition: all 0.15s;
+    text-wrap: nowrap;
+    text-align: center;
+    display: block;
+    height: 30px;
+    scale: .9;
+    cursor: default;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 15px 20px;
+}

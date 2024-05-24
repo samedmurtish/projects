@@ -1,0 +1,18 @@
+.mainOfUUID {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 500px;
+}
+
+.uuidText {
+    width: 550px;
+    justify-self: center;
+    text-align: center;
+    font-size: 25px;
+    display: inline-block;
+    font-family: "Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
+    ;
+    ;
+}

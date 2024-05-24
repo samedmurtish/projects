@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>TO-DO LIST</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/projects/to-do-list/styles/main.css">
+    <link rel="stylesheet" href="/projects/to-do-list/styles/default.css">
+    <link rel="stylesheet" href="/styles/navigationBar.css">
+    <link rel="icon" type="image/x-icon" href="/projects/to-do-list/images/logo.png">
+</head>
+
+<body>
+    <style>
+        img[src*="https://cdn.000webhost.com/000webhost/logo/footer-powered-by-000webhost-white2.png"] {
+            display: none;
+        }
+    </style>
+
+    <div class="nav-bar-integrated">
+        <div class="logo">
+            <a class="logoText" href="/index.html#first">smd.</a>
+        </div>
+    </div>
+    <div class="bg"></div>
+
+    <div class="title-background">
+        <p class="tabInfoTitle"></p>
+    </div>
+    <div class="main-div">
+        <div class="main-grid">
+            <div class="top-grid">
+                <input type="text" placeholder="Task Title." class="titleInput" id="taskTitle">
+                <input type="date" class="dateInput" id="taskDate">
+                <button class="addTaskButton" onclick="addToList()">ADD</button>
+            </div>
+            <div class="task-list-overflow">
+                <span class="taskList"></span>
+            </div>
+        </div>
+    </div>
+    <script src="scripts/main.js" async defer></script>
+    <script src="scripts/moment.js" async defer></script>
+</body>
+
+</html>

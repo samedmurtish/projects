@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ID GENERATOR</title>
+    <link rel="stylesheet" href="/projects/idGenerator/styles/customID.css">
+    <link rel="stylesheet" href="/projects/idGenerator/styles/uuid.css">
+    <link rel="stylesheet" href="/projects/idGenerator/styles/main.css">
+    <link rel="stylesheet" href="/projects/idGenerator/styles/default.css">
+</head>
+
+<body>
+    <div class="bg"></div>
+    <div class="main">
+        <div class="mainOfCustomId hide">
+            <div class="optionDiv">
+                <p class="letterLabel">Use Letters</p>
+                <input type="checkbox" class="useLetter">
+            </div>
+            <div class="optionDiv useLowerCaseDiv">
+                <p class="letterLabel">Use Lower Case</p>
+                <input type="checkbox" class="useLowerCase useLetter">
+            </div>
+            <div class="optionDiv useUpperCaseDiv">
+                <p class="letterLabel">Use Upper Case</p>
+                <input type="checkbox" class="useUpperCase useLetter">
+            </div>
+            <div class="optionDiv useMixedCaseDiv">
+                <p class="letterLabel">Use Mixed Case</p>
+                <input type="checkbox" class="useMixedCase useLetter">
+            </div>
+            <div class="optionDiv">
+                <p class="letterLabel">Set Part Length</p>
+                <input type="number" class="partLength" placeholder="Unordered">
+            </div>
+            <div class="optionDiv">
+                <p class="letterLabel">ID Division</p>
+                <input type="number" class="idDivisionInput" placeholder="3" min="1" max="5" required />
+            </div>
+            <div class="optionDiv js-error-label">
+                <p>The number you've entered is greater than the max-number/limit. <br><span style="color: darkgray;">Number has been set to the default <span style="color:gray">(3).</p>
+            </div>
+            <div class="optionDiv">
+                <button class="generateButton">Generate</button>
+            </div>
+            <div class="optionDiv">
+                <p class="idText"></p>
+            </div>
+        </div>
+        <div class="buttonDiv" style="display: none;">
+            <button class="uuidButton button">UUID</button>
+            <button class="customIdButton button">Custom ID</button>
+        </div>
+    </div>
+    <div class="mainOfUUID mainOfCustomId">      
+        <div class="optionDiv">
+            <p class="letterLabel">How many ?
+                <input type="number" class="js-rep-value idDivisionInput" inputmode="numeric">
+            </p>
+        </div>      
+        <div class="optionDiv">
+            <button class="generateUuidButton generateButton">Generate</button>
+        </div>
+        <div class="optionDiv">
+            <p class="uuidText letterLabel"></p>
+        </div>
+    </div>
+        <script src="/projects/idGenerator/scripts/main.js"></script>
+        <script src="/projects/idGenerator/scripts/customID.js"></script>
+        <script src="/projects/idGenerator/scripts/uuid.js"></script>
+</body>
+
+</html>
