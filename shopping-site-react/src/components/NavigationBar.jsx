@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import logo from "../images/logo.png";
 import { AiOutlineUser } from "react-icons/ai";
 import { FaSearch } from "react-icons/fa";
@@ -6,25 +6,46 @@ import { IoMdDownload } from "react-icons/io";
 import { FaUser } from "react-icons/fa";
 import { RiShoppingCartLine } from "react-icons/ri";
 export default function NavigationBar() {
+  const [scroll, setScroll] = useState(false);
+  const [currentScroll, setCurrentScroll] = useState(window.scrollY);
+  const [show, setShow] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setCurrentScroll((current) => current + window.scrollY);
+      setShow(window.scrollY <= 50);
+      setScroll(true);
+    };
+
+    setScroll(false);
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <>
       <nav className="fixed w-full">
-        <div className="bg-rose-700">
-          <div className="h-full w-5/6 mx-auto my-0 text-white text-xs flex justify-between text-center items-center py-1 ">
-            <div>
-              <p>Brand Waali Quality, Bazaar Waali Deal!</p>
-            </div>
-            <div className="flex">
-              <p className="px-2">Impact@Snapdeal</p>
-              <p className="px-2">Help Center</p>
-              <p className="px-2">Sell On Snapdeal</p>
-              <p className="px-2 flex justify-center items-center">
-                <IoMdDownload /> Download App
-              </p>
-              <p className="px-2">Donate For Elderly</p>
+        {show && (
+          <div className="bg-rose-700 topBar" id="topBar">
+            <div className="h-full w-5/6 mx-auto my-0 text-white text-xs flex justify-between text-center items-center py-1 ">
+              <div>
+                <p>Brand Waali Quality, Bazaar Waali Deal!</p>
+              </div>
+              <div className="flex">
+                <p className="px-2 hover:cursor-pointer">Impact@Snapdeal</p>
+                <p className="px-2 hover:cursor-pointer">Help Center</p>
+                <p className="px-2 hover:cursor-pointer">Sell On Snapdeal</p>
+                <p className="px-2 flex justify-center items-center hover:cursor-pointer">
+                  <IoMdDownload /> Download App
+                </p>
+                <p className="px-2 hover:cursor-pointer">Donate For Elderly</p>
+              </div>
             </div>
           </div>
-        </div>
+        )}
+
         <div className="bg-rose-600">
           <div className="h-16 w-5/6 mx-auto my-0 flex justify-between items-center text-nowrap flex-nowrap">
             <img src={logo} className="w-50 h-10" alt="" />

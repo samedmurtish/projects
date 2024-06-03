@@ -63,7 +63,7 @@ export default function Navigations() {
     "Sweater for Men",
   ];
   return (
-    <div className="shadow bg-gray-100 py-10 text-xs text-gray-500 text-pretty">
+    <div className="shadow bg-gray-100 py-10 text-xs text-gray-500 text-pretty border-2 border-gray-200">
       <div className="w-5/6 mx-auto my-0 h-full flex flex-col justify-between items-center ">
         <div className="flex">
           <a className="hover:underline hover:cursor-pointer inline pr-3">

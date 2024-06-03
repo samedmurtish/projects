@@ -8,7 +8,26 @@
 .text-border {
   text-shadow: 2px 2px red;
 }
-
+.paymentIcon {
+  width: 60px;
+  height: 51px;
+  background-position: -366px -63px;
+}
+.trustpayIcon {
+  width: 48px;
+  height: 51px;
+  background-position: -420px -63px;
+}
+.costumerCareIcon {
+  width: 54px;
+  height: 51px;
+  background-position: -467px -63px;
+}
+.shopOnGoIcon {
+  width: 38px;
+  height: 51px;
+  background-position: -520px -63px;
+}
 .visaIcon {
   width: 44px;
   height: 31px;

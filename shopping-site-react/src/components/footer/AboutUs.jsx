@@ -3,8 +3,8 @@ import React from "react";
 export default function AboutUs() {
   return (
     <div>
-      <div className="shadow bg-gray-100 py-10 text-xs text-gray-500 text-pretty flex ">
-        <div className="w-5/6 mx-auto my-0 flex justify-around">
+      <div className="shadow bg-white py-10 text-xs text-gray-500 text-pretty flex border-2 border-gray-100 ">
+        <div className="w-5/6 mx-auto my-0 flex justify-between">
           <div className="flex flex-col">
             <p className="font-bold pb-5 text-base">POLICY INFO</p>
             <a className="text-gray-400 hover:text-gray-500 transition hover:underline cursor-pointer">
@@ -82,7 +82,7 @@ export default function AboutUs() {
             <div className="flex mb-5">
               <input
                 type="text"
-                className="px-3"
+                className="px-3 border-2 border-gray-200"
                 placeholder="Your email address"
               />
               <button className="text-white bg-gray-800 hover:bg-gray-700 transition h-9 w-32 px-6 flex justify-center items-center text-center">

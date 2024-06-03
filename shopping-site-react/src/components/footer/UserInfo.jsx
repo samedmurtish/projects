@@ -3,7 +3,7 @@ import React from "react";
 export default function UserInfo() {
   return (
     <>
-      <div className="shadow bg-white py-10 text-xs text-gray-500 text-pretty flex ">
+      <div className="shadow bg-white py-10 text-xs text-gray-500 text-pretty flex border-1 border-gray-100">
         <div className="w-5/6 mx-auto my-0 flex">
           <div className="w-full h-full flex flex-col">
             <div>
