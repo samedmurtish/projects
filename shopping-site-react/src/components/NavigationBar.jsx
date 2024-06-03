@@ -34,7 +34,7 @@ export default function NavigationBar() {
                 placeholder="Search products & brands"
                 className="px-5 h-9 w-2/4"
               ></input>
-              <button className="text-white bg-gray-800 h-9 w-40 px-6 flex justify-center items-center text-center">
+              <button className="text-white bg-gray-800 hover:bg-gray-700 transition h-9 w-40 px-6 flex justify-center items-center text-center">
                 <FaSearch />
                 <p className="px-2">Search</p>
               </button>

@@ -5,8 +5,12 @@ export default function App() {
   return (
     <>
       <NavigationBar />
-      <div className="test"></div>
-      <Footer />
+      <div className="flex h-screen flex-col">
+        <div className="py-96">content</div>
+        <footer className="justify-self-end self-end">
+          <Footer />
+        </footer>
+      </div>
     </>
   );
 }

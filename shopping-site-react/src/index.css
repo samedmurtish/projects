@@ -8,3 +8,40 @@
 .text-border {
   text-shadow: 2px 2px red;
 }
+
+.visaIcon {
+  width: 44px;
+  height: 31px;
+  background-position: -48px -6px;
+}
+.mastercardIcon {
+  width: 42px;
+  height: 34px;
+  background-position: -4px -4px;
+}
+.amexIcon {
+  width: 43px;
+  height: 32px;
+  background-position: -94px -5px;
+}
+.neftbankIcon {
+  width: 68px;
+  height: 35px;
+  background-position: -120px -117px;
+}
+.clubIcon {
+  width: 42px;
+  height: 33px;
+  background-position: -138px -4px;
+}
+.cashondeliveryIcon {
+  width: 63px;
+  height: 35px;
+  background-position: -189px -117px;
+}
+
+.icons {
+  background-image: url(./images/icons.png);
+  display: inline-block;
+  vertical-align: middle;
+}
