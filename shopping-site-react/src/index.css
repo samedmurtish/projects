@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.test {
+  padding-top: 500px;
+}
+.text-border {
+  text-shadow: 2px 2px red;
+}

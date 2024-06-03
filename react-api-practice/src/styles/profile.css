@@ -46,3 +46,7 @@
 .profile-options {
   flex: 3;
 }
+
+.seperator {
+  min-height: 70vh;
+}

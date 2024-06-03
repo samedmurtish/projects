@@ -45,7 +45,7 @@ export function UserContainer() {
             </div>
           </div>
         </div>
-        <div className="h-full bg-slate-200 w-1"></div>
+        <div className=" bg-slate-200 w-1 seperator"></div>
         <div className="profile-right-side">
           {isOnEditProfile && <EditProfile />}
         </div>
