@@ -3,7 +3,7 @@ import React from "react";
 export default function AboutSite() {
   return (
     <div className="shadow bg-white text-xs text-gray-500 text-pretty flex border-2 border-b-0 border-gray-100">
-      <div className="w-5/6 mx-auto my-0 flex justify-between h-56">
+      <div className="flex justify-between h-56 w-11/12 mx-auto my-0">
         <div className="w-full h-full flex flex-col justify-center items-center border-2 border-gray-100 border-b-0 border-t-0">
           <span className="paymentIcon icons"></span>
           <p className="font-bold text-xl py-2">100% SECURE PAYMENTS</p>

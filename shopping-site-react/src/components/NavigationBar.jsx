@@ -6,18 +6,13 @@ import { IoMdDownload } from "react-icons/io";
 import { FaUser } from "react-icons/fa";
 import { RiShoppingCartLine } from "react-icons/ri";
 export default function NavigationBar() {
-  const [scroll, setScroll] = useState(false);
-  const [currentScroll, setCurrentScroll] = useState(window.scrollY);
   const [show, setShow] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
-      setCurrentScroll((current) => current + window.scrollY);
       setShow(window.scrollY <= 50);
-      setScroll(true);
     };
 
-    setScroll(false);
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
@@ -26,7 +21,7 @@ export default function NavigationBar() {
 
   return (
     <>
-      <nav className="fixed w-full">
+      <nav className="fixed w-full z-[999999]">
         {show && (
           <div className="bg-rose-700 topBar" id="topBar">
             <div className="h-full w-5/6 mx-auto my-0 text-white text-xs flex justify-between text-center items-center py-1 ">
@@ -48,7 +43,7 @@ export default function NavigationBar() {
 
         <div className="bg-rose-600">
           <div className="h-16 w-5/6 mx-auto my-0 flex justify-between items-center text-nowrap flex-nowrap">
-            <img src={logo} className="w-50 h-10" alt="" />
+            <img src={logo} className="w-36 h-8" alt="" />
             <div className="flex flex-1 mx-32">
               <input
                 type="text"
