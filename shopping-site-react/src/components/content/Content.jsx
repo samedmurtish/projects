@@ -8,22 +8,25 @@ import {
 } from "../../data/data.js";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 
+// Main functional component
 export default function Content() {
+  // State to keep track of the current category index
   const [categoryIndex, setCategoryIndex] = useState(0);
 
+  // useEffect hook to select the category on initial render
   useEffect(() => {
     selectCategory(categoryIndex, null);
   }, []);
 
+  // Function to handle category selection
   const selectCategory = (index, nextPrev) => {
-    if (index != undefined) setCategoryIndex(index);
+    if (index !== undefined) setCategoryIndex(index);
 
-    if (nextPrev != null || nextPrev != undefined) index = categoryIndex;
+    if (nextPrev != null || nextPrev !== undefined) index = categoryIndex;
 
-    for (let index = 0; index < imageCategory.length; index++) {
-      const categoryElement = document.getElementById(
-        "image-category-" + index
-      );
+    // Remove border class from all category elements
+    for (let i = 0; i < imageCategory.length; i++) {
+      const categoryElement = document.getElementById("image-category-" + i);
       if (
         categoryElement &&
         categoryElement.classList.contains("border-b-black")
@@ -32,15 +35,18 @@ export default function Content() {
       }
     }
 
+    // Adjust index based on next or previous action
     if (nextPrev != null) {
-      if (nextPrev == "next") {
+      if (nextPrev === "next") {
         if (index < imageCategory.length - 1) index = categoryIndex + 1;
         else if (index === imageCategory.length - 1) index = 0;
-      } else if (nextPrev == "prev") {
+      } else if (nextPrev === "prev") {
         if (index > 0) index = categoryIndex - 1;
         else if (index === 0) index = imageCategory.length - 1;
       }
     }
+
+    // Add border class to the selected category element
     const selectedCategoryElement = document.getElementById(
       "image-category-" + index
     );
@@ -48,15 +54,19 @@ export default function Content() {
       selectedCategoryElement.classList.add("border-b-black");
     }
 
+    // Update the category image banner
     const categoryImageBanner = document.getElementById(
       "category-image-banner"
     );
     if (categoryImageBanner) {
       categoryImageBanner.src = imageCategory[index].image;
     }
+
+    // Update the state with the new category index
     return setCategoryIndex(index);
   };
 
+  // Function to render image category elements
   const renderImageCategory = () => {
     return imageCategory.map((value, valueIndex) => (
       <div
@@ -70,6 +80,7 @@ export default function Content() {
     ));
   };
 
+  // Function to render categories
   const renderCategories = () => {
     return categories.map((value, valueIndex) => (
       <div key={valueIndex}>
@@ -83,6 +94,7 @@ export default function Content() {
     ));
   };
 
+  // Function to render content of each category
   const renderCategoryContent = (index, image) => {
     return contentCategories[index].map((value, valueIndex) => (
       <li
@@ -155,7 +167,9 @@ export default function Content() {
             <img src={qrcode} />
           </div>
           <div className="pl-3">
-            <p className="text-gray-900 pb-1">Enjoy Convenien Order Tracking</p>
+            <p className="text-gray-900 pb-1">
+              Enjoy Convenient Order Tracking
+            </p>
             <p className="text-gray-400">Scan to download app</p>
           </div>
         </div>
