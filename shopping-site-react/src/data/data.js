@@ -1,3 +1,59 @@
+export const products = [
+  {
+    id: 0,
+    name: "Bhawna Collection Loard Shiv Trishul Damru Locket With Puchmukhi Rudraksha Mala Gold-plated Brass, Wood For Men & Women",
+    stars: 3.9,
+    image:
+      "https://n1.sdlcdn.com/imgs/i/n/r/bhawna-collection-Loard-Shiv-Trishul-SDL890408077-1-86933.jpeg",
+    price: 399,
+    discount: 65,
+  },
+  {
+    id: 1,
+    name: "Stay Healthy - Foot Protector (Free Size)",
+    stars: 3.8,
+    image: "https://n3.sdlcdn.com/imgs/i/u/v/HeelSocks1-aeb5a.jpg",
+    price: 899,
+    discount: 89,
+  },
+  {
+    id: 2,
+    name: "Bentag Exerciser Single Spring Tummy Trimmer",
+    stars: 3.8,
+    image:
+      "https://n1.sdlcdn.com/imgs/j/f/3/Bentag-Exerciser-Single-Spring-Tummy-SDL420716614-1-c49e4.jpeg",
+    price: 1199,
+    discount: 79,
+  },
+  {
+    id: 3,
+    name: "Aadi Black Casual Shoes",
+    stars: 3.6,
+    image:
+      "https://n1.sdlcdn.com/imgs/j/d/1/Aadi-Black-Casual-Shoes-SDL456083229-3-a8ae2.jpeg",
+    price: 999,
+    discount: 64,
+  },
+  {
+    id: 4,
+    name: "Bentag kitchenware Vegetable & Fruit Clever Cutter Stainless Steel Vegetable Scissor",
+    stars: 3.8,
+    image:
+      "https://n2.sdlcdn.com/imgs/k/w/k/Bentag-kitchenware-Vegetable-Fruit-Clever-SDL841893040-1-1e2e8.jpg",
+    price: 499,
+    discount: 70,
+  },
+  {
+    id: 5,
+    name: "Veirdo - Multicolor Cotton Regular Fit Men's T-Shirt ( Pack of 1 )		",
+    stars: 3.8,
+    image:
+      "https://n1.sdlcdn.com/imgs/k/e/u/Veirdo-100-Cotton-Regular-Fit-SDL051246309-1-51a91.jpg",
+    price: 1199,
+    discount: 75,
+  },
+];
+
 export const contentCategories = [
   [
     {
