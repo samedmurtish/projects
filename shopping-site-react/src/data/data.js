@@ -1,8 +1,8 @@
-export const products = [
+export const trendingProducts = [
   {
     id: 0,
     name: "Bhawna Collection Loard Shiv Trishul Damru Locket With Puchmukhi Rudraksha Mala Gold-plated Brass, Wood For Men & Women",
-    stars: 3.9,
+    stars: 5.0,
     image:
       "https://n1.sdlcdn.com/imgs/i/n/r/bhawna-collection-Loard-Shiv-Trishul-SDL890408077-1-86933.jpeg",
     price: 399,
@@ -19,7 +19,7 @@ export const products = [
   {
     id: 2,
     name: "Bentag Exerciser Single Spring Tummy Trimmer",
-    stars: 3.8,
+    stars: 1.8,
     image:
       "https://n1.sdlcdn.com/imgs/j/f/3/Bentag-Exerciser-Single-Spring-Tummy-SDL420716614-1-c49e4.jpeg",
     price: 1199,
@@ -46,7 +46,7 @@ export const products = [
   {
     id: 5,
     name: "Veirdo - Multicolor Cotton Regular Fit Men's T-Shirt ( Pack of 1 )		",
-    stars: 3.8,
+    stars: 2.8,
     image:
       "https://n1.sdlcdn.com/imgs/k/e/u/Veirdo-100-Cotton-Regular-Fit-SDL051246309-1-51a91.jpg",
     price: 1199,

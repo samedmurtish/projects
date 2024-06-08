@@ -5,13 +5,20 @@ import {
   imageCategory,
   contentCategories,
   categories,
+  trendingProducts,
 } from "../../data/data.js";
+import parse from "html-react-parser";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
-import { FaStarHalfAlt, FaStar, FaRegStar } from "react-icons/fa";
+import { FaStarHalfAlt, FaStar, FaRegStar, FaRegHeart } from "react-icons/fa";
 // Main functional component
 export default function Content() {
+  const [trendingProductsCount, setTrendingProductsCount] = useState(0);
   // State to keep track of the current category index
   const [categoryIndex, setCategoryIndex] = useState(0);
+  const [isMouseOnProductCard, setIsMouseOnProductCard] = useState({
+    onCard: false,
+    cardId: 0,
+  });
 
   // useEffect hook to select the category on initial render
   useEffect(() => {
@@ -127,6 +134,62 @@ export default function Content() {
       </li>
     ));
   };
+  const renderStars = (stars) => {
+    let starList = [];
+
+    const fixed = stars.toFixed(0);
+
+    for (let index = 0; index < fixed; index++) {
+      starList.push(<FaStar key={`star-${index}`} />);
+    }
+
+    if (fixed + 0.5 >= fixed && fixed < 5) {
+      starList.push(<FaStarHalfAlt key={`half-star-${starList.length}`} />);
+    }
+
+    let length = starList.length;
+
+    while (length < 5) {
+      starList.push(<FaRegStar key={`empty-star-${length}`} />);
+      length++;
+    }
+
+    return <>{starList}</>;
+  };
+
+  const renderTrendingProducts = () => {
+    return trendingProducts.map((value) => (
+      <div
+        key={value.id}
+        className="hover:shadow-xl h-full w-full bg-white flex flex-col items-start justify-center p-5 relative transition"
+        id="trending-product-card"
+      >
+        <div
+          className="text-2xl absolute top-4 right-4 transition opacity-0"
+          id={"add-to-wishlist"}
+        >
+          <FaRegHeart />
+        </div>
+        <img src={value.image} className="w-max h-max self-center" />
+        <div className="w-full h-12 pt-3">
+          <p className="trending-product-name">{value.name}</p>
+        </div>
+        <div className="pt-3 flex flex-row text-yellow-300 ">
+          <span className="text-black pr-3 hidden">{value.stars}</span>
+          {renderStars(value.stars)}
+        </div>
+        <div className="flex gap-2 flex-row flex-nowrap text-nowrap items-center justify-center">
+          <p className="line-through text-gray-300">{value.price}</p>
+          <p className="text-black">
+            Rs {(value.price - (value.price / 100) * value.discount).toFixed(0)}
+          </p>
+          <p className="p-1 px-2 bg-white border-[1.5px] text-gray-400 border-gray-300">
+            {value.discount}% OFF
+          </p>
+        </div>
+      </div>
+    ));
+  };
 
   return (
     <div className=" bg-gray-100 text-xs text-gray-500 text-pretty flex border-1 border-gray-100 select-none ">
@@ -205,28 +268,7 @@ export default function Content() {
             <div className="h-full">
               <p className="pb-3 text-xl">TRENDING PRODUCTS</p>
               <div className="bg-white w-full h-full flex flex-row justify-center gap-x-3">
-                <div className="h-full w-64 bg-white flex flex-col items-start justify-start p-5">
-                  <img
-                    src="https://n1.sdlcdn.com/imgs/i/n/r/bhawna-collection-Loard-Shiv-Trishul-SDL890408077-1-86933.jpeg"
-                    alt=""
-                    className="w-max h-2/3 self-center"
-                  />
-                  <div className="w-full h-12 overflow-hidden truncate text-ellipsis">
-                    <p className="text-nowrap text-base h-full truncate text-ellipsis w-[100%]">
-                      Bhawna Collection Loard Shiv Trishul Damru Locket With
-                      Puchmukhi Rudraksha Mala Gold-plated Brass, Wood For Men &
-                      Women
-                    </p>
-                  </div>
-                  <div className="flex flex-row text-yellow-300 ">
-                    <FaStar /> <FaStar /> <FaStar /> <FaStarHalfAlt />{" "}
-                    <FaRegStar />
-                  </div>
-                </div>
-                <div className="h-full w-full bg-purple-300"></div>
-                <div className="h-full w-full bg-purple-200"></div>
-                <div className="h-full w-full bg-purple-300"></div>
-                <div className="h-full w-full bg-purple-200"></div>
+                {renderTrendingProducts()}
               </div>
             </div>
           </div>

@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../images/logo.png";
-import { AiOutlineUser } from "react-icons/ai";
 import { FaSearch } from "react-icons/fa";
 import { IoMdDownload } from "react-icons/io";
 import { FaUser } from "react-icons/fa";
 import { RiShoppingCartLine } from "react-icons/ri";
+
 export default function NavigationBar() {
   const [show, setShow] = useState(true);
 
@@ -21,7 +21,7 @@ export default function NavigationBar() {
 
   return (
     <>
-      <nav className="fixed w-full z-[999999]">
+      <nav className="fixed w-full z-[999999] select-none" id="nav">
         {show && (
           <div className="bg-rose-700 topBar" id="topBar">
             <div className="h-full w-5/6 mx-auto my-0 text-white text-xs flex justify-between text-center items-center py-1 ">
@@ -43,7 +43,7 @@ export default function NavigationBar() {
 
         <div className="bg-rose-600">
           <div className="h-16 w-5/6 mx-auto my-0 flex justify-between items-center text-nowrap flex-nowrap">
-            <img src={logo} className="w-36 h-8" alt="" />
+            <img src={logo} className="w-36 h-8 select-none" alt="" />
             <div className="flex flex-1 mx-32">
               <input
                 type="text"
