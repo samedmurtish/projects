@@ -12,13 +12,12 @@ import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 import { FaStarHalfAlt, FaStar, FaRegStar, FaRegHeart } from "react-icons/fa";
 // Main functional component
 export default function Content() {
-  const [trendingProductsCount, setTrendingProductsCount] = useState(0);
   // State to keep track of the current category index
   const [categoryIndex, setCategoryIndex] = useState(0);
-  const [isMouseOnProductCard, setIsMouseOnProductCard] = useState({
-    onCard: false,
-    cardId: 0,
-  });
+
+  setTimeout(() => {
+    selectCategory(...[, "next"]);
+  }, 8000);
 
   // useEffect hook to select the category on initial render
   useEffect(() => {
