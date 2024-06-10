@@ -20,10 +20,10 @@ export default function Data() {
       })
       .catch((error) => setError(error))
       .finally(() => {
-        /*         setTimeout(() => {
-                          setLoading(false);
-                        }, 2000); */
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 4000);
+        //setLoading(false);
       });
     return () => {
       controller.abort();
