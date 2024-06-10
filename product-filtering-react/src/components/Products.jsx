@@ -1,11 +1,13 @@
+// Import necessary modules and icons from React and react-icons library
 import React, { useEffect, useState } from "react";
-import { BiCategory } from "react-icons/bi";
-
 import { FaRegStar, FaStar, FaStarHalfAlt, FaHeart } from "react-icons/fa";
 
+// Define the Products component which takes products, sortBy, and category as props
 export default function Products({ products, sortBy, category }) {
+  // State to store products sorted by price
   const [productsByPrice, setProductsByPrice] = useState({});
 
+  // Function to render individual product
   const product = (value, valueIndex) => {
     return (
       <div key={valueIndex}>
@@ -53,32 +55,37 @@ export default function Products({ products, sortBy, category }) {
     );
   };
 
+  // Function to sort products by the specified criteria
   const sort = (sortBy) => {
     if (sortBy == "price")
       return setProductsByPrice(
         [...products].sort((a, b) => a.price - b.price)
-      ); // Price Ascending
+      ); // Sort by price in ascending order
   };
 
+  // Use useEffect to sort products whenever sortBy or category changes
   useEffect(() => {
     sort(sortBy, category);
   }, [sortBy]);
 
+  // Function to render star rating for a product
   const renderStars = (stars) => {
     let starList = [];
 
     const fixed = Math.floor(stars);
 
+    // Render filled stars
     for (let index = 0; index < fixed; index++) {
       starList.push(<FaStar key={`star-${index}`} />);
     }
 
+    // Render half star if applicable
     if (stars >= Math.floor(stars) + 0.5) {
       starList.push(<FaStarHalfAlt key={`half-star-${starList.length}`} />);
     }
 
+    // Render empty stars to fill up to 5 stars
     let length = starList.length;
-
     while (length < 5) {
       starList.push(<FaRegStar key={`empty-star-${length}`} />);
       length++;
@@ -86,25 +93,31 @@ export default function Products({ products, sortBy, category }) {
 
     return <>{starList}</>;
   };
+
+  // Function to render products based on sorting and filtering criteria
   const renderProducts = () => {
     if (!Array.isArray(products)) return null;
     if (sortBy == "price" && !Array.isArray(productsByPrice)) return null;
 
+    // If sorting by price
     if (sortBy == "price") {
-      if (category != "all")
-        return productsByPrice
-          .filter((product) => product.category == category)
-          .map((value, valueIndex) => product(value, valueIndex));
-      else
-        return productsByPrice.map((value, valueIndex) =>
-          product(value, valueIndex)
-        );
+      return category != "all"
+        ? productsByPrice
+            .filter((product) => product.category == category)
+            .map((value, valueIndex) => product(value, valueIndex))
+        : productsByPrice.map((value, valueIndex) =>
+            product(value, valueIndex)
+          );
     }
-    if (category != "all")
-      return products
-        .filter((product) => product.category == category)
-        .map((value, valueIndex) => product(value, valueIndex));
-    return products.map((value, valueIndex) => product(value, valueIndex));
+
+    // If not sorting by price
+    return category != "all"
+      ? products
+          .filter((product) => product.category == category)
+          .map((value, valueIndex) => product(value, valueIndex))
+      : products.map((value, valueIndex) => product(value, valueIndex));
   };
+
+  // Render the products
   return <>{renderProducts()}</>;
 }
