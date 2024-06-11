@@ -1,6 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 
 export default function Sorting({ sortProducts }) {
+  const [priceController, setPriceController] = useState(0);
+
+  const priceText = ["none", "ascending", "descending"];
+
+  const handlePriceText = () => {
+    setPriceController((prev) => {
+      const newValue = prev < 2 ? prev + 1 : 0;
+      sortProducts(priceText[newValue]);
+      return newValue;
+    });
+  };
+
   return (
     <div className="flex flex-row items-center gap-3">
       <div className="bg-slate-600 h-14 w-32 rounded-xl flex text-white font-semibold justify-center items-center flex-col text-xl">
@@ -8,15 +20,18 @@ export default function Sorting({ sortProducts }) {
       </div>
       <div
         className="border-gray-300 active:border-gray-400 active:bg-gray-300 hover:bg-gray-100 transition border-4 bg-white h-12 w-28 rounded-xl flex text-gray-800 font-semibold justify-center items-center flex-col text-lg cursor-pointer"
-        onClick={() => sortProducts("default")}
+        onClick={() => {
+          sortProducts("none");
+          setPriceController(0);
+        }}
       >
         default
       </div>
       <div
-        className="border-gray-300 active:border-gray-400 active:bg-gray-300 hover:bg-gray-100 transition border-4 bg-white h-12 w-28 rounded-xl flex text-gray-800 font-semibold justify-center items-center flex-col text-lg cursor-pointer"
-        onClick={() => sortProducts("price")}
+        className="border-gray-300 active:border-gray-400 active:bg-gray-300 hover:bg-gray-100 transition border-4 bg-white h-12 w-max px-3 rounded-xl flex text-gray-800 font-semibold justify-center items-center flex-col text-lg cursor-pointer"
+        onClick={() => handlePriceText()}
       >
-        price
+        price: {priceText[priceController]}
       </div>
     </div>
   );

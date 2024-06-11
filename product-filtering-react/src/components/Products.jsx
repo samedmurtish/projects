@@ -7,6 +7,8 @@ export default function Products({ products, sortBy, category }) {
   // State to store products sorted by price
   const [productsByPrice, setProductsByPrice] = useState({});
 
+  console.log(sortBy);
+
   // Function to render individual product
   const product = (value, valueIndex) => {
     return (
@@ -56,10 +58,11 @@ export default function Products({ products, sortBy, category }) {
 
   // Function to sort products by the specified criteria
   const sort = (sortBy) => {
-    if (sortBy == "price")
-      return setProductsByPrice(
-        [...products].sort((a, b) => a.price - b.price)
-      ); // Sort by price in ascending order
+    if (sortBy != "none")
+      return sortBy == "ascending"
+        ? setProductsByPrice([...products].sort((a, b) => a.price - b.price))
+        : setProductsByPrice([...products].sort((a, b) => b.price - a.price));
+    // Sort by price in ascending order
   };
 
   // Use useEffect to sort products whenever sortBy or category changes
@@ -96,10 +99,10 @@ export default function Products({ products, sortBy, category }) {
   // Function to render products based on sorting and filtering criteria
   const renderProducts = () => {
     if (!Array.isArray(products)) return null;
-    if (sortBy == "price" && !Array.isArray(productsByPrice)) return null;
+    if (sortBy != "none" && !Array.isArray(productsByPrice)) return null;
 
     // If sorting by price
-    if (sortBy == "price") {
+    if (sortBy != "none") {
       return category != "all"
         ? productsByPrice
             .filter((product) => product.category == category)

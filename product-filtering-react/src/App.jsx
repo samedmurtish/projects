@@ -4,17 +4,16 @@ import LeftMenu from "./components/LeftMenu";
 import Products from "./components/Products";
 import Loading from "./components/Loading";
 import Sorting from "./components/Sorting";
-import { GiCatapult } from "react-icons/gi";
 
 export default function App() {
-  const { products, loading, error } = Data();
+  const { products, loading } = Data();
 
-  const [sortType, setSortType] = useState("default");
+  const [sortType, setSortType] = useState("none");
 
   const [category, setCategory] = useState("all");
 
   const handleSortProducts = (type) => {
-    /* console.log("sorting by " + type + ".."); */
+    console.log("sorting by " + type + "..");
     setSortType(type);
   };
 
@@ -25,7 +24,7 @@ export default function App() {
 
   return (
     <>
-      <div className="h-full mx-auto my-0 w-11/12 mt-10 select-none">
+      <div className="h-full mx-auto my-0 w-11/12 mt-10 mb-10 select-none">
         {!loading ? (
           <>
             <LeftMenu category={handleCategories} />
