@@ -13,11 +13,10 @@ export default function Products({ products, sortBy, category }) {
       <div key={valueIndex}>
         <div className="h-fit w-64 bg-gray-100 flex justify-between items-center flex-col rounded-xl">
           <div className="w-full flex flex-col items-center">
-            <div className="">
+            <div>
               <img
                 className="w-full bg-white border-[5px] border-gray-200 shadow-inner border-b-0 rounded-t-2xl"
                 src={value.thumbnail}
-                alt=""
               />
             </div>
             <div
