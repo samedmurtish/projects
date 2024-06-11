@@ -19,15 +19,6 @@ export default function Sorting({ sortProducts }) {
         SORT BY
       </div>
       <div
-        className="border-gray-300 active:border-gray-400 active:bg-gray-300 hover:bg-gray-100 transition border-4 bg-white h-12 w-28 rounded-xl flex text-gray-800 font-semibold justify-center items-center flex-col text-lg cursor-pointer"
-        onClick={() => {
-          sortProducts("none");
-          setPriceController(0);
-        }}
-      >
-        default
-      </div>
-      <div
         className="border-gray-300 active:border-gray-400 active:bg-gray-300 hover:bg-gray-100 transition border-4 bg-white h-12 w-max px-3 rounded-xl flex text-gray-800 font-semibold justify-center items-center flex-col text-lg cursor-pointer"
         onClick={() => handlePriceText()}
       >

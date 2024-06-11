@@ -19,6 +19,7 @@ export default function Products({ products, sortBy, category }) {
               <img
                 className="w-full bg-white border-[5px] border-gray-200 shadow-inner border-b-0 rounded-t-2xl"
                 src={value.thumbnail}
+                alt={`${value.title} thumbnail`}
               />
             </div>
             <div
@@ -29,7 +30,7 @@ export default function Products({ products, sortBy, category }) {
             </div>
             <div className="py-2 px-3 h-full text-yellow-300 flex justify-center items-center gap-x-2 bg-gray-100 w-full border-x-[5px]">
               <div className="flex">{renderStars(value.rating)}</div>
-              <div className="">
+              <div>
                 <span className="text-black">({value.rating})</span>
               </div>
             </div>
@@ -45,7 +46,7 @@ export default function Products({ products, sortBy, category }) {
               Add To Cart
             </button>
             <button
-              className="self-end h-[60px] w-1/3 flex justify-center items-center bg-slate-500 rounded-br-2xl text-white hover:text-rose-500 transition font-semibold text-2xl "
+              className="self-end h-[60px] w-1/3 flex justify-center items-center bg-slate-500 rounded-br-2xl text-white hover:text-rose-500 transition font-semibold text-2xl"
               id="add-to-wishlist"
             >
               <FaHeart />
@@ -58,17 +59,19 @@ export default function Products({ products, sortBy, category }) {
 
   // Function to sort products by the specified criteria
   const sort = (sortBy) => {
-    if (sortBy != "none")
-      return sortBy == "ascending"
-        ? setProductsByPrice([...products].sort((a, b) => a.price - b.price))
-        : setProductsByPrice([...products].sort((a, b) => b.price - a.price));
-    // Sort by price in ascending order
+    if (sortBy !== "none") {
+      if (sortBy === "ascending") {
+        setProductsByPrice([...products].sort((a, b) => a.price - b.price));
+      } else {
+        setProductsByPrice([...products].sort((a, b) => b.price - a.price));
+      }
+    }
   };
 
   // Use useEffect to sort products whenever sortBy or category changes
   useEffect(() => {
-    sort(sortBy, category);
-  }, [sortBy]);
+    sort(sortBy);
+  }, [sortBy, category]);
 
   // Function to render star rating for a product
   const renderStars = (stars) => {
@@ -99,13 +102,13 @@ export default function Products({ products, sortBy, category }) {
   // Function to render products based on sorting and filtering criteria
   const renderProducts = () => {
     if (!Array.isArray(products)) return null;
-    if (sortBy != "none" && !Array.isArray(productsByPrice)) return null;
+    if (sortBy !== "none" && !Array.isArray(productsByPrice)) return null;
 
     // If sorting by price
-    if (sortBy != "none") {
-      return category != "all"
+    if (sortBy !== "none") {
+      return category !== "all"
         ? productsByPrice
-            .filter((product) => product.category == category)
+            .filter((product) => product.category === category)
             .map((value, valueIndex) => product(value, valueIndex))
         : productsByPrice.map((value, valueIndex) =>
             product(value, valueIndex)
@@ -113,9 +116,9 @@ export default function Products({ products, sortBy, category }) {
     }
 
     // If not sorting by price
-    return category != "all"
+    return category !== "all"
       ? products
-          .filter((product) => product.category == category)
+          .filter((product) => product.category === category)
           .map((value, valueIndex) => product(value, valueIndex))
       : products.map((value, valueIndex) => product(value, valueIndex));
   };
