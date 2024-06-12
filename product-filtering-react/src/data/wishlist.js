@@ -2,9 +2,11 @@ let wishlist = localStorage.key("wishlist") ?
     JSON.parse(localStorage.getItem("wishlist")) :
     [];
 
-export function addToWishlist(item) {
+export function addToWishlist(item, wishlistIncrease) {
     //localStorage.setItem("wishlistItem-" + item.id, item);
     const exists = wishlist.some((value) => value.title === item.title);
+
+    !exists && wishlistIncrease();
 
     !exists && wishlist.push(item);
 

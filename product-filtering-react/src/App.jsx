@@ -6,7 +6,14 @@ import Loading from "./components/Loading";
 import Sorting from "./components/Sorting";
 import { FaRegHeart } from "react-icons/fa";
 import { Link, Outlet } from "react-router-dom";
+
 export default function App() {
+  const [wishlistLength, setWishlistLength] = useState(
+    localStorage.key("wishlist")
+      ? JSON.parse(localStorage.getItem("wishlist")).length
+      : 0
+  );
+
   const { products, loading } = Data();
 
   const [sortType, setSortType] = useState("none");
@@ -14,13 +21,21 @@ export default function App() {
   const [category, setCategory] = useState("all");
 
   const handleSortProducts = (type) => {
-    console.log("sorting by " + type + "..");
+    // console.log("sorting by " + type + "..");
     setSortType(type);
   };
 
   const handleCategories = (category) => {
     /* console.log("category successfully set to " + category); */
     setCategory(category);
+  };
+
+  const handleWishlistLength = () => {
+    return setWishlistLength((value) => {
+      const newValue = value + 1;
+      console.log(newValue);
+      return newValue;
+    });
   };
 
   return (
@@ -35,11 +50,15 @@ export default function App() {
                   <Sorting sortProducts={handleSortProducts} />
                   <Link
                     to={"wishlist"}
-                    className="flex justify-center flex-col items-center "
+                    className="flex justify-center flex-col items-center"
                   >
                     <FaRegHeart className="cursor-pointer hover:text-slate-500 text-slate-400 text-4xl" />
                     <span className="text-gray-500 font-semibold px-5">
-                      Wishlist
+                      Wishlist ({" "}
+                      <span className="text-slate-900 font-extrabold">
+                        {wishlistLength}
+                      </span>{" "}
+                      )
                     </span>
                   </Link>
                 </div>
@@ -49,6 +68,7 @@ export default function App() {
                     sortBy={sortType}
                     loaded={loading}
                     category={category}
+                    wishlistIncrease={handleWishlistLength}
                   />
                 </div>
               </div>
