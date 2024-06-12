@@ -2,13 +2,14 @@
 import React, { useEffect, useState } from "react";
 import { FaRegStar, FaStar, FaStarHalfAlt, FaHeart } from "react-icons/fa";
 import { addToWishlist } from "../data/wishlist";
-
+import SkeletonProduct from "../react-skeleton/SkeletonProduct";
 // Define the Products component which takes products, sortBy, and category as props
 export default function Products({
   products,
   sortBy,
   category,
   wishlistIncrease,
+  loading,
 }) {
   // State to store products sorted by price
   const [productsByPrice, setProductsByPrice] = useState({});
@@ -106,6 +107,15 @@ export default function Products({
     return <>{starList}</>;
   };
 
+  const renderLoadingProducts = () => {
+    if (!Array.isArray(products)) return null;
+    return products.map((value, valueIndex) => (
+      <div key={valueIndex}>
+        <SkeletonProduct />
+      </div>
+    ));
+  };
+
   // Function to render products based on sorting and filtering criteria
   const renderProducts = () => {
     if (!Array.isArray(products)) return null;
@@ -131,5 +141,5 @@ export default function Products({
   };
 
   // Render the products
-  return <>{renderProducts()}</>;
+  return <>{loading ? renderLoadingProducts() : renderProducts()}</>;
 }

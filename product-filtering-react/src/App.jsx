@@ -48,46 +48,43 @@ export default function App() {
   return (
     <>
       <div className="h-full mx-auto my-0 w-11/12 mt-10 mb-10 select-none">
-        {!loading ? (
-          <>
-            {/* Render the left menu with category selection handler */}
-            <LeftMenu category={handleCategories} />
-            <div className="flex flex-col h-full w-full gap-5">
-              <div className="pl-80">
-                <div className="flex justify-between items-center">
-                  {/* Render the sorting component with sort handler */}
-                  <Sorting sortProducts={handleSortProducts} />
-                  <Link
-                    to={"wishlist"}
-                    className="flex justify-center flex-col items-center"
-                  >
-                    {/* Wishlist link with icon and length */}
-                    <FaRegHeart className="cursor-pointer hover:text-slate-500 text-slate-400 text-4xl" />
-                    <span className="text-gray-500 font-semibold px-5">
-                      Wishlist ({" "}
-                      <span className="text-slate-900 font-extrabold">
-                        {wishlistLength}
-                      </span>{" "}
-                      )
-                    </span>
-                  </Link>
-                </div>
-                <div className="flex justify-between items-center overflow-auto flex-wrap gap-3 w-full pt-5">
-                  {/* Render products with sorting, category, and wishlist update handler */}
-                  <Products
-                    products={products}
-                    sortBy={sortType}
-                    loaded={loading}
-                    category={category}
-                    wishlistIncrease={handleWishlistLength}
-                  />
-                </div>
+        <>
+          {/* Render the left menu with category selection handler */}
+          <LeftMenu category={handleCategories} />
+          <div className="flex flex-col h-full w-full gap-5">
+            <div className="pl-80">
+              <div className="flex justify-between items-center">
+                {/* Render the sorting component with sort handler */}
+                <Sorting sortProducts={handleSortProducts} />
+                <Link
+                  to={"wishlist"}
+                  className="flex justify-center flex-col items-center"
+                >
+                  {/* Wishlist link with icon and length */}
+                  <FaRegHeart className="cursor-pointer hover:text-slate-500 text-slate-400 text-4xl" />
+                  <span className="text-gray-500 font-semibold px-5">
+                    Wishlist ({" "}
+                    <span className="text-slate-900 font-extrabold">
+                      {wishlistLength}
+                    </span>{" "}
+                    )
+                  </span>
+                </Link>
+              </div>
+              <div className="flex justify-between items-center overflow-auto flex-wrap gap-3 w-full pt-5">
+                {/* Render products with sorting, category, and wishlist update handler */}
+                <Products
+                  products={products}
+                  sortBy={sortType}
+                  loaded={loading}
+                  category={category}
+                  wishlistIncrease={handleWishlistLength}
+                  loading={loading}
+                />
               </div>
             </div>
-          </>
-        ) : (
-          <Loading /> // Render loading component if data is still being fetched
-        )}
+          </div>
+        </>
       </div>
       <Outlet /> {/* Render nested routes */}
     </>
