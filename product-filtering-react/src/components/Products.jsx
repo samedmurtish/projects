@@ -1,6 +1,7 @@
 // Import necessary modules and icons from React and react-icons library
 import React, { useEffect, useState } from "react";
 import { FaRegStar, FaStar, FaStarHalfAlt, FaHeart } from "react-icons/fa";
+import { addToWishlist } from "../data/wishlist";
 
 // Define the Products component which takes products, sortBy, and category as props
 export default function Products({ products, sortBy, category }) {
@@ -48,6 +49,7 @@ export default function Products({ products, sortBy, category }) {
             <button
               className="self-end h-[60px] w-1/3 flex justify-center items-center bg-slate-500 rounded-br-2xl text-white hover:text-rose-500 transition font-semibold text-2xl"
               id="add-to-wishlist"
+              onClick={() => addToWishlist(value)}
             >
               <FaHeart />
             </button>
