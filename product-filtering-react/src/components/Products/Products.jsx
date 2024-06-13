@@ -1,16 +1,13 @@
 // Import necessary modules and icons from React and react-icons library
 import React, { useEffect, useState } from "react";
-import { FaRegStar, FaStar, FaStarHalfAlt, FaHeart } from "react-icons/fa";
-import { addToWishlist } from "../data/wishlist";
-import SkeletonProduct from "../react-skeleton/SkeletonProduct";
-import { addToCart } from "../data/cart";
-import Snackbar from "@mui/material/Snackbar";
-import Slide from "@mui/material/Slide";
-import SnackbarShow from "../MuiElements/SnackbarShow";
-import { useFetcher } from "react-router-dom";
-function SlideTransition(props) {
-  return <Slide {...props} direction="up" />;
-}
+import { FaHeart } from "react-icons/fa";
+import { addToWishlist } from "../../data/wishlist";
+import SkeletonProduct from "../../react-skeleton/SkeletonProduct";
+import { addToCart } from "../../data/cart";
+import SnackbarShow from "../../MuiElements/SnackbarShow";
+import { Link, Outlet } from "react-router-dom";
+import RenderStars from "./RenderStars";
+
 // Define the Products component which takes products, sortBy, and category as props
 export default function Products({
   products,
@@ -39,7 +36,11 @@ export default function Products({
   // Function to render individual product
   const product = (value, valueIndex) => {
     return (
-      <div key={valueIndex}>
+      <Link
+        to={`/product/${value.id}`}
+        state={{ product: value }}
+        key={valueIndex}
+      >
         <div className="h-fit w-64 bg-gray-100 flex justify-between items-center flex-col rounded-xl">
           <div className="w-full flex flex-col items-center">
             <div>
@@ -56,7 +57,9 @@ export default function Products({
               {value.title}
             </div>
             <div className="py-2 px-3 h-full text-yellow-300 flex justify-center items-center gap-x-2 bg-gray-100 w-full border-x-[5px]">
-              <div className="flex">{renderStars(value.rating)}</div>
+              <div className="flex">
+                <RenderStars stars={value.rating} />
+              </div>
               <div>
                 <span className="text-black">({value.rating})</span>
               </div>
@@ -94,7 +97,7 @@ export default function Products({
             </button>
           </div>
         </div>
-      </div>
+      </Link>
     );
   };
 
@@ -113,32 +116,6 @@ export default function Products({
   useEffect(() => {
     sort(sortBy);
   }, [sortBy, category]);
-
-  // Function to render star rating for a product
-  const renderStars = (stars) => {
-    let starList = [];
-
-    const fixed = Math.floor(stars);
-
-    // Render filled stars
-    for (let index = 0; index < fixed; index++) {
-      starList.push(<FaStar key={`star-${index}`} />);
-    }
-
-    // Render half star if applicable
-    if (stars >= Math.floor(stars) + 0.5) {
-      starList.push(<FaStarHalfAlt key={`half-star-${starList.length}`} />);
-    }
-
-    // Render empty stars to fill up to 5 stars
-    let length = starList.length;
-    while (length < 5) {
-      starList.push(<FaRegStar key={`empty-star-${length}`} />);
-      length++;
-    }
-
-    return <>{starList}</>;
-  };
 
   const renderLoadingProducts = () => {
     if (!Array.isArray(products)) return null;

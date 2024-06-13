@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Data from "./api/Data"; // Import the data fetching function
 import LeftMenu from "./components/LeftMenu"; // Import the LeftMenu component
-import Products from "./components/Products"; // Import the Products component
+import Products from "./components/Products/Products"; // Import the Products component
 import Loading from "./components/Loading"; // Import the Loading component
 import Sorting from "./components/Sorting"; // Import the Sorting component
 import { FaRegHeart } from "react-icons/fa"; // Import an icon from react-icons
