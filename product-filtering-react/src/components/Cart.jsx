@@ -146,7 +146,15 @@ export default function Cart() {
                     Items:
                   </p>
                   <div className="max-h-32 h-full overflow-hidden overflow-y-auto my-2 border-2 border-slate-300 rounded-xl">
-                    <ul>{renderCheckoutItems()}</ul>
+                    <ul className="flex flex-col justify-center items-center bg-slate-200 w-full h-full">
+                      {cart.length == 0 ? (
+                        <p className="flex justify-center text-sm h-full py-2 bg-slate-100 w-full self-center justify-self-center">
+                          Cart is empty.
+                        </p>
+                      ) : (
+                        renderCheckoutItems()
+                      )}
+                    </ul>
                   </div>
                 </div>
                 <div>
