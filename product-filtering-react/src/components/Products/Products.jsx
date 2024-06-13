@@ -83,7 +83,7 @@ export default function Products({
               Add To Cart
             </button>
             <button
-              className="self-end h-[60px] w-1/3 flex justify-center items-center bg-slate-500 rounded-br-2xl active:text-rose-400 text-white  hover:text-rose-500  transition font-semibold text-2xl"
+              className="self-end h-[60px] w-1/3 flex justify-center items-center bg-slate-500 rounded-br-2xl active:text-rose-400 text-white  hover:text-rose-500 transition font-semibold text-2xl"
               id="add-to-wishlist"
               onClick={() => {
                 setShowBar({

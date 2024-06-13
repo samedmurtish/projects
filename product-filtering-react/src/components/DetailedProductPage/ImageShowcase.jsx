@@ -6,29 +6,30 @@ export default function ImageShowcase({ product }) {
 
   const renderImages = () => {
     return product.images.map((value, valueIndex) => (
-      <img
+      <div
+        className="h-[120px] w-full border-2 border-slate-200 cursor-pointer border-t-0 border-x-0 bg-slate-300 hover:bg-slate-400 flex justify-center items-center"
         key={valueIndex}
-        src={value}
-        alt={product.title}
-        className="h-max w-full border-2 border-slate-200 cursor-pointer border-t-0 border-x-0"
-        onMouseOver={() => {
-          setShowcaseImage(value);
-        }}
-      />
+      >
+        <img
+          key={valueIndex}
+          src={value}
+          alt={product.title}
+          className="h-[120px] w-max "
+          onMouseOver={() => {
+            setShowcaseImage(value);
+          }}
+        />
+      </div>
     ));
   };
 
   return (
-    <div className="h-[400px] w-max bg-white flex flex-row border-2 border-slate-200">
+    <div className="h-[364px] w-max bg-white flex flex-row border-2 border-slate-200">
       <div className="flex flex-col h-full w-[120px] justify-start border-r-2 overflow-y-auto">
         {renderImages()}
       </div>
-      <div className="h-full w-[400px] ">
-        <img
-          src={showcaseImage}
-          alt={product.title}
-          className="w-full h-full"
-        />
+      <div className="h-full w-[400px] flex justify-center items-center">
+        <img src={showcaseImage} alt={product.title} className="w-max h-full" />
       </div>
     </div>
   );
