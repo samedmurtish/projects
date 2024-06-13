@@ -44,7 +44,7 @@ export default function Cart() {
   const renderCheckoutItems = () => {
     return cart.map((value, valueIndex) => (
       <li
-        key={valueIndex} // Use valueIndex as the key
+        key={valueIndex}
         className="w-full h-full bg-slate-100 p-1 px-2 flex items-center text-slate-600 font-normal rounded-xl justify-between flex-row shadow-md my-1"
       >
         <div className="w-full h-full flex-row flex items-center justify-between">
@@ -64,11 +64,20 @@ export default function Cart() {
     ));
   };
 
-  // Function to render the cart items
+  const handleInput = (e, valueIndex) => {
+    const inputValue = parseInt(e.target.value);
+
+    if (isNaN(inputValue)) {
+      return handleQuantityChange(valueIndex, 1);
+    }
+    if (inputValue > 99) return handleQuantityChange(valueIndex, 99);
+    return handleQuantityChange(valueIndex, inputValue);
+  };
+
   const renderList = () => {
     return cart.map((value, valueIndex) => (
       <li
-        key={valueIndex} // Use valueIndex as the key
+        key={valueIndex}
         className="w-full h-[80px] bg-slate-100 mb-1 p-3 flex items-center text-slate-600 font-bold rounded-xl justify-between flex-row shadow-md"
       >
         <div className="flex justify-center items-center">
@@ -80,15 +89,11 @@ export default function Cart() {
               max={99}
               value={value.quantity}
               className="w-full flex justify-center items-center text-center font-normal"
-              onChange={(e) => handleQuantityChange(valueIndex, e.target.value)}
+              onChange={(e) => handleInput(e, valueIndex)}
             />
           </div>
           <span className="font-normal">X</span>
-          <img
-            src={value.thumbnail}
-            alt={value.title}
-            className="h-12 w-20"
-          />{" "}
+          <img src={value.thumbnail} alt={value.title} className="h-12 w-20" />
         </div>
         <div className="flex w-full h-full justify-between items-center">
           <p className="w-full text-nowrap font-normal">
@@ -162,7 +167,7 @@ export default function Cart() {
                     Tax
                   </p>{" "}
                   <div className="w-full h-full bg-slate-100 mb-1 p-1 px-2 flex items-center text-slate-600 font-normal rounded-xl justify-between flex-row shadow-md my-2">
-                    <div className="w-full h-full flex-row flex items-center justify-between">
+                    <div className="w-full h-full flex-row flex items-center justify-between px-2">
                       <div className="flex">
                         <span className="font-semibold">{totalQuantity} x</span>
                       </div>
@@ -177,7 +182,7 @@ export default function Cart() {
                     Total
                   </p>
                   <div className="w-full h-full bg-slate-100 mb-1 p-1 px-2 flex items-center text-slate-600 font-normal rounded-xl justify-between flex-row shadow-md mt-2">
-                    <div className="w-full h-full flex-row flex items-center justify-between">
+                    <div className="w-full h-full flex-row flex items-center justify-between px-2">
                       <div className="flex">
                         <span className="font-semibold">{totalQuantity} x</span>
                       </div>
