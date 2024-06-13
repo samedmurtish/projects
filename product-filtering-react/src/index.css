@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+#wishlist-div-icon:hover #wishlist-icon {
+  color: rgb(100 116 139);
+}
+#cart-div-icon:hover #cart-icon {
+  color: rgb(100 116 139);
+}
+
 #product-name {
   display: -webkit-box;
   -webkit-line-clamp: 1;

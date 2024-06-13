@@ -3,12 +3,14 @@ import React, { useEffect, useState } from "react";
 import { FaRegStar, FaStar, FaStarHalfAlt, FaHeart } from "react-icons/fa";
 import { addToWishlist } from "../data/wishlist";
 import SkeletonProduct from "../react-skeleton/SkeletonProduct";
+import { addToCart } from "../data/cart";
 // Define the Products component which takes products, sortBy, and category as props
 export default function Products({
   products,
   sortBy,
   category,
   wishlistIncrease,
+  cartIncrease,
   loading,
 }) {
   // State to store products sorted by price
@@ -47,11 +49,14 @@ export default function Products({
             <button
               className="self-end h-[60px] w-2/3 flex justify-center items-center bg-slate-600 hover:bg-slate-500 rounded-bl-2xl text-white font-semibold transition"
               id="add-to-cart"
+              onClick={() => {
+                addToCart(value, cartIncrease);
+              }}
             >
               Add To Cart
             </button>
             <button
-              className="self-end h-[60px] w-1/3 flex justify-center items-center bg-slate-500 rounded-br-2xl text-white hover:text-rose-500 transition font-semibold text-2xl"
+              className="self-end h-[60px] w-1/3 flex justify-center items-center bg-slate-500 rounded-br-2xl active:text-rose-400 text-white  hover:text-rose-500  transition font-semibold text-2xl"
               id="add-to-wishlist"
               onClick={() => {
                 addToWishlist(value, wishlistIncrease);
