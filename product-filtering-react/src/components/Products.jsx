@@ -7,6 +7,7 @@ import { addToCart } from "../data/cart";
 import Snackbar from "@mui/material/Snackbar";
 import Slide from "@mui/material/Slide";
 import SnackbarShow from "../MuiElements/SnackbarShow";
+import { useFetcher } from "react-router-dom";
 function SlideTransition(props) {
   return <Slide {...props} direction="up" />;
 }
@@ -19,6 +20,14 @@ export default function Products({
   cartIncrease,
   loading,
 }) {
+  useEffect(() => {
+    if (loading)
+      setShowBar({
+        clicked: true,
+        message: "Loading products..",
+      });
+  }, [loading]);
+
   const [showBar, setShowBar] = useState({
     clicked: false,
     message: "Product added to cart successfully!",
@@ -168,7 +177,6 @@ export default function Products({
   return (
     <>
       <SnackbarShow get={showBar} set={setShowBar} />
-
       {loading ? renderLoadingProducts() : renderProducts()}
     </>
   );
