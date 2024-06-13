@@ -10,7 +10,7 @@ export function addToCart(item, cartIncrease) {
 
   // If the item does not exist, increase the cart counter and add the item to the cart
   if (!exists) {
-    cartIncrease();
+    if (cartIncrease != null && cartIncrease != undefined) cartIncrease();
     item.quantity = 1;
     cart.push(item);
   } else {

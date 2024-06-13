@@ -145,7 +145,7 @@ export default function Cart() {
                       <span className="font-semibold">{totalQuantity} x</span>
                     </div>
                     <div className="font-semibold">
-                      %15 + ${total.toFixed(2)}
+                      ${total.toFixed(2)} + %15
                     </div>
                   </div>
                 </div>{" "}

@@ -1,19 +1,16 @@
 import React, { useState } from "react";
 import { getList, updateWishlist } from "../data/wishlist";
 import { addToCart } from "../data/cart";
-import { useCartContext } from "./contexts/CartContext.jsx";
+import { useLocation } from "react-router-dom";
 
 export default function Wishlist() {
-  const { handleCartLength } = useCartContext();
+  const location = useLocation();
   const [wishlist, setWishlist] = useState(getList);
 
   const removeFromList = (itemId) => {
     const updatedList = wishlist.filter((item) => item.id !== itemId);
-    setWishlist(() => {
-      const newValue = updatedList;
-      updateWishlist(newValue);
-      return newValue;
-    });
+    setWishlist(updatedList);
+    updateWishlist(updatedList);
   };
 
   const renderList = () => {
@@ -33,7 +30,7 @@ export default function Wishlist() {
           <div
             className="h-full w-[30%] bg-slate-700 text-white p-3 rounded-l-full cursor-pointer hover:bg-slate-600 transition flex justify-center items-center"
             onClick={() => {
-              addToCart(value, handleCartLength);
+              addToCart(value);
             }}
           >
             <p className="px-1">Add To Cart</p>
@@ -57,10 +54,9 @@ export default function Wishlist() {
         </div>
         <div className="bg-slate-200 h-3/4 w-[48%] rounded-b-xl overflow-y-auto shadow-xl overflow-x-hidden">
           <ul className="flex flex-col px-1 pt-1 w-full h-full">
-            {wishlist.length == 0 ? (
+            {wishlist.length === 0 ? (
               <p className="mx-auto my-auto text-xl">
-                List is
-                <span className="font-semibold pl-1">empty</span>.
+                List is <span className="font-semibold pl-1">empty</span>.
               </p>
             ) : (
               renderList()
