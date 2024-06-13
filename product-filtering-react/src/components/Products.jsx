@@ -4,6 +4,12 @@ import { FaRegStar, FaStar, FaStarHalfAlt, FaHeart } from "react-icons/fa";
 import { addToWishlist } from "../data/wishlist";
 import SkeletonProduct from "../react-skeleton/SkeletonProduct";
 import { addToCart } from "../data/cart";
+import Snackbar from "@mui/material/Snackbar";
+import Slide from "@mui/material/Slide";
+import SnackbarShow from "../MuiElements/SnackbarShow";
+function SlideTransition(props) {
+  return <Slide {...props} direction="up" />;
+}
 // Define the Products component which takes products, sortBy, and category as props
 export default function Products({
   products,
@@ -13,6 +19,11 @@ export default function Products({
   cartIncrease,
   loading,
 }) {
+  const [showBar, setShowBar] = useState({
+    clicked: false,
+    message: "Product added to cart successfully!",
+  });
+
   // State to store products sorted by price
   const [productsByPrice, setProductsByPrice] = useState({});
 
@@ -50,6 +61,10 @@ export default function Products({
               className="self-end h-[60px] w-2/3 flex justify-center items-center bg-slate-600 hover:bg-slate-500 rounded-bl-2xl text-white font-semibold transition"
               id="add-to-cart"
               onClick={() => {
+                setShowBar({
+                  clicked: true,
+                  message: "Product added to cart successfully!",
+                });
                 addToCart(value, cartIncrease);
               }}
             >
@@ -59,6 +74,10 @@ export default function Products({
               className="self-end h-[60px] w-1/3 flex justify-center items-center bg-slate-500 rounded-br-2xl active:text-rose-400 text-white  hover:text-rose-500  transition font-semibold text-2xl"
               id="add-to-wishlist"
               onClick={() => {
+                setShowBar({
+                  clicked: true,
+                  message: "Product added to wishlist successfully!",
+                });
                 addToWishlist(value, wishlistIncrease);
               }}
             >
@@ -146,5 +165,11 @@ export default function Products({
   };
 
   // Render the products
-  return <>{loading ? renderLoadingProducts() : renderProducts()}</>;
+  return (
+    <>
+      <SnackbarShow get={showBar} set={setShowBar} />
+
+      {loading ? renderLoadingProducts() : renderProducts()}
+    </>
+  );
 }

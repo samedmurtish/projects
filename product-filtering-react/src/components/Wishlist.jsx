@@ -2,9 +2,13 @@ import React, { useState } from "react";
 import { getList, updateWishlist } from "../data/wishlist";
 import { addToCart } from "../data/cart";
 import { useLocation } from "react-router-dom";
+import SnackbarShow from "../MuiElements/SnackbarShow";
 
 export default function Wishlist() {
-  const location = useLocation();
+  const [showBar, setShowBar] = useState({
+    clicked: false,
+    message: "Product added to cart successfully!",
+  });
   const [wishlist, setWishlist] = useState(getList);
 
   const removeFromList = (itemId) => {
@@ -30,6 +34,10 @@ export default function Wishlist() {
           <div
             className="h-full w-[30%] bg-slate-700 text-white p-3 rounded-l-full cursor-pointer hover:bg-slate-600 transition flex justify-center items-center"
             onClick={() => {
+              setShowBar({
+                clicked: true,
+                message: "Product added to cart successfully!",
+              });
               addToCart(value);
             }}
           >
@@ -37,7 +45,13 @@ export default function Wishlist() {
           </div>
           <div
             className="h-full w-max bg-slate-500 text-white p-3 rounded-r-full cursor-pointer hover:bg-rose-500 transition flex items-center justify-center"
-            onClick={() => removeFromList(value.id)}
+            onClick={() => {
+              setShowBar({
+                clicked: true,
+                message: "Product removed from wishlist successfully!",
+              });
+              removeFromList(value.id);
+            }}
           >
             <p className="px-1 pr-2">Remove</p>
           </div>
@@ -47,23 +61,26 @@ export default function Wishlist() {
   };
 
   return (
-    <div className="mx-auto my-0 w-full h-screen ">
-      <div className="flex flex-col justify-center items-center h-full w-full">
-        <div className="bg-slate-600 flex justify-center items-center h-[75px] w-[49%] font-semibold text-white text-2xl shadow-xl z-50 rounded-md">
-          WISHLIST
-        </div>
-        <div className="bg-slate-200 h-3/4 w-[48%] rounded-b-xl overflow-y-auto shadow-xl overflow-x-hidden">
-          <ul className="flex flex-col px-1 pt-1 w-full h-full">
-            {wishlist.length === 0 ? (
-              <p className="mx-auto my-auto text-xl">
-                List is <span className="font-semibold pl-1">empty</span>.
-              </p>
-            ) : (
-              renderList()
-            )}
-          </ul>
+    <>
+      <SnackbarShow get={showBar} set={setShowBar} />
+      <div className="mx-auto my-0 w-full h-screen ">
+        <div className="flex flex-col justify-center items-center h-full w-full">
+          <div className="bg-slate-600 flex justify-center items-center h-[75px] w-[49%] font-semibold text-white text-2xl shadow-xl z-50 rounded-md">
+            WISHLIST
+          </div>
+          <div className="bg-slate-200 h-3/4 w-[48%] rounded-b-xl overflow-y-auto shadow-xl overflow-x-hidden">
+            <ul className="flex flex-col px-1 pt-1 w-full h-full">
+              {wishlist.length === 0 ? (
+                <p className="mx-auto my-auto text-xl">
+                  List is <span className="font-semibold pl-1">empty</span>.
+                </p>
+              ) : (
+                renderList()
+              )}
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
