@@ -3,6 +3,7 @@ import { getList, updateWishlist } from "../data/wishlist";
 import { addToCart } from "../data/cart";
 import { useLocation } from "react-router-dom";
 import SnackbarShow from "../MuiElements/SnackbarShow";
+import RedirectIcons from "./NavigationBar/RedirectIcons";
 
 export default function Wishlist() {
   const [showBar, setShowBar] = useState({
@@ -10,7 +11,11 @@ export default function Wishlist() {
     message: "Product added to cart successfully!",
   });
   const [wishlist, setWishlist] = useState(getList);
-
+  const [cartLength, setCartLength] = useState(
+    localStorage.getItem("cart")
+      ? JSON.parse(localStorage.getItem("cart")).length
+      : 0
+  );
   const removeFromList = (itemId) => {
     const updatedList = wishlist.filter((item) => item.id !== itemId);
     setWishlist(updatedList);
@@ -63,12 +68,15 @@ export default function Wishlist() {
   return (
     <>
       <SnackbarShow get={showBar} set={setShowBar} />
-      <div className="mx-auto my-0 w-full h-screen ">
+      <div className="mx-auto my-0 w-[60%] h-screen ">
         <div className="flex flex-col justify-center items-center h-full w-full">
-          <div className="bg-slate-600 flex justify-center items-center h-[75px] w-[49%] font-semibold text-white text-2xl shadow-xl z-50 rounded-md">
+          <div className="w-full py-5">
+            <RedirectIcons wishlist={false} home={true} cart={true} />
+          </div>
+          <div className="bg-slate-600 flex justify-center items-center h-[75px] w-full font-semibold text-white text-2xl shadow-xl z-50 rounded-md">
             WISHLIST
           </div>
-          <div className="bg-slate-200 h-3/4 w-[48%] rounded-b-xl overflow-y-auto shadow-xl overflow-x-hidden">
+          <div className="bg-slate-200 h-3/4 w-full rounded-b-xl overflow-y-auto shadow-xl overflow-x-hidden">
             <ul className="flex flex-col px-1 pt-1 w-full h-full">
               {wishlist.length === 0 ? (
                 <p className="mx-auto my-auto text-xl">

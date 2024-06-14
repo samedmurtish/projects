@@ -11,6 +11,8 @@ import SnackbarShow from "../../MuiElements/SnackbarShow";
 import { addToWishlist } from "../../data/wishlist";
 import { FaCircleUser } from "react-icons/fa6";
 import { IoHomeOutline } from "react-icons/io5";
+import RedirectIcons from "../NavigationBar/RedirectIcons";
+
 export default function ProductPage() {
   const location = useLocation();
   let product;
@@ -33,63 +35,6 @@ export default function ProductPage() {
       ? JSON.parse(localStorage.getItem("cart")).length
       : 0
   );
-
-  const renderRedirectIcons = () => {
-    return (
-      <div className="flex justify-between">
-        <Link
-          to={"/"}
-          className="flex justify-center flex-col items-center"
-          id="home-div-icon"
-        >
-          {/* Wishlist link with icon and length */}
-          <IoHomeOutline
-            className="cursor-pointer hover:text-slate-500 text-slate-400 text-4xl"
-            id="home-icon"
-          />
-          <span className="text-gray-500 font-semibold px-5">Home</span>
-        </Link>
-        <div className="flex">
-          <Link
-            to={"/wishlist"}
-            className="flex justify-center flex-col items-center"
-            id="wishlist-div-icon"
-          >
-            {/* Wishlist link with icon and length */}
-            <FaRegHeart
-              className="cursor-pointer hover:text-slate-500 text-slate-400 text-4xl"
-              id="wishlist-icon"
-            />
-            <span className="text-gray-500 font-semibold px-5">
-              Wishlist ({" "}
-              <span className="text-slate-900 font-extrabold">
-                {wishlistLength}
-              </span>{" "}
-              )
-            </span>
-          </Link>
-          <Link
-            to={"/cart"}
-            className="flex justify-center flex-col items-center"
-            id="cart-div-icon"
-          >
-            {/* Wishlist link with icon and length */}
-            <IoCartOutline
-              className="cursor-pointer hover:text-slate-500 text-slate-400 text-4xl"
-              id="cart-icon"
-            />
-            <span className="text-gray-500 font-semibold px-5">
-              Cart ({" "}
-              <span className="text-slate-900 font-extrabold">
-                {cartLength}
-              </span>{" "}
-              )
-            </span>
-          </Link>
-        </div>
-      </div>
-    );
-  };
 
   const renderTags = () => {
     return product.tags.map((value, valueIndex) => (
@@ -139,7 +84,15 @@ export default function ProductPage() {
         <>
           <div className="mx-auto my-0 w-11/12 h-full flex justify-center py-10 overflow-y-auto">
             <div className="flex flex-col h-full w-max overflow-y-auto">
-              <div className="p-5">{renderRedirectIcons()}</div>
+              <div className="p-5">
+                <RedirectIcons
+                  wishlistLength={wishlistLength}
+                  cartLength={cartLength}
+                  home={true}
+                  wishlist={true}
+                  cart={true}
+                />
+              </div>
               <div className="bg-gray-100 h-full w-max rounded-b-xl overflow-y-auto shadow-xl overflow-x-hidden rounded-xl">
                 <div className="flex flex-row h-full w-max">
                   <ImageShowcase product={product} />
