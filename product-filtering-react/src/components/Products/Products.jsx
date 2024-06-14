@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import { addToWishlist } from "../../data/wishlist";
-import SkeletonProduct from "../../react-skeleton/SkeletonProduct";
+import SkeletonProduct from "../../react-skeleton/SkeletonProducts";
 import { addToCart } from "../../data/cart";
 import SnackbarShow from "../../MuiElements/SnackbarShow";
 import { Link, Outlet } from "react-router-dom";
@@ -72,12 +72,13 @@ export default function Products({
             <button
               className="self-end h-[60px] w-2/3 flex justify-center items-center bg-slate-600 hover:bg-slate-500 rounded-bl-2xl text-white font-semibold transition"
               id="add-to-cart"
-              onClick={() => {
+              onClick={(e) => {
                 setShowBar({
                   clicked: true,
                   message: "Product added to cart successfully!",
                 });
                 addToCart(value, cartIncrease);
+                e.preventDefault();
               }}
             >
               Add To Cart
@@ -85,12 +86,13 @@ export default function Products({
             <button
               className="self-end h-[60px] w-1/3 flex justify-center items-center bg-slate-500 rounded-br-2xl active:text-rose-400 text-white  hover:text-rose-500 transition font-semibold text-2xl"
               id="add-to-wishlist"
-              onClick={() => {
+              onClick={(e) => {
                 setShowBar({
                   clicked: true,
                   message: "Product added to wishlist successfully!",
                 });
                 addToWishlist(value, wishlistIncrease);
+                e.preventDefault();
               }}
             >
               <FaHeart />

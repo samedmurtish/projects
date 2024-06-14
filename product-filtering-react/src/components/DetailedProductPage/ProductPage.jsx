@@ -15,7 +15,7 @@ export default function ProductPage() {
   let product;
   location.state != null ? ({ product } = location.state) : null;
 
-  console.log(product);
+  //console.log(product);
 
   const [showBar, setShowBar] = useState({
     clicked: false,
@@ -77,8 +77,8 @@ export default function ProductPage() {
   const renderTags = () => {
     return product.tags.map((value, valueIndex) => (
       <div key={`${value}-${valueIndex}`}>
-        <p className="rounded-full bg-slate-300 hover:bg-slate-500 w-max h-max px-3 py-1 hover:text-white text-slate-500 font-semibold text-xs flex justify-center items-center text-center transition cursor-default">
-          <span className="text-slate-400 flex justify-center items-center text-center">
+        <p className="rounded-full bg-slate-300 hover:bg-slate-500 w-max h-max px-2 py-1 hover:text-white text-slate-500 font-semibold text-xs flex justify-center items-center text-center transition cursor-default">
+          <span className="text-slate-400 flex justify-center items-center text-center font-extrabold">
             #
           </span>
           {value}
@@ -100,17 +100,36 @@ export default function ProductPage() {
               <div className="bg-gray-100 h-max w-max rounded-b-xl overflow-y-auto shadow-xl overflow-x-hidden rounded-xl">
                 <div className="flex flex-row h-full w-max">
                   <ImageShowcase product={product} />
-                  <div className="w-max h-full p-10 flex flex-col justify-between">
+                  <div className="w-max h-full p-10 py-7 pt-3 flex flex-col justify-between">
                     <div>
-                      <div className="flex">{renderTags()}</div>
+                      <div className="flex py-2">{renderTags()}</div>
                       <div className="text-2xl font-semibold pb-0 w-max ">
-                        <p className="max-w-[700px]"> {product.title}</p>
+                        <p className="max-w-[700px] text-slate-600">
+                          {" "}
+                          {product.title}
+                        </p>
                       </div>
-                      <div className="w-max">{product.brand}</div>
+                      <div className="w-max text-slate-400">
+                        {product.brand}
+                      </div>
                       <div className="text-yellow-300 flex justify-start items-center gap-x-2 bg-gray-100 w-fit text-base py-1">
                         <div className="flex">
                           <RenderStars stars={product.rating} />
                         </div>
+                      </div>
+                      <div className="flex">
+                        {product.availabilityStatus == "In Stock" ? (
+                          <p className="rounded-full rounded-r-none bg-green-400 hover:bg-green-500 w-max h-max px-3 py-1 my-2 text-white font-semibold transition cursor-default text-sm">
+                            {product.availabilityStatus}
+                          </p>
+                        ) : (
+                          <p className="rounded-full rounded-r-none bg-rose-400 hover:bg-rose-500 w-max h-max px-3 py-1 my-2 text-white font-semibold transition cursor-default text-sm">
+                            {product.availabilityStatus}
+                          </p>
+                        )}
+                        <p className="rounded-full rounded-l-none bg-slate-500  hover:bg-slate-600 w-max h-max px-3 py-1 my-2 text-white font-semibold transition cursor-default text-sm">
+                          Items Left: {product.stock}
+                        </p>{" "}
                       </div>
                       <p className="rounded-full bg-slate-500 hover:bg-slate-600 w-max h-max px-3 py-1 my-2 text-white font-semibold transition cursor-default">
                         <span className="text-slate-300 pr-1">$</span>
@@ -119,7 +138,8 @@ export default function ProductPage() {
                     </div>
                     <div className="flex h-max w-max justify-between">
                       <div className="flex">
-                        <button
+                        <Link
+                          to={"/cart"}
                           className="h-max w-max bg-slate-600 hover:bg-slate-500 text-white p-3 rounded-lg cursor-pointer transition flex justify-center font-semibold mr-1"
                           id="add-to-cart"
                           onClick={() => {
@@ -134,7 +154,7 @@ export default function ProductPage() {
                           }}
                         >
                           <p className="px-1">Buy Now</p>
-                        </button>{" "}
+                        </Link>
                         <button
                           className="h-max w-max bg-slate-600 hover:bg-slate-500 text-white p-3 rounded-lg cursor-pointer transition flex justify-center mr-3 font-semibold"
                           id="add-to-cart"
