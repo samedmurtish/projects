@@ -9,12 +9,13 @@ import { addToCart } from "../../data/cart";
 import { FaHeart } from "react-icons/fa";
 import SnackbarShow from "../../MuiElements/SnackbarShow";
 import { addToWishlist } from "../../data/wishlist";
-
+import { FaCircleUser } from "react-icons/fa6";
+import { IoHomeOutline } from "react-icons/io5";
 export default function ProductPage() {
   const location = useLocation();
   let product;
   location.state != null ? ({ product } = location.state) : null;
-
+  window.scrollTo(0, 0);
   //console.log(product);
 
   const [showBar, setShowBar] = useState({
@@ -35,41 +36,57 @@ export default function ProductPage() {
 
   const renderRedirectIcons = () => {
     return (
-      <div className="flex">
+      <div className="flex justify-between">
         <Link
-          to={"/wishlist"}
+          to={"/"}
           className="flex justify-center flex-col items-center"
-          id="wishlist-div-icon"
+          id="home-div-icon"
         >
           {/* Wishlist link with icon and length */}
-          <FaRegHeart
+          <IoHomeOutline
             className="cursor-pointer hover:text-slate-500 text-slate-400 text-4xl"
-            id="wishlist-icon"
+            id="home-icon"
           />
-          <span className="text-gray-500 font-semibold px-5">
-            Wishlist ({" "}
-            <span className="text-slate-900 font-extrabold">
-              {wishlistLength}
-            </span>{" "}
-            )
-          </span>
+          <span className="text-gray-500 font-semibold px-5">Home</span>
         </Link>
-        <Link
-          to={"/cart"}
-          className="flex justify-center flex-col items-center"
-          id="cart-div-icon"
-        >
-          {/* Wishlist link with icon and length */}
-          <IoCartOutline
-            className="cursor-pointer hover:text-slate-500 text-slate-400 text-4xl"
-            id="cart-icon"
-          />
-          <span className="text-gray-500 font-semibold px-5">
-            Cart ({" "}
-            <span className="text-slate-900 font-extrabold">{cartLength}</span>{" "}
-            )
-          </span>
-        </Link>
+        <div className="flex">
+          <Link
+            to={"/wishlist"}
+            className="flex justify-center flex-col items-center"
+            id="wishlist-div-icon"
+          >
+            {/* Wishlist link with icon and length */}
+            <FaRegHeart
+              className="cursor-pointer hover:text-slate-500 text-slate-400 text-4xl"
+              id="wishlist-icon"
+            />
+            <span className="text-gray-500 font-semibold px-5">
+              Wishlist ({" "}
+              <span className="text-slate-900 font-extrabold">
+                {wishlistLength}
+              </span>{" "}
+              )
+            </span>
+          </Link>
+          <Link
+            to={"/cart"}
+            className="flex justify-center flex-col items-center"
+            id="cart-div-icon"
+          >
+            {/* Wishlist link with icon and length */}
+            <IoCartOutline
+              className="cursor-pointer hover:text-slate-500 text-slate-400 text-4xl"
+              id="cart-icon"
+            />
+            <span className="text-gray-500 font-semibold px-5">
+              Cart ({" "}
+              <span className="text-slate-900 font-extrabold">
+                {cartLength}
+              </span>{" "}
+              )
+            </span>
+          </Link>
+        </div>
       </div>
     );
   };
@@ -87,6 +104,32 @@ export default function ProductPage() {
     ));
   };
 
+  const renderReviews = () => {
+    return product.reviews.map((value, valueIndex) => (
+      <div
+        key={valueIndex}
+        className="h-full w-full bg-gray-200 flex flex-row py-3 justify-start border-b-slate-300 border-b-2"
+      >
+        <div className="text-3xl text-slate-600 p-3 pt-2 w-max h-full flex justify-start items-start">
+          <FaCircleUser />
+        </div>
+        <div className="flex flex-col w-full pr-3">
+          <div className="text-slate-700 font-semibold pb-3 w-full">
+            <div className="flex justify-between flex-row w-full">
+              <div>{value.reviewerName}</div>
+              <div>{value.date}</div>
+            </div>
+            <span className="text-slate-400 flex  items-center">
+              <RenderStars stars={value.rating} />
+              <span className="text-slate-500 px-1">({value.rating})</span>
+            </span>
+          </div>
+          <div className="text-slate-600">{value.comment}</div>
+        </div>
+      </div>
+    ));
+  };
+
   return (
     <div>
       <SnackbarShow get={showBar} set={setShowBar} />
@@ -94,18 +137,17 @@ export default function ProductPage() {
         <ErrorPage />
       ) : (
         <>
-          <div className="mx-auto my-0 w-11/12 h-screen flex justify-center py-10">
-            <div className="flex flex-col h-full w-max ">
-              <div className="self-end p-5">{renderRedirectIcons()}</div>
-              <div className="bg-gray-100 h-max w-max rounded-b-xl overflow-y-auto shadow-xl overflow-x-hidden rounded-xl">
+          <div className="mx-auto my-0 w-11/12 h-full flex justify-center py-10 overflow-y-auto">
+            <div className="flex flex-col h-full w-max overflow-y-auto">
+              <div className="p-5">{renderRedirectIcons()}</div>
+              <div className="bg-gray-100 h-full w-max rounded-b-xl overflow-y-auto shadow-xl overflow-x-hidden rounded-xl">
                 <div className="flex flex-row h-full w-max">
                   <ImageShowcase product={product} />
-                  <div className="w-max h-full p-10 py-7 pt-3 flex flex-col justify-between">
+                  <div className="w-max p-10 py-7 pt-3 flex flex-col justify-between">
                     <div>
                       <div className="flex py-2">{renderTags()}</div>
                       <div className="text-2xl font-semibold pb-0 w-max ">
                         <p className="max-w-[700px] text-slate-600">
-                          {" "}
                           {product.title}
                         </p>
                       </div>
@@ -136,7 +178,7 @@ export default function ProductPage() {
                         {product.price}
                       </p>
                     </div>
-                    <div className="flex h-max w-max justify-between">
+                    <div className="flex h-full w-max justify-center items-end">
                       <div className="flex">
                         <Link
                           to={"/cart"}
@@ -189,6 +231,24 @@ export default function ProductPage() {
                       </button>
                     </div>
                   </div>
+                </div>
+              </div>
+              <div className="w-full h-full text-white font-semibold flex justify-center items-center flex-col py-5 pt-10 flex-wrap text-wrap rounded-b-xl">
+                <div className="py-6 px-6 text-2xl bg-slate-600 w-full rounded-xl flex justify-center">
+                  DESCRIPTION
+                </div>
+                <div className="w-full h-full  flex justify-center items-center rounded-b-xl">
+                  <div className="h-full w-[840px] bg-gray-200 flex flex-row p-3 justify-start rounded-b-xl border-b-slate-300 border-b-2 text-wrap flex-wrap text-slate-500">
+                    {product.description}
+                  </div>
+                </div>
+              </div>
+              <div className="w-full h-full text-white font-semibold flex justify-center items-center flex-col py-5">
+                <div className="py-6 px-6 text-2xl bg-slate-600 w-full rounded-xl  flex justify-center">
+                  REVIEWS
+                </div>
+                <div className="w-[95%] h-full rounded-b-xl">
+                  {renderReviews()}
                 </div>
               </div>
             </div>

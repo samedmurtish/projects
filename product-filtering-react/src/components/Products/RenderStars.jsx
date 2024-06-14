@@ -27,5 +27,5 @@ export default function RenderStars({ stars }) {
 
     return <>{starList}</>;
   };
-  return <>{renderStars(stars)}</>;
+  return <div className="flex">{renderStars(stars)}</div>;
 }

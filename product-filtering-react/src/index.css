@@ -8,6 +8,9 @@
 #cart-div-icon:hover #cart-icon {
   color: rgb(100 116 139);
 }
+#home-div-icon:hover #home-icon {
+  color: rgb(100 116 139);
+}
 
 #product-name {
   display: -webkit-box;

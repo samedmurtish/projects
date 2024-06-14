@@ -70,6 +70,9 @@ export default function Cart() {
     if (isNaN(inputValue)) {
       return handleQuantityChange(valueIndex, 1);
     }
+    if (inputValue <= 0) {
+      return handleQuantityChange(valueIndex, 1);
+    }
     if (inputValue > 99) return handleQuantityChange(valueIndex, 99);
     return handleQuantityChange(valueIndex, inputValue);
   };
