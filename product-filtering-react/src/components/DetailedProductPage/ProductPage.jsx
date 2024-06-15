@@ -93,10 +93,10 @@ export default function ProductPage() {
                   cart={true}
                 />
               </div>
-              <div className="bg-gray-100 h-full w-max rounded-b-xl overflow-y-auto shadow-xl overflow-x-hidden rounded-xl">
-                <div className="flex flex-row h-full w-max">
+              <div className="h-full w-full rounded-b-xl overflow-y-auto shadow-xl overflow-x-hidden rounded-xl flex items-center justify-evenly">
+                <div className="flex flex-row h-full w-full justify-evenly bg-gray-100">
                   <ImageShowcase product={product} />
-                  <div className="w-max p-10 py-7 pt-3 flex flex-col justify-between">
+                  <div className="w-full p-10 py-7 pt-3 flex flex-col justify-between">
                     <div>
                       <div className="flex py-2">{renderTags()}</div>
                       <div className="text-2xl font-semibold pb-0 w-max ">
@@ -190,8 +190,8 @@ export default function ProductPage() {
                 <div className="py-6 px-6 text-2xl bg-slate-600 w-full rounded-xl flex justify-center">
                   DESCRIPTION
                 </div>
-                <div className="w-full h-full  flex justify-center items-center rounded-b-xl">
-                  <div className="h-full w-[840px] bg-gray-200 flex flex-row p-3 justify-start rounded-b-xl border-b-slate-300 border-b-2 text-wrap flex-wrap text-slate-500">
+                <div className="w-[95%] h-full bg-gray-200 flex justify-center items-center rounded-b-xl">
+                  <div className="h-full w-full  flex flex-row p-3 justify-start rounded-b-xl border-b-slate-300 border-b-2 text-wrap flex-wrap text-slate-500">
                     {product.description}
                   </div>
                 </div>
