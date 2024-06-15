@@ -3,20 +3,28 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import ErrorPage from "../Error/ErrorPage";
 import ImageShowcase from "./ImageShowcase";
 import RenderStars from "../Products/RenderStars";
-import { FaRegHeart } from "react-icons/fa"; // Import an icon from react-icons
-import { IoCartOutline } from "react-icons/io5";
 import { addToCart } from "../../data/cart";
 import { FaHeart } from "react-icons/fa";
 import SnackbarShow from "../../MuiElements/SnackbarShow";
 import { addToWishlist } from "../../data/wishlist";
 import { FaCircleUser } from "react-icons/fa6";
-import { IoHomeOutline } from "react-icons/io5";
 import RedirectIcons from "../NavigationBar/RedirectIcons";
+import { useParams } from "react-router-dom";
+import Data from "../../api/Data";
 
 export default function ProductPage() {
+  const { products, loading } = Data();
+
+  console.log(products);
+
+  const { id } = useParams();
+
+  console.log(id);
+
   const location = useLocation();
-  let product;
-  location.state != null ? ({ product } = location.state) : null;
+  let product = products[id];
+  location.state != null && ({ product } = location.state);
+
   window.scrollTo(0, 0);
   //console.log(product);
 
@@ -79,10 +87,10 @@ export default function ProductPage() {
     <div>
       <SnackbarShow get={showBar} set={setShowBar} />
       {product == null ? (
-        <ErrorPage />
+        !loading && <ErrorPage />
       ) : (
         <>
-          <div className="mx-auto my-0 w-11/12 h-full flex justify-center py-10 overflow-y-auto">
+          <div className="mx-auto my-0 w-11/12 max-w-[1000px] h-full flex justify-center py-10 overflow-y-auto">
             <div className="flex flex-col h-full w-max overflow-y-auto">
               <div className="p-5">
                 <RedirectIcons
