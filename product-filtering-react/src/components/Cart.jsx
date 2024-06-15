@@ -146,10 +146,10 @@ export default function Cart() {
               <div className="bg-slate-600 flex justify-center items-center h-[75px] w-full font-semibold text-white text-2xl shadow-xl z-50 rounded-md">
                 CART
               </div>
-              <div className="bg-slate-200 h-max max-h-[500px] min-h-[500px] w-[97%] rounded-b-xl overflow-y-auto shadow-xl overflow-x-hidden">
+              <div className="bg-slate-200 h-full max-h-[500px] min-h-[500px] w-[97%] rounded-b-xl overflow-y-auto shadow-xl overflow-x-hidden">
                 <ul className="flex flex-col px-1 pt-1 w-full h-full">
                   {cart.length === 0 ? ( // Check if cart is empty
-                    <p className="mx-auto my-auto text-xl">
+                    <p className="mx-auto my-auto text-xl self-center justify-self-center h-full w-full flex justify-center items-center pt-20">
                       Cart is
                       <span className="font-semibold pl-1">empty</span>.
                     </p>
