@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 const blogPostSchema = new Schema({
     title: String,
-    content: String,
+    postContent: String,
 }, {
     timestamps: true,
 });

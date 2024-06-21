@@ -1,13 +1,12 @@
 import { request } from "http";
 import connectMongoDB from "../../../lib/mongodb";
-import BlogPost from "../../../models/blogpost";
+import BlogPost from "../../../models/BlogPost";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
-    const { title, content } = await req.json();
+    const { title, postContent } = await req.json();
     await connectMongoDB();
-    await BlogPost.create({ title, content });
-    console.log(req);
+    await BlogPost.create({ title, postContent });
     return NextResponse.json({ message: "BlogPost Created" }, { status: 201 });
 }
 

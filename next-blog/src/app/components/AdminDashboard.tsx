@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { SetStateAction, useState } from "react";
 export default function AdminDashboard() {
   const [title, setTitle] = useState();
-  const [content, setContent] = useState();
+  const [postContent, setPostContent] = useState();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -13,7 +13,7 @@ export default function AdminDashboard() {
         headers: {
           "Content-type": "application/json",
         },
-        body: JSON.stringify({ content }),
+        body: JSON.stringify({ postContent, zitle: title }),
       });
     } catch (error) {
       console.log(error);
@@ -42,7 +42,7 @@ export default function AdminDashboard() {
             className="border-2 rounded-lg px-2"
             cols={90}
             rows={5}
-            onChange={(e) => setContent(e.target.value)}
+            onChange={(e) => setPostContent(e.target.value)}
           ></textarea>
         </div>
         <button className="bg-slate-500 h-max w-max px-3 py-1 rounded-lg text-white font-semibold">
