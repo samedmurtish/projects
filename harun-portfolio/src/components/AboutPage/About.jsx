@@ -1,20 +1,27 @@
 import React from "react";
 import photo from "../../assets/me.jpg";
-import NavigationBar from "../NavigationBar";
+import NavigationBar from "../NavigationBar/NavigationBar";
+import NavigationBarMobile from "../NavigationBar/NavigationBarMobile";
+
 export default function Content() {
   return (
     <div className="select-none">
-      <NavigationBar />
+      <div className="hidden md:block ">
+        <NavigationBar />
+      </div>
+      <div className="block md:hidden">
+        <NavigationBarMobile />
+      </div>
       <div className="h-full w-full text-white font-semibold pt-20">
-        <div className="mx-auto my-0 w-3/4 h-max">
-          <div className="flex flex-row w-full h-full">
-            <div className="flex justify-between items-center ml-0 mt-20">
+        <div className="mx-auto my-0 w-3/4">
+          <div className="flex w-full h-full ">
+            <div className="flex flex-col md:flex-row items-center ml-0 mt-20">
               <img
                 src={photo}
-                className="w-[35%] h-max rounded-3xl shadow-xl"
+                className="w-4/5 md:w-[35%] h-max rounded-3xl shadow-xl"
               />
-              <div className="ml-36 overflow-hidden text-wrap text-ellipsis truncate bg-[#AB012F] p-6 rounded-3xl">
-                <p className="text-[3vw] font-bold pb-6 flex">
+              <div className="my-20 md:ml-36 md:my-0 overflow-hidden text-wrap text-ellipsis truncate bg-[#AB012F] p-6 rounded-3xl cursor-help">
+                <p className="text-[3vw] font-bold pb-6 flex ">
                   <span id="about-easter-egg" className="pr-3">
                     About{" "}
                   </span>{" "}
@@ -24,7 +31,7 @@ export default function Content() {
                   </span>
                 </p>
                 <div className="w-full h-1 bg-[#212121]"></div>
-                <p className="font-thin text-[1.5vw] h-max bg-[#950129] p-5 rounded-b-xl ">
+                <p className="font-thin text-[1.5vw] h-max bg-[#950129] p-5 rounded-b-xl text-justify ">
                   I am <span className="font-bold">Harun Spaho </span>from the
                   small town of <span className="font-normal">Struga</span> in{" "}
                   <span className="font-normal">North Macedonia</span>. I am

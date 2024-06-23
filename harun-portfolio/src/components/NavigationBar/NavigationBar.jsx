@@ -27,8 +27,8 @@ export default function NavigationBar() {
 
   return (
     <>
-      <div className="bg-[#AB012F] absolute w-full">
-        <div className="flex justify-between items-center text-white font-semibold py-5 text-xl mx-auto my-0 w-3/4 shadow-lg">
+      <div className="bg-[#AB012F] fixed w-full">
+        <div className="flex justify-between items-center text-white font-semibold py-5 text-xl mx-auto my-0 w-3/4 ">
           <Link className="py-3" to="/">
             Harun Spaho
           </Link>

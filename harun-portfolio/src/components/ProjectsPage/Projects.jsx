@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import NavigationBar from "../NavigationBar";
+import NavigationBar from "../NavigationBar/NavigationBar";
 import { MdFavorite } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { projectData } from "../../scripts/data";
-
+import NavigationBarMobile from "../NavigationBar/NavigationBarMobile";
 export default function Projects() {
   const renderProjects = () => {
     return projectData.map((value, valueIndex) => (
@@ -21,7 +21,7 @@ export default function Projects() {
             </p>
           </div>
         </Link>
-        <div className="bg-rose-600 h-1 w-full"></div>
+        <div className="bg-rose-400 h-1 w-full"></div>
         <div className="flex w-full h-full">
           <Link
             to={`/project/${value.id}`}
@@ -40,8 +40,13 @@ export default function Projects() {
 
   return (
     <div>
-      <NavigationBar />
-      <div className="flex w-full h-screen pt-44 text-white  font-semibold">
+      <div className="hidden sm:block ">
+        <NavigationBar />
+      </div>
+      <div className="block sm:hidden">
+        <NavigationBarMobile />
+      </div>
+      <div className="flex w-full h-full pt-44 text-white  font-semibold">
         <div className="mx-auto my-0 w-3/4 h-max">
           <p className="text-5xl">Projects</p>
           <div className="w-full bg-rose-600 h-1 my-5" />
