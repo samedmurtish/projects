@@ -4,7 +4,14 @@ import { MdFavorite } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { projectData } from "../../scripts/data";
 import NavigationBarMobile from "../NavigationBar/NavigationBarMobile";
+import SnackbarShow from "../../MuiElements/SnackbarShow";
+
 export default function Projects() {
+  const [showBar, setShowBar] = useState({
+    clicked: false,
+    message: "Product added to cart successfully!",
+  });
+
   const renderProjects = () => {
     return projectData.map((value, valueIndex) => (
       <div key={valueIndex}>
@@ -27,6 +34,12 @@ export default function Projects() {
             to={`/project/${value.id}`}
             state={{ project: value }}
             className="w-2/3 bg-rose-600 hover:bg-rose-700 active:bg-rose-800 h-full p-5 transition text-xl flex justify-center items-center"
+            onClick={() =>
+              setShowBar({
+                clicked: true,
+                message: "Redirecting to project..",
+              })
+            }
           >
             View Project
           </Link>
@@ -40,6 +53,7 @@ export default function Projects() {
 
   return (
     <div>
+      <SnackbarShow get={showBar} set={setShowBar} />
       <div className="hidden sm:block ">
         <NavigationBar />
       </div>
@@ -51,8 +65,6 @@ export default function Projects() {
           <p className="text-5xl">Projects</p>
           <div className="w-full bg-rose-600 h-1 my-5" />
           <div className="flex w-full h-full gap-5 justify-start items-center flex-wrap">
-            {renderProjects()}
-            {renderProjects()}
             {renderProjects()}
           </div>
         </div>

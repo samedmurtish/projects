@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import SnackbarShow from "../../MuiElements/SnackbarShow";
+import { showSuccessSnackbar } from "../../actions/snackbarActions";
+import { useDispatch } from "react-redux";
 
 export default function NavigationBar() {
   const pages = [
@@ -7,7 +10,10 @@ export default function NavigationBar() {
     { link: "projects", title: "My Projects" },
     { link: "cv", title: "CV" },
   ];
-
+  const [showBar, setShowBar] = useState({
+    clicked: false,
+    message: "Redirecting!",
+  });
   const renderNav = () => {
     return pages.map((value, valueIndex) => (
       <Link
@@ -27,6 +33,7 @@ export default function NavigationBar() {
 
   return (
     <>
+      <SnackbarShow get={showBar} set={setShowBar} />
       <div className="bg-[#AB012F] fixed w-full">
         <div className="flex justify-between items-center text-white font-semibold py-5 text-xl mx-auto my-0 w-3/4 ">
           <Link className="py-3" to="/">
