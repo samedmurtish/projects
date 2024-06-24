@@ -72,23 +72,25 @@ export default function Projects() {
     sortCategories();
 
     return sortedCategories.map((value, valueIndex) => (
-      <div key={valueIndex} className="flex flex-col w-full">
+      <div key={valueIndex} className="flex flex-col w-full mb-24">
         <p className="text-5xl text-white font-thin">{value}</p>
-        <div className="w-full bg-rose-600 h-1 my-5" />
+        <div className="flex">
+          <div className="w-2/3 bg-rose-600 h-1 my-5" />
+          <div className="w-[20%] bg-rose-500 h-1 my-5" />
+          <div className="w-[10%] bg-rose-400 h-1 my-5" />
+          <div className="w-[5%] bg-rose-300 h-1 my-5" />
+        </div>
         <div className="flex w-full h-full gap-5 justify-start items-start flex-wrap ">
           {renderProjects(value)}
         </div>
-        <div className="self-center justify-self-center bg-neutral-700 w-1/2 h-[2px] mt-16" />
-        <div className="self-center justify-self-center bg-neutral-700 w-2/3 h-[2px] mx-16 mt-[2px]" />
-        <div className="self-center justify-self-center bg-neutral-700 w-1/2 h-[2px] my-16 mt-[2px]" />
       </div>
     ));
   };
 
   return (
-    <div>
+    <div className="flex justify-center items-start md:items-center flex-col">
       <SnackbarShow get={showBar} set={setShowBar} />
-      <div className="hidden sm:block ">
+      <div className="hidden sm:block md:self-start">
         <NavigationBar />
       </div>
       <div className="block sm:hidden">
@@ -96,12 +98,15 @@ export default function Projects() {
       </div>
       <div className="flex w-full h-full pt-24 text-white  font-semibold">
         <div className="mx-auto my-0 w-3/4 h-max">
-          <p className="text-8xl py-10 font-extrabold">Projects</p>
+          <p className="text-7xl md:text-8xl py-10 font-extrabold">Projects</p>
           <div className="flex w-full h-full gap-5 justify-start items-center flex-wrap">
             {renderCategories()}
           </div>
         </div>
       </div>
+      <div className="self-center justify-self-center bg-neutral-700 w-1/2 h-[2px] mt-16" />
+      <div className="self-center justify-self-center bg-neutral-700 w-2/3 h-[2px] mx-16 mt-[2px]" />
+      <div className="self-center justify-self-center bg-neutral-700 w-1/2 h-[2px] my-16 mt-[2px]" />
       <Footer />
     </div>
   );

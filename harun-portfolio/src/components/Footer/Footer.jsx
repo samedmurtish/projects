@@ -10,8 +10,8 @@ export default function Footer() {
   }, [currentDate.getFullYear()]);
 
   return (
-    <div className="bg-[#AB012F] w-full h-[70px]">
-      <div className="select-none  text-white flex justify-between items-center w-3/4 h-full mx-auto my-0">
+    <div className="bg-[#AB012F] w-full h-[130px] py-1 md:h-[70px]">
+      <div className="select-none  text-white flex flex-col md:flex-row p-2 text-center md:text-pretty justify-between items-center w-[60%] md:w-3/4 h-full mx-auto my-0">
         <div>
           <b className="font-extrabold"></b>©<b> Harun Spaho</b>'s Portfolio,{" "}
           {date}. <b>All rights reserved</b>
