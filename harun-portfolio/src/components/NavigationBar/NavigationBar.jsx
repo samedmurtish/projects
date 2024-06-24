@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import SnackbarShow from "../../MuiElements/SnackbarShow";
-import { showSuccessSnackbar } from "../../actions/snackbarActions";
-import { useDispatch } from "react-redux";
 
 export default function NavigationBar() {
   const pages = [

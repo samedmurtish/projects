@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import Snackbar from "@mui/material/Snackbar";
 import Slide from "@mui/material/Slide";
-
+import { IoIosCheckmarkCircle } from "react-icons/io";
 function SlideTransition(props) {
   return <Slide {...props} direction="up" />;
 }
@@ -40,7 +40,14 @@ export default function SnackbarShow({ get, set }) {
         open={state.open}
         onClose={handleClose}
         TransitionComponent={state.Transition}
-        message={get.message}
+        message={
+          <div className="flex justify-center items-center">
+            <span className="text-3xl text-green-400 pr-2">
+              <IoIosCheckmarkCircle />
+            </span>
+            {get.message}
+          </div>
+        }
         key={get.message}
         autoHideDuration={1500}
       />
