@@ -210,47 +210,67 @@ export const projectData = [
   },
   {
     id: 8,
-    name: "Econocar",
-    category: "Logo Designs",
-    thumbnail: `${carLogoThumb}`,
+    name: "ZEC",
+    category: "Social Media Content",
+    thumbnail: `${zecThumb}`,
     details: [
       {
-        img: `${carLogoThumb}`,
-        title: "Econocar",
-        text: "The 'Econo Car' logo was assigned to me during my university studies. I was tasked with animating it using HTML, CSS, and JavaScript. Unfortunately, this is all i got of the logo",
+        img: `${zecThumb}`,
+        title: "ZEC",
+        text: "Creating these social media posts was a deliberate self-assessment of my graphic design skills. I found immense satisfaction in their outcome. Interestingly, when I shared them with the company, after they offered me to do my internship with them.",
       },
       {
-        img: `${carLogoDetail1}`,
-        title: "Econocar",
-        text: "The 'Econo Car' logo was assigned to me during my university studies. I was tasked with animating it using HTML, CSS, and JavaScript. Unfortunately, this is all i got of the logo",
+        img: `${zecDetail1}`,
+        title: "ZEC",
+        text: "Creating these social media posts was a deliberate self-assessment of my graphic design skills. I found immense satisfaction in their outcome. Interestingly, when I shared them with the company, after they offered me to do my internship with them.",
       },
       {
-        img: `${carLogoDetail2}`,
-        title: "Econocar",
-        text: "The 'Econo Car' logo was assigned to me during my university studies. I was tasked with animating it using HTML, CSS, and JavaScript. Unfortunately, this is all i got of the logo",
+        img: `${zecDetail2}`,
+        title: "ZEC",
+        text: "Creating these social media posts was a deliberate self-assessment of my graphic design skills. I found immense satisfaction in their outcome. Interestingly, when I shared them with the company, after they offered me to do my internship with them.",
+      },
+      {
+        img: `${zecDetail3}`,
+        title: "ZEC",
+        text: "Creating these social media posts was a deliberate self-assessment of my graphic design skills. I found immense satisfaction in their outcome. Interestingly, when I shared them with the company, after they offered me to do my internship with them.",
+      },
+      {
+        img: `${zecDetail4}`,
+        title: "ZEC",
+        text: "Creating these social media posts was a deliberate self-assessment of my graphic design skills. I found immense satisfaction in their outcome. Interestingly, when I shared them with the company, after they offered me to do my internship with them.",
+      },
+      {
+        img: `${zecDetail5}`,
+        title: "ZEC",
+        text: "Creating these social media posts was a deliberate self-assessment of my graphic design skills. I found immense satisfaction in their outcome. Interestingly, when I shared them with the company, after they offered me to do my internship with them.",
       },
     ],
   },
   {
     id: 9,
-    name: "My Piramit",
-    category: "Logo Designs",
-    thumbnail: `${pyramidThumb}`,
+    name: "FC STRUGA",
+    category: "Social Media Content",
+    thumbnail: `${fcStrugaThumb}`,
     details: [
       {
-        img: `${pyramidThumb}`,
-        title: "My Piramit",
-        text: "The 'My Piramit' logo was intended for my cousin's unsuccessful online shopping company.",
+        img: `${fcStrugaThumb}`,
+        title: "FC STRUGA",
+        text: "These social media posts were created for my local football team, FC Struga Trim Lum. Although I haven't shared them with the team yet, I hope that when I do, they will consider me as their social media content creator.",
       },
       {
-        img: `${pyramidLogoDetail1}`,
-        title: "My Piramit",
-        text: "",
+        img: `${fcStrugaDetail1}`,
+        title: "NEXT MATCH",
+        text: "These social media posts were created for my local football team, FC Struga Trim Lum. Although I haven't shared them with the team yet, I hope that when I do, they will consider me as their social media content creator.",
       },
       {
-        img: `${pyramidLogoDetail2}`,
-        title: "My Piramit ",
-        text: "",
+        img: `${fcStrugaDetail2}`,
+        title: "STARTING XI",
+        text: "These social media posts were created for my local football team, FC Struga Trim Lum. Although I haven't shared them with the team yet, I hope that when I do, they will consider me as their social media content creator.",
+      },
+      {
+        img: `${fcStrugaDetail3}`,
+        title: "PRE SEASON GAMES",
+        text: "These social media posts were created for my local football team, FC Struga Trim Lum. Although I haven't shared them with the team yet, I hope that when I do, they will consider me as their social media content creator.",
       },
     ],
   },
@@ -309,6 +329,53 @@ export const projectData = [
   },
   {
     id: 11,
+    name: "Econocar",
+    category: "Logo Designs",
+    thumbnail: `${carLogoThumb}`,
+    details: [
+      {
+        img: `${carLogoThumb}`,
+        title: "Econocar",
+        text: "The 'Econo Car' logo was assigned to me during my university studies. I was tasked with animating it using HTML, CSS, and JavaScript. Unfortunately, this is all i got of the logo",
+      },
+      {
+        img: `${carLogoDetail1}`,
+        title: "Econocar",
+        text: "The 'Econo Car' logo was assigned to me during my university studies. I was tasked with animating it using HTML, CSS, and JavaScript. Unfortunately, this is all i got of the logo",
+      },
+      {
+        img: `${carLogoDetail2}`,
+        title: "Econocar",
+        text: "The 'Econo Car' logo was assigned to me during my university studies. I was tasked with animating it using HTML, CSS, and JavaScript. Unfortunately, this is all i got of the logo",
+      },
+    ],
+  },
+  {
+    id: 12,
+    name: "My Piramit",
+    category: "Logo Designs",
+    thumbnail: `${pyramidThumb}`,
+    details: [
+      {
+        img: `${pyramidThumb}`,
+        title: "My Piramit",
+        text: "The 'My Piramit' logo was intended for my cousin's unsuccessful online shopping company.",
+      },
+      {
+        img: `${pyramidLogoDetail1}`,
+        title: "My Piramit",
+        text: "",
+      },
+      {
+        img: `${pyramidLogoDetail2}`,
+        title: "My Piramit ",
+        text: "",
+      },
+    ],
+  },
+
+  {
+    id: 13,
     name: "Skateboard",
     category: "Skateboard Designs",
     thumbnail: `${skateThumb}`,
@@ -327,72 +394,6 @@ export const projectData = [
         img: `${skateDetail2}`,
         title: "Skateboard",
         text: "Creating skate decks for fun and then realizing their potential for your magazine is a fantastic journey! It's wonderful how your creativity led to such unique designs. Incorporating characters from 'Euphoria' adds an intriguing touch.",
-      },
-    ],
-  },
-  {
-    id: 12,
-    name: "ZEC",
-    category: "Social Media Content",
-    thumbnail: `${zecThumb}`,
-    details: [
-      {
-        img: `${zecThumb}`,
-        title: "ZEC",
-        text: "Creating these social media posts was a deliberate self-assessment of my graphic design skills. I found immense satisfaction in their outcome. Interestingly, when I shared them with the company, after they offered me to do my internship with them.",
-      },
-      {
-        img: `${zecDetail1}`,
-        title: "ZEC",
-        text: "Creating these social media posts was a deliberate self-assessment of my graphic design skills. I found immense satisfaction in their outcome. Interestingly, when I shared them with the company, after they offered me to do my internship with them.",
-      },
-      {
-        img: `${zecDetail2}`,
-        title: "ZEC",
-        text: "Creating these social media posts was a deliberate self-assessment of my graphic design skills. I found immense satisfaction in their outcome. Interestingly, when I shared them with the company, after they offered me to do my internship with them.",
-      },
-      {
-        img: `${zecDetail3}`,
-        title: "ZEC",
-        text: "Creating these social media posts was a deliberate self-assessment of my graphic design skills. I found immense satisfaction in their outcome. Interestingly, when I shared them with the company, after they offered me to do my internship with them.",
-      },
-      {
-        img: `${zecDetail4}`,
-        title: "ZEC",
-        text: "Creating these social media posts was a deliberate self-assessment of my graphic design skills. I found immense satisfaction in their outcome. Interestingly, when I shared them with the company, after they offered me to do my internship with them.",
-      },
-      {
-        img: `${zecDetail5}`,
-        title: "ZEC",
-        text: "Creating these social media posts was a deliberate self-assessment of my graphic design skills. I found immense satisfaction in their outcome. Interestingly, when I shared them with the company, after they offered me to do my internship with them.",
-      },
-    ],
-  },
-  {
-    id: 13,
-    name: "FC STRUGA",
-    category: "Social Media Content",
-    thumbnail: `${fcStrugaThumb}`,
-    details: [
-      {
-        img: `${fcStrugaThumb}`,
-        title: "FC STRUGA",
-        text: "These social media posts were created for my local football team, FC Struga Trim Lum. Although I haven't shared them with the team yet, I hope that when I do, they will consider me as their social media content creator.",
-      },
-      {
-        img: `${fcStrugaDetail1}`,
-        title: "NEXT MATCH",
-        text: "These social media posts were created for my local football team, FC Struga Trim Lum. Although I haven't shared them with the team yet, I hope that when I do, they will consider me as their social media content creator.",
-      },
-      {
-        img: `${fcStrugaDetail2}`,
-        title: "STARTING XI",
-        text: "These social media posts were created for my local football team, FC Struga Trim Lum. Although I haven't shared them with the team yet, I hope that when I do, they will consider me as their social media content creator.",
-      },
-      {
-        img: `${fcStrugaDetail3}`,
-        title: "PRE SEASON GAMES",
-        text: "These social media posts were created for my local football team, FC Struga Trim Lum. Although I haven't shared them with the team yet, I hope that when I do, they will consider me as their social media content creator.",
       },
     ],
   },

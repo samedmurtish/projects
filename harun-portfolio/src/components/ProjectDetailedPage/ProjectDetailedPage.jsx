@@ -3,8 +3,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { projectData } from "../../scripts/data";
 import NavigationBar from "../NavigationBar/NavigationBar";
 import NavigationBarMobile from "../NavigationBar/NavigationBarMobile";
-import { ImSortAlphaAsc, ImSortAmountAsc } from "react-icons/im";
-import { RiScreenshot2Fill } from "react-icons/ri";
+import Footer from "../Footer/Footer";
 
 export default function ProjectDetailedPage() {
   const { id } = useParams();
@@ -77,6 +76,7 @@ export default function ProjectDetailedPage() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
