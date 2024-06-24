@@ -9,6 +9,7 @@ import {
 } from "../../scripts/data";
 import NavigationBarMobile from "../NavigationBar/NavigationBarMobile";
 import SnackbarShow from "../../MuiElements/SnackbarShow";
+import Footer from "../Footer/Footer";
 
 export default function Projects() {
   const [showBar, setShowBar] = useState({
@@ -101,6 +102,7 @@ export default function Projects() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

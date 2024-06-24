@@ -6,6 +6,9 @@ body {
   background-color: #212121;
 }
 
+#label-name:hover ~ #label-icon {
+  background-color: #72001e;
+}
 #about-easter-egg:hover ~ #easteregg {
   color: #7f0123;
   transition: 0.15s;

@@ -1,0 +1,38 @@
+import React, { useEffect, useState } from "react";
+import { BsFillLightningFill } from "react-icons/bs";
+export default function Footer() {
+  const currentDate = new Date();
+
+  const [date, setDate] = useState(currentDate.getFullYear());
+
+  useEffect(() => {
+    setDate(currentDate.getFullYear());
+  }, [currentDate.getFullYear()]);
+
+  return (
+    <div className="bg-[#AB012F] w-full h-[70px]">
+      <div className="select-none  text-white flex justify-between items-center w-3/4 h-full mx-auto my-0">
+        <div>
+          <b className="font-extrabold"></b>©<b> Harun Spaho</b>'s Portfolio,{" "}
+          {date}. <b>All rights reserved</b>
+        </div>
+        <div className="flex justify-center items-center">
+          Made with <b className="px-1">love</b> by{" "}
+          <a
+            href="https://samedmurtish.xyz/"
+            target="_blank"
+            className="flex justify-center items-center"
+            id="main-link"
+          >
+            <span
+              className="ml-3 p-1 px-3 text-rose-400 underline hover:text-rose-400 transition font-extrabold rounded-full bg-[#850023] hover:bg-[#72001e]"
+              id="label-name"
+            >
+              smd
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
