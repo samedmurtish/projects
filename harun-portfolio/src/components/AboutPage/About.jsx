@@ -4,6 +4,7 @@ import NavigationBar from "../NavigationBar/NavigationBar";
 import NavigationBarMobile from "../NavigationBar/NavigationBarMobile";
 
 export default function Content() {
+  document.title = "Harun Spaho`s Portfolio";
   return (
     <div className="select-none">
       <div className="hidden md:block ">

@@ -12,6 +12,7 @@ import SnackbarShow from "../../MuiElements/SnackbarShow";
 import Footer from "../Footer/Footer";
 
 export default function Projects() {
+  document.title = "Harun Spaho`s Portfolio";
   const [showBar, setShowBar] = useState({
     clicked: false,
     message: "Product added to cart successfully!",

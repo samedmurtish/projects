@@ -8,6 +8,7 @@ import Footer from "../Footer/Footer";
 export default function ProjectDetailedPage() {
   const { id } = useParams();
 
+  document.title = "Harun Spaho`s Portfolio";
   const location = useLocation();
   let project = projectData[id];
   location.state != null && ({ project } = location.state);

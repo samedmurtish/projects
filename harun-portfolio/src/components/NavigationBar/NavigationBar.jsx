@@ -12,6 +12,9 @@ export default function NavigationBar() {
     clicked: false,
     message: "Redirecting!",
   });
+
+  document.title = "Harun Spaho`s Portfolio";
+
   const renderNav = () => {
     return pages.map((value, valueIndex) => (
       <Link

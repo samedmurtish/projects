@@ -10,6 +10,7 @@ export default function NavigationBarMobile() {
 
   const [menuOpened, setMenuOpened] = useState(false);
 
+  document.title = "Harun Spaho`s Portfolio";
   const renderNav = () => {
     return pages.map((value, valueIndex) => (
       <Link
