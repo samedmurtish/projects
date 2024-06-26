@@ -24,7 +24,10 @@ export default function ProjectDetailedPage() {
       ? project.details.map((value, valueIndex) => (
           <div className="mb-32 bg-[#272727]">
             <div
-              className="flex flex-row  w-full h-max justify-start items-start"
+              className="flex flex-row w-full h-max"
+              style={{
+                alignItems: value.text == "" ? "center" : "start",
+              }}
               key={valueIndex}
             >
               {valueIndex % 2 == 0 && (
