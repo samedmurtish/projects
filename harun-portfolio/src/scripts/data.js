@@ -48,12 +48,12 @@ import skateDetail1 from "../assets/images/project-images/Skate/3.png";
 import skateDetail2 from "../assets/images/project-images/Skate/4.png";
 
 // social media content with details
-import zecThumb from "../assets/images/! Project Thumbnails/zecThumb.png";
-import zecDetail1 from "../assets/images/project-images/Advertisement/zec 2.png";
-import zecDetail2 from "../assets/images/project-images/Advertisement/zec 3.png";
-import zecDetail3 from "../assets/images/project-images/Advertisement/zec 4.png";
-import zecDetail4 from "../assets/images/project-images/Advertisement/zec 5.png";
-import zecDetail5 from "../assets/images/project-images/Advertisement/zec 6.png";
+import kazfonThumb from "../assets/images/! Project Thumbnails/zecThumb.png";
+import kazfonDetail1 from "../assets/images/project-images/Advertisement/zec 2.png";
+import kazfonDetail2 from "../assets/images/project-images/Advertisement/zec 3.png";
+import kazfonDetail3 from "../assets/images/project-images/Advertisement/zec 4.png";
+import kazfonDetail4 from "../assets/images/project-images/Advertisement/zec 5.png";
+import kazfonDetail5 from "../assets/images/project-images/Advertisement/zec 6.png";
 
 import fcStrugaThumb from "../assets/images/! Project Thumbnails/fcStrugaThumb.png";
 import fcStrugaDetail1 from "../assets/images/project-images/Fcstruga/FCstruga-01.png";
@@ -83,7 +83,7 @@ export const projectData = [
       {
         img: `${bmwDetail}`,
         title: "Bin It",
-        text: "The 'Bin It' poster was designed to address the issue of littering. The visual metaphor of a trash can preventing a car from moving underscores the importance of keeping our streets clean for a smoother, more harmonious urban environment!",
+        text: "",
       },
     ],
   },
@@ -101,7 +101,7 @@ export const projectData = [
       {
         img: `${boatDetail}`,
         title: "Keep It",
-        text: "The 'Keep It Clean' poster was designed with a similar purpose as the 'Bin It' poster, but this time focusing on water conservation—a critical issue that demands our attention.",
+        text: "",
       },
     ],
   },
@@ -119,7 +119,7 @@ export const projectData = [
       {
         img: `${planetDetail}`,
         title: "Save The Planet",
-        text: "The 'Save the Planet' poster was created to address the issue of littering. It highlights the paradox where individuals capture photos and videos for social media, yet their actions in reality do not reflect genuine concern for the environment.",
+        text: "",
       },
     ],
   },
@@ -137,7 +137,7 @@ export const projectData = [
       {
         img: `${fuckDetail}`,
         title: "F*CK !",
-        text: "The 'I Don't Be Giving No F**k' poster was created as an experimental piece, exploring new artistic styles for fun.",
+        text: "",
       },
     ],
   },
@@ -155,7 +155,7 @@ export const projectData = [
       {
         img: `${mendoDetail}`,
         title: "Mendo !",
-        text: "The 'Just Sk8, Don't Pose' poster was an assignment during my university studies. I was tasked with creating a poster that conveyed my personality without explicitly stating it. It turned out to be a highly enjoyable project.",
+        text: "",
       },
     ],
   },
@@ -186,7 +186,7 @@ export const projectData = [
       {
         img: `${elliotDetail}`,
         title: "Elliot",
-        text: "The 'Elliot' poster is part of a three-part series inspired by the show 'Euphoria.' This university assignment resulted in all three posters being exhibited in the university gallery. The specific focus of this poster is on the show's second season.",
+        text: "",
       },
     ],
   },
@@ -204,45 +204,45 @@ export const projectData = [
       {
         img: `${julesDetail}`,
         title: "Jules Vaughn",
-        text: "The 'Jules Vaughn' poster is part of a three-part series inspired by the show 'Euphoria.' This university assignment resulted in all three posters being exhibited in the university gallery. The specific focus of this poster is on the show's first season.",
+        text: "",
       },
     ],
   },
   {
     id: 8,
-    name: "ZEC",
+    name: "KAZFON",
     category: "Social Media Content",
-    thumbnail: `${zecThumb}`,
+    thumbnail: `${kazfonThumb}`,
     details: [
       {
-        img: `${zecThumb}`,
-        title: "ZEC",
+        img: `${kazfonThumb}`,
+        title: "KAZFON",
         text: "Creating these social media posts was a deliberate self-assessment of my graphic design skills. I found immense satisfaction in their outcome. Interestingly, when I shared them with the company, after they offered me to do my internship with them.",
       },
       {
-        img: `${zecDetail1}`,
-        title: "ZEC",
-        text: "Creating these social media posts was a deliberate self-assessment of my graphic design skills. I found immense satisfaction in their outcome. Interestingly, when I shared them with the company, after they offered me to do my internship with them.",
+        img: `${kazfonDetail1}`,
+        title: "KAZFON",
+        text: "",
       },
       {
-        img: `${zecDetail2}`,
-        title: "ZEC",
-        text: "Creating these social media posts was a deliberate self-assessment of my graphic design skills. I found immense satisfaction in their outcome. Interestingly, when I shared them with the company, after they offered me to do my internship with them.",
+        img: `${kazfonDetail2}`,
+        title: "KAZFON",
+        text: "",
       },
       {
-        img: `${zecDetail3}`,
-        title: "ZEC",
-        text: "Creating these social media posts was a deliberate self-assessment of my graphic design skills. I found immense satisfaction in their outcome. Interestingly, when I shared them with the company, after they offered me to do my internship with them.",
+        img: `${kazfonDetail3}`,
+        title: "KAZFON",
+        text: "",
       },
       {
-        img: `${zecDetail4}`,
-        title: "ZEC",
-        text: "Creating these social media posts was a deliberate self-assessment of my graphic design skills. I found immense satisfaction in their outcome. Interestingly, when I shared them with the company, after they offered me to do my internship with them.",
+        img: `${kazfonDetail4}`,
+        title: "KAZFON",
+        text: "",
       },
       {
-        img: `${zecDetail5}`,
-        title: "ZEC",
-        text: "Creating these social media posts was a deliberate self-assessment of my graphic design skills. I found immense satisfaction in their outcome. Interestingly, when I shared them with the company, after they offered me to do my internship with them.",
+        img: `${kazfonDetail5}`,
+        title: "KAZFON",
+        text: "",
       },
     ],
   },
@@ -260,17 +260,17 @@ export const projectData = [
       {
         img: `${fcStrugaDetail1}`,
         title: "NEXT MATCH",
-        text: "These social media posts were created for my local football team, FC Struga Trim Lum. Although I haven't shared them with the team yet, I hope that when I do, they will consider me as their social media content creator.",
+        text: "",
       },
       {
         img: `${fcStrugaDetail2}`,
         title: "STARTING XI",
-        text: "These social media posts were created for my local football team, FC Struga Trim Lum. Although I haven't shared them with the team yet, I hope that when I do, they will consider me as their social media content creator.",
+        text: "",
       },
       {
         img: `${fcStrugaDetail3}`,
         title: "PRE SEASON GAMES",
-        text: "These social media posts were created for my local football team, FC Struga Trim Lum. Although I haven't shared them with the team yet, I hope that when I do, they will consider me as their social media content creator.",
+        text: "",
       },
     ],
   },
@@ -287,43 +287,43 @@ export const projectData = [
       },
       {
         img: `${magazineDetail1}`,
-        title: "Magazine",
-        text: "The 'Flip Frame Magazine' is one of my favorite projects. In my university studies, I was assigned to create a magazine related to art and graphic design, and I chose skateboarding as my theme. This project allowed me to express myself extensively, and it remains one of my most accomplished works.",
+        title: "Erased Project",
+        text: "",
       },
       {
         img: `${magazineDetail2}`,
-        title: "Magazine",
-        text: "The 'Flip Frame Magazine' is one of my favorite projects. In my university studies, I was assigned to create a magazine related to art and graphic design, and I chose skateboarding as my theme. This project allowed me to express myself extensively, and it remains one of my most accomplished works.",
+        title: "Fisheye",
+        text: "",
       },
       {
         img: `${magazineDetail3}`,
-        title: "Magazine",
-        text: "The 'Flip Frame Magazine' is one of my favorite projects. In my university studies, I was assigned to create a magazine related to art and graphic design, and I chose skateboarding as my theme. This project allowed me to express myself extensively, and it remains one of my most accomplished works.",
+        title: "Deisgning Decks",
+        text: "",
       },
       {
         img: `${magazineDetail4}`,
-        title: "Magazine",
-        text: "The 'Flip Frame Magazine' is one of my favorite projects. In my university studies, I was assigned to create a magazine related to art and graphic design, and I chose skateboarding as my theme. This project allowed me to express myself extensively, and it remains one of my most accomplished works.",
+        title: "Local Shops",
+        text: "",
       },
       {
         img: `${magazineDetail5}`,
-        title: "Magazine",
-        text: "The 'Flip Frame Magazine' is one of my favorite projects. In my university studies, I was assigned to create a magazine related to art and graphic design, and I chose skateboarding as my theme. This project allowed me to express myself extensively, and it remains one of my most accomplished works.",
+        title: "Fashion",
+        text: "",
       },
       {
         img: `${magazineDetail6}`,
-        title: "Magazine",
-        text: "The 'Flip Frame Magazine' is one of my favorite projects. In my university studies, I was assigned to create a magazine related to art and graphic design, and I chose skateboarding as my theme. This project allowed me to express myself extensively, and it remains one of my most accomplished works.",
+        title: "Brands",
+        text: "",
       },
       {
         img: `${magazineDetail7}`,
-        title: "Magazine",
-        text: "The 'Flip Frame Magazine' is one of my favorite projects. In my university studies, I was assigned to create a magazine related to art and graphic design, and I chose skateboarding as my theme. This project allowed me to express myself extensively, and it remains one of my most accomplished works.",
+        title: "Stylish Skater",
+        text: "",
       },
       {
         img: `${magazineDetail8}`,
-        title: "Magazine",
-        text: "The 'Flip Frame Magazine' is one of my favorite projects. In my university studies, I was assigned to create a magazine related to art and graphic design, and I chose skateboarding as my theme. This project allowed me to express myself extensively, and it remains one of my most accomplished works.",
+        title: "2K24 Skateboarding",
+        text: "",
       },
     ],
   },
@@ -341,12 +341,12 @@ export const projectData = [
       {
         img: `${carLogoDetail1}`,
         title: "Econocar",
-        text: "The 'Econo Car' logo was assigned to me during my university studies. I was tasked with animating it using HTML, CSS, and JavaScript. Unfortunately, this is all i got of the logo",
+        text: "",
       },
       {
         img: `${carLogoDetail2}`,
         title: "Econocar",
-        text: "The 'Econo Car' logo was assigned to me during my university studies. I was tasked with animating it using HTML, CSS, and JavaScript. Unfortunately, this is all i got of the logo",
+        text: "",
       },
     ],
   },
@@ -388,12 +388,12 @@ export const projectData = [
       {
         img: `${skateDetail1}`,
         title: "Skateboard",
-        text: "Creating skate decks for fun and then realizing their potential for your magazine is a fantastic journey! It's wonderful how your creativity led to such unique designs. Incorporating characters from 'Euphoria' adds an intriguing touch.",
+        text: "",
       },
       {
         img: `${skateDetail2}`,
         title: "Skateboard",
-        text: "Creating skate decks for fun and then realizing their potential for your magazine is a fantastic journey! It's wonderful how your creativity led to such unique designs. Incorporating characters from 'Euphoria' adds an intriguing touch.",
+        text: "",
       },
     ],
   },
