@@ -221,27 +221,27 @@ export const projectData = [
       },
       {
         img: `${kazfonDetail1}`,
-        title: "KAZFON",
+        title: "IPHONE X",
         text: "",
       },
       {
         img: `${kazfonDetail2}`,
-        title: "KAZFON",
+        title: "SAMSUNG GALAXY A34 5G",
         text: "",
       },
       {
         img: `${kazfonDetail3}`,
-        title: "KAZFON",
+        title: "SAMSUNG GALAXY FO4",
         text: "",
       },
       {
         img: `${kazfonDetail4}`,
-        title: "KAZFON",
+        title: "XIAMO 11 LITE 5G",
         text: "",
       },
       {
         img: `${kazfonDetail5}`,
-        title: "KAZFON",
+        title: "A1 ALPHA ECO",
         text: "",
       },
     ],

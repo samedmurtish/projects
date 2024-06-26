@@ -22,25 +22,28 @@ export default function ProjectDetailedPage() {
   const renderProductDetails = (isOnMobile) => {
     return !isOnMobile
       ? project.details.map((value, valueIndex) => (
-          <div
-            className="flex flex-row mb-32 w-full h-max justify-start items-start"
-            key={valueIndex}
-          >
-            {valueIndex % 2 == 0 && (
-              <img src={value.img} className="w-[400px] h-full" />
-            )}
+          <div className="mb-32 bg-[#272727]">
             <div
-              className="flex flex-col h-full w-full mt-0 mx-10"
-              style={{
-                alignItems: valueIndex % 2 == 0 ? "" : "flex-end",
-              }}
+              className="flex flex-row  w-full h-max justify-start items-start"
+              key={valueIndex}
             >
-              <p className="text-[3vw]">{value.title}</p>
-              <p className="text-justify">{value.text}</p>
+              {valueIndex % 2 == 0 && (
+                <img src={value.img} className="w-[400px] h-full" />
+              )}
+              <div
+                className="flex flex-col h-full w-full mt-0 mx-10"
+                style={{
+                  alignItems: valueIndex % 2 == 0 ? "" : "flex-end",
+                }}
+              >
+                <p className="text-[3vw]">{value.title}</p>
+                <p className="text-justify">{value.text}</p>
+              </div>
+              {valueIndex % 2 != 0 && (
+                <img src={value.img} className="w-[400px] h-full" />
+              )}
             </div>
-            {valueIndex % 2 != 0 && (
-              <img src={value.img} className="w-[400px] h-full" />
-            )}
+            <div className="w-full h-1 bg-rose-700"></div>
           </div>
         ))
       : project.details.map((value, valueIndex) => (
@@ -50,7 +53,7 @@ export default function ProjectDetailedPage() {
           >
             {isOnMobile && <img src={value.img} className="w-[400px] h-full" />}
             <div className="flex flex-col h-full w-full mt-5 md:mt-0 mx-0 md:mx-10 gap-2 md:gap-0">
-              <p className="text-[8vw] self-center  md:self-start md:text-[3vw]">
+              <p className="text-[8vw] self-center  md:self-start md:text-[3vw] text-center">
                 {value.title}
               </p>
               <p className="text-justify">{value.text}</p>
