@@ -73,8 +73,8 @@ export default function App() {
       <div className="md:hidden inline">
         <NavigationBarMobile />
       </div>
-      <div className="sm:overflow-x-hidden md:pt-0 pt-10 text-white flex justify-start items-center h-full mx-auto my-0 w-5/6 overflow-y-auto flex-col pb-32">
-        <div className=" mt-28 flex flex-col md:flex-row md:justify-start md:items-start justify-center items-center">
+      <div className="overflow-x-hidden md:pt-0 pt-10 text-white flex justify-start items-center h-full mx-auto my-0 w-5/6 overflow-y-auto flex-col pb-16">
+        <div className="mt-28 flex flex-col md:flex-row md:justify-start md:items-start justify-center items-center">
           <div className="w-6/12 md:w-3/12 flex flex-col gap-10">
             <div className="overflow-hidden flex justify-center items-center border-b-8 border-[#1D2537] rounded-full md:mb-0 mb-16">
               <img src={me} className="bg-[rgba(0,0,0,.1)]" />
@@ -83,31 +83,39 @@ export default function App() {
               {handleSkills()}
             </span>
           </div>
-          <div className="md:ml-16 w-full md:w-[50vw]">
+          <div className="md:ml-16 w-full md:w-[60vw]">
             <div className="px-5">
               <p className="font-extrabold lg:text-8xl text-7xl m-0 text-justify">
                 SAMED <span className="font">MURTISH</span>
               </p>
-              <p className="font-extralight lg:text-7xl text-6xl text-rose-500 m-0 teko flex">
+              <p className="font-extralight lg:text-7xl text-6xl text-sky-500 m-0 teko flex">
                 <span className="font-extralight">Front-End</span>{" "}
-                <div className="ml-5 text-white px-5 pt-2  bg-rose-500 overflow-hidden h-max w-max text-4xl lg:text-5xl">
+                <span className="ml-5 text-white px-5 pt-2  bg-sky-500 overflow-hidden h-max w-max text-4xl lg:text-5xl">
                   developer
-                </div>
+                </span>
               </p>
             </div>
             <div className="w-full h-1 bg-[#1D2537] my-10 mt-6"></div>
-            <p className="text-justify text-lg h-full w-full bg-[rgba(0,0,0,.1)] p-3 px-5 rounded-lg">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              Perferendis quaerat, sit obcaecati optio reprehenderit sapiente
-              voluptatibus impedit totam aut ex magni, eligendi cum corporis!
-              Saepe fuga ab nemo quam esse! Lorem ipsum dolor, sit amet
-              consectetur adipisicing elit. Eos, qui consequuntur. Laboriosam ex
-              velit laborum veritatis! Ea impedit aliquam atque accusamus
-              eveniet tempora minima, quasi deserunt. Hic, minus veniam.
-              Exercitationem? Lorem ipsum dolor sit amet consectetur adipisicing
-              elit. Atque odio repudiandae voluptas possimus aspernatur vel
-              quasi quod aliquid. Delectus beatae ipsam ex provident totam omnis
-              temporibus natus laborum doloremque unde.
+            <p className="text-justify text-lg h-full w-full bg-[rgba(255,255,255,.05)] p-3 px-5 rounded-lg">
+              Hello, I`m{" "}
+              <span className="font-bold text-rose-500">Samed Murtish</span> and
+              I`m a <span className="font-bold">self-taught</span> front-end
+              developer with a passion for creating engaging{" "}
+              <span className="font-bold">user experiences</span>. My journey in
+              web development began out of curiosity and has since evolved into
+              a professional career where I leverage technologies like
+              <span className="text-[#38BDF8] font-bold"> React</span>,{" "}
+              <span className="text-[#e380ff] font-bold">Vite</span>,{" "}
+              <span className="text-[#6ad2ff] font-bold">Tailwind</span>
+              <span className="text-[#0b84b8] font-extrabold">CSS </span> to
+              build
+              <span className="font-bold"> responsive</span> and{" "}
+              <span className="font-bold"> dynamic</span> web applications. I am
+              dedicated to{" "}
+              <span className="font-bold">continuous learning</span> and
+              applying best practices to deliver{" "}
+              <span className="font-bold">high-quality</span> software
+              solutions.
             </p>
           </div>
         </div>

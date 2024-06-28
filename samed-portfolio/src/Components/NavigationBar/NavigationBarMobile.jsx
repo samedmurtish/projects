@@ -1,24 +1,20 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { HiOutlineMenu } from "react-icons/hi";
-export default function NavigationBarMobile() {
-  const pages = [
-    { link: "about", title: "About Me" },
-    { link: "projects", title: "My Projects" },
-    { link: "contact", title: "Contact" },
-  ];
+import { navigations } from "./Navigations";
 
+export default function NavigationBarMobile() {
   const [menuOpened, setMenuOpened] = useState(false);
 
   const renderNav = () => {
-    return pages.map((value, valueIndex) => (
+    return navigations.map((value, valueIndex) => (
       <Link
-        to={`/${value.link}`}
+        to={`/${value.route}`}
         key={valueIndex}
         className="flex justify-center items-center px-5 pb-2"
       >
         <div className="p-3 border-b-2 border-b-transparent hover:border-b-white border-b-[#0a2e5e] cursor-pointer w-full transition hover:bg-[#082449] bg-[#071d3a] active:bg-[#082449] flex justify-center rounded-lg">
-          <p>{value.title}</p>
+          <p>{value.name}</p>
         </div>
       </Link>
     ));

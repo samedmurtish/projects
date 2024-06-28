@@ -5,6 +5,7 @@ import "./index.css";
 import { RouterProvider } from "react-router";
 import { createBrowserRouter } from "react-router-dom";
 import ErrorPage from "./Components/Error/ErrorPage.jsx";
+import ContactMe from "./Components/Contact/ContactMe.jsx";
 
 const router = createBrowserRouter([
   {
@@ -29,7 +30,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/contact",
-    element: <App />,
+    element: <ContactMe />,
     errorElement: <ErrorPage />,
   },
 ]);
