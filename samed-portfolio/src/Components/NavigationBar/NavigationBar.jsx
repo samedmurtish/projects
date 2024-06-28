@@ -16,12 +16,14 @@ export default function NavigationBar() {
   };
 
   return (
-    <div className="text-white w-5/6 h-full flex justify-between items-center mx-auto my-0 py-7 border-b-2 border-b-[#1D2537] font-extralight pb-0">
-      <Link to={"/"} className="flex flex-row h-full text-3xl">
-        smd.
-      </Link>
-      <div className="md:flex flex-row h-full gap-10 items-center hidden">
-        {renderNavigations()}
+    <div className="absolute w-full z-[9999999] overflow-y-hidden">
+      <div className="text-white w-5/6 h-full flex justify-between items-center mx-auto my-0 py-7 border-b-2 border-b-[#1D2537] font-extralight pb-0">
+        <Link to={"/"} className="flex flex-row h-full text-3xl">
+          smd.
+        </Link>
+        <div className="md:flex flex-row h-full gap-10 items-center hidden">
+          {renderNavigations()}
+        </div>
       </div>
     </div>
   );

@@ -1,70 +1,70 @@
 import React from "react";
-import NavigationBar from "./Components/NavigationBar/NavigationBar";
+import NavigationBar from "../NavigationBar/NavigationBar";
 
 import { FaReact, FaHtml5 } from "react-icons/fa";
 import { BiLogoJavascript } from "react-icons/bi";
 import { IoLogoCss3 } from "react-icons/io";
 import { RiTailwindCssFill } from "react-icons/ri";
 
-import me from "./assets/photos/me.png";
-import NavigationBarMobile from "./Components/NavigationBar/NavigationBarMobile";
+import me from "../../assets/photos/me.png";
+import NavigationBarMobile from "../NavigationBar/NavigationBarMobile";
 
-const skills = [
-  {
-    name: "ReactJS",
-    icon: <FaReact />,
-    progress: 90,
-    color: "rgb(56 189 248)",
-  },
-  {
-    name: "Javascript",
-    icon: <BiLogoJavascript />,
-    progress: 90,
-    color: "rgb(253 224 71)",
-  },
-  {
-    name: "HTML5",
-    icon: <FaHtml5 />,
-    progress: 100,
-    color: "rgb(249 115 22)",
-  },
-  {
-    name: "CSS3",
-    icon: <IoLogoCss3 />,
-    progress: 100,
-    color: "rgb(59 130 246)",
-  },
-  {
-    name: "TailwindCSS",
-    icon: <RiTailwindCssFill />,
-    progress: 100,
-    color: "rgb(56 189 248)",
-  },
-];
+export default function About() {
+  const skills = [
+    {
+      name: "ReactJS",
+      icon: <FaReact />,
+      progress: 90,
+      color: "rgb(56 189 248)",
+    },
+    {
+      name: "Javascript",
+      icon: <BiLogoJavascript />,
+      progress: 90,
+      color: "rgb(253 224 71)",
+    },
+    {
+      name: "HTML5",
+      icon: <FaHtml5 />,
+      progress: 100,
+      color: "rgb(249 115 22)",
+    },
+    {
+      name: "CSS3",
+      icon: <IoLogoCss3 />,
+      progress: 100,
+      color: "rgb(59 130 246)",
+    },
+    {
+      name: "TailwindCSS",
+      icon: <RiTailwindCssFill />,
+      progress: 100,
+      color: "rgb(56 189 248)",
+    },
+  ];
 
-const handleSkills = () => {
-  return skills.map((value, valueIndex) => (
-    <div key={valueIndex} className="w-full">
-      <div
-        className="flex flex-col justify-center items-center w-full gap-5"
-        style={{ color: value.color }}
-      >
-        <span className="text-7xl">{value.icon}</span>
-        <div className="h-[10px] w-full bg-gray-500">
-          <div
-            className="h-[10px] bg-gray-100"
-            style={{ width: `${value.progress}%` }}
-          ></div>
+  const handleSkills = () => {
+    return skills.map((value, valueIndex) => (
+      <div key={valueIndex} className="w-full">
+        <div
+          className="flex flex-col justify-center items-center w-full gap-5"
+          style={{ color: value.color }}
+        >
+          <span className="text-7xl">{value.icon}</span>
+          <div className="h-[10px] w-full bg-gray-500">
+            <div
+              className="h-[10px] bg-gray-100"
+              style={{ width: `${value.progress}%` }}
+            ></div>
+          </div>
+          <span className="text-lg font-extrabold">
+            {value.progress} <span className="text-white">%</span>
+          </span>
         </div>
-        <span className="text-lg font-extrabold">
-          {value.progress} <span className="text-white">%</span>
-        </span>
       </div>
-    </div>
-  ));
-};
+    ));
+  };
 
-export default function App() {
   return (
     <>
       <div className="md:inline hidden">
@@ -73,7 +73,7 @@ export default function App() {
       <div className="md:hidden inline">
         <NavigationBarMobile />
       </div>
-      <div className="overflow-x-hidden md:pt-0 pt-10 text-white flex justify-start items-center h-full mx-auto my-0 w-5/6 overflow-y-auto flex-col pb-16">
+      <div className="overflow-x-hidden md:pt-10 pt-10 text-white flex justify-start items-center h- mx-auto my-0 w-5/6 flex-col">
         <div className="mt-28 flex flex-col md:flex-row md:justify-start md:items-start justify-center items-center">
           <div className="w-6/12 md:w-3/12 flex flex-col gap-10">
             <div className="overflow-hidden flex justify-center items-center border-b-8 border-[#1D2537] rounded-full md:mb-0 mb-16">

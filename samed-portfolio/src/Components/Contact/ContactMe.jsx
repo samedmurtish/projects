@@ -34,7 +34,7 @@ function ContactMe() {
       <div className="md:hidden inline">
         <NavigationBarMobile />
       </div>
-      <div className="text-white flex justify-center items-center h-full w-screen flex-col gap-10 pt-40 md:pt-20">
+      <div className="text-white flex justify-center items-center h-screen w-screen flex-col gap-10 pt-40 md:pt-20">
         <div className="bg-[rgba(255,255,255,0.05)] p-10 rounded-xl">
           <div className="text-8xl font-extrabold pb-10">
             Contact <span className="text-sky-500">Me</span> !
