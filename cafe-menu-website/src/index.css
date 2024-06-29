@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: mainFont;
+  src: url("./assets/fonts/abington bold font.otf");
+}
+
+body {
+  font-family: mainFont;
+  background-color: black;
+}
