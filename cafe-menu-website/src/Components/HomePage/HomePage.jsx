@@ -1,6 +1,7 @@
 import React from "react";
 import cafe from "../../assets/images/cafe.jpg";
 import logo from "../../assets/images/logo.png";
+
 import { homeGallery } from "./homeData";
 import NavigationBarMobile from "../NavigationBar/NavigationBarMobile";
 import NavigationBar from "../NavigationBar/NavigationBar";
@@ -18,7 +19,6 @@ export default function HomePage() {
       </>
     ));
   };
-
   return (
     <>
       <div className="lg:inline hidden">
@@ -27,11 +27,11 @@ export default function HomePage() {
       <div className="lg:hidden inline">
         <NavigationBarMobile />
       </div>
-      <div className="relative text-black font-extrabold h-full flex pt-32 lg:pt-0 flex-col">
+      <div className="relative text-black font-extrabold h-full flex pt-16 lg:pt-0 flex-col">
         <div className="relative overflow-hidden w-full h-max flex justify-center items-center ">
           <img src={cafe} className="relative h-[180%] lg:w-full lg:h-screen" />
           <span className="bg-[rgba(0,0,0,0.5)] h-full w-full absolute top-0"></span>
-          <span className="absolute left-0 right-0 top-0 bottom-0 ml-auto mr-auto h-full w-full text-white flex justify-center items-center">
+          <span className="absolute left-0 right-0 top-0 md:top-5 bottom-0 ml-auto mr-auto h-full w-full text-white flex justify-center items-center">
             <img src={logo} className="h-3/4 relative" />
           </span>
         </div>

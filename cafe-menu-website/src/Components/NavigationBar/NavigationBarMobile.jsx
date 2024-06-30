@@ -13,7 +13,7 @@ export default function NavigationBarMobile() {
         key={valueIndex}
         className="flex justify-center items-center pb-2"
       >
-        <div className="p-3 border-b-4 text-white border-b-transparent hover:border-b-[#05A981] cursor-pointer w-3/4 transition hover:bg-[rgba(255,255,255,0.1)] bg-transparent active:bg-[rgba(255,255,255,0.1)] flex justify-center rounded-lg text-5xl font-bold">
+        <div className="p-3 border-b-4 text-white border-b-transparent hover:border-b-[#05A981] cursor-pointer w-3/4 transition hover:bg-[rgba(255,255,255,0.1)] bg-transparent active:bg-[rgba(255,255,255,0.1)] flex justify-center rounded-lg text-2xl md:text-5xl font-bold">
           <p>{value.name}</p>
         </div>
       </Link>
@@ -23,7 +23,7 @@ export default function NavigationBarMobile() {
   return (
     <>
       <div className="bg-[#000000] fixed w-full z-[99999]" id="font">
-        <div className="flex justify-center items-center fixed text-white font-semibold py-5 text-xl mx-auto my-0 w-full z-[999999999] bg-black ">
+        <div className="flex justify-center items-center fixed text-white font-semibold py-2 text-xl mx-auto my-0 w-full z-[999999999] bg-black">
           <div
             className="w-3/4 flex flex-row h-full justify-between items-center"
             style={{
@@ -35,7 +35,7 @@ export default function NavigationBarMobile() {
               <span className="font-extrabold">HOLIDAY</span>
             </Link>
             <div
-              className="rounded-full bg-[#252525] hover:bg-[#05162c] p-2 cursor-pointer"
+              className="rounded-full bg-[#151515] hover:bg-[#252525] p-2 cursor-pointer"
               onClick={() => setMenuOpened(!menuOpened)}
             >
               <HiOutlineMenu />

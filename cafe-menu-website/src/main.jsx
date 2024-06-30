@@ -4,6 +4,9 @@ import App from "./App.jsx";
 import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Gallery from "./Components/Gallery/Gallery.jsx";
+import Menu from "./Components/Menu/Menu.jsx";
+import About from "./Components/About/About.jsx";
+import Contact from "./Components/ContactUs/Contact.jsx";
 
 const router = createBrowserRouter([
   {
@@ -15,16 +18,16 @@ const router = createBrowserRouter([
     element: <Gallery />,
   },
   {
-    path: "/",
-    element: <App />,
+    path: "/menu",
+    element: <Menu />,
   },
   {
-    path: "/",
-    element: <App />,
+    path: "/about",
+    element: <About />,
   },
   {
-    path: "/",
-    element: <App />,
+    path: "/contact",
+    element: <Contact />,
   },
 ]);
 
