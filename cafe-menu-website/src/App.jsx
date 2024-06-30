@@ -5,14 +5,7 @@ import HomePage from "./Components/HomePage/HomePage";
 
 export default function App() {
   return (
-    <div className="h-screen w-screen">
-      <div className="md:inline hidden">
-        <NavigationBar />
-      </div>
-      <div className="md:hidden inline">
-        <NavigationBarMobile />
-      </div>
-
+    <div className="h-full w-full">
       <HomePage />
     </div>
   );

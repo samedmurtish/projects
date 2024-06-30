@@ -22,7 +22,7 @@ export default function NavigationBarMobile() {
 
   return (
     <>
-      <div className="bg-[#000000] fixed w-full z-[99999]">
+      <div className="bg-[#000000] fixed w-full z-[99999]" id="font">
         <div className="flex justify-center items-center fixed text-white font-semibold py-5 text-xl mx-auto my-0 w-full z-[999999999] bg-black ">
           <div
             className="w-3/4 flex flex-row h-full justify-between items-center"
@@ -55,7 +55,9 @@ export default function NavigationBarMobile() {
 
         {menuOpened && (
           <div className="h-full w-screen bg-[rgba(0,0,0,0.6)] fixed right-0 text-white flex flex-col justify-center ">
-            <div className="font-semibold py-3">{renderNav()}</div>
+            <div className="font-semibold py-3 flex justify-between flex-col">
+              {renderNav()}
+            </div>
           </div>
         )}
       </div>

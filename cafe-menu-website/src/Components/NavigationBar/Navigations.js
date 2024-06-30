@@ -1,7 +1,7 @@
 export const navigations = [
-    { name: "Home", route: "projects" },
+    { name: "Home", route: "" },
     { name: "Menu", route: "menu" },
-    { name: "About us", route: "about" },
     { name: "Gallery", route: "gallery" },
+    { name: "About Us", route: "about" },
     { name: "Contact", route: "contact" },
 ];
