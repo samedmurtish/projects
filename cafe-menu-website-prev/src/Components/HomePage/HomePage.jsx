@@ -27,15 +27,12 @@ export default function HomePage() {
       <div className="lg:hidden inline">
         <NavigationBarMobile />
       </div>
-      <div className="relative text-black font-extrabold h-full flex pt-20 lg:pt-0 flex-col">
+      <div className="relative text-black font-extrabold h-full flex pt-16 lg:pt-0 flex-col">
         <div className="relative overflow-hidden w-full h-max flex justify-center items-center ">
-          <img
-            src={cafe}
-            className="relative h-[180%] lg:w-full lg:h-screen "
-          />
+          <img src={cafe} className="relative h-[180%] lg:w-full lg:h-screen" />
           <span className="bg-[rgba(0,0,0,0.5)] h-full w-full absolute top-0"></span>
           <span className="absolute left-0 right-0 top-0 md:top-5 bottom-0 ml-auto mr-auto h-full w-full text-white flex justify-center items-center">
-            <img src={logo} className="h-3/4 md:h-1/2 relative" />
+            <img src={logo} className="h-3/4 relative" />
           </span>
         </div>
         <div className="mt-10 w-3/4 mx-auto my-0">
@@ -51,10 +48,7 @@ export default function HomePage() {
               {renderGallery()}
             </div>
           </div>
-          <div
-            className="text-white text-center text-xs py-10 font-thin"
-            id="textFont"
-          >
+          <div className="text-white text-center text-xs py-10 font-thin">
             HOLIDAY is a warm and casual Cocktail Bar located in the center of
             Struga. Since 1995 our goal has been to deliver drinks through a
             painstaking, time-consuming process, using only the finest

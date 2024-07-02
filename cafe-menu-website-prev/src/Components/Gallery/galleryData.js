@@ -6,26 +6,25 @@ import gallery5 from "../../assets/images/cafe.jpg";
 
 export const galleryData = [
   {
-    id: 0,
     category: "Beach",
     image: gallery3,
   },
   {
-    id: 1,
     category: "Beach",
     image: gallery4,
   },
   {
-    id: 2,
     category: "Bar",
     image: gallery1,
   },
   {
-    id: 3,
     category: "Bar",
     image: gallery2,
   },
-  { id: 4, category: "Bar", image: gallery5 },
+  {
+    category: "Bar",
+    image: gallery5,
+  },
 ];
 
 export let sortedCategories = [];

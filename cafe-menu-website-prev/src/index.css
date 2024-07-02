@@ -6,13 +6,6 @@
   font-family: mainFont;
   src: url("./assets/fonts/abington bold font.otf");
 }
-@font-face {
-  font-family: textFont;
-  src: url("./assets/fonts/Abiah-Regular.otf");
-}
-#textFont {
-  font-family: textFont;
-}
 #font {
   font-family: mainFont;
 }

@@ -4,15 +4,16 @@ import NavigationBarMobile from "../NavigationBar/NavigationBarMobile";
 import { galleryData, sortCategories, sortedCategories } from "./galleryData";
 import { ImGift } from "react-icons/im";
 
+//{renderProjects(value)}
+
 export default function Gallery() {
   const renderPhotos = (category) => {
-    return galleryData.map((value) => (
+    return galleryData.map((value, valueIndex) => (
       <>
-        {value.category === category && (
-          <img
-            src={value.image}
-            className="min-w-[250px] md:min-w-[400px] min-h-[250px] md:min-h-[400px]"
-          />
+        {value.category == category && (
+          <>
+            <img src={value.image} className="w-[400px]" />
+          </>
         )}
       </>
     ));
@@ -26,7 +27,7 @@ export default function Gallery() {
         <p className="text-5xl text-[#EFAB3A] font-thin" id="font">
           {value}
         </p>
-        <div className="flex w-full h-[250px] md:h-[400px] overflow-x-auto rounded-3xl overflow-hidden justify-start items-center gap-5">
+        <div className="flex w-full h-[400px] overflow-x-auto rounded-3xl overflow-hidden justify-start items-center gap-5">
           {renderPhotos(value)}
         </div>
       </div>

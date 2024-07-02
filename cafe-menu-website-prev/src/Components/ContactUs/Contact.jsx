@@ -1,7 +1,6 @@
 import React from "react";
 import NavigationBar from "../NavigationBar/NavigationBar";
 import NavigationBarMobile from "../NavigationBar/NavigationBarMobile";
-import photo from "../../assets/images/cafe.jpg";
 
 export default function Contact() {
   const [result, setResult] = React.useState("");
@@ -36,32 +35,25 @@ export default function Contact() {
       <div className="lg:hidden inline">
         <NavigationBarMobile />
       </div>
-      <div className="relative w-full  h-[200%] md:h-full blur overflow-hidden">
-        <img src={photo} alt="relative" />
-        <div className="w-full h-full bg-[rgba(0,0,0,0.8)] absolute top-0"></div>
-      </div>
-      <div className="pt-24 md:pt-32 flex justify-center items-center w-full flex-col pb-16 absolute top-0">
+      <div className="pt-24 md:pt-32 flex justify-center items-center w-full flex-col">
         <div
           className="text-[#EFAB3A] flex w-max md:w-1/2 text-3xl justify-center pb-10"
           id="font"
         >
           Contact Us
         </div>
-        <div
-          className="text-white py-5 text-2xl flex justify-center items-center font-semibold"
-          id="font"
-        >
+        <div className="text-white py-5 text-2xl flex justify-center items-center font-semibold">
           <span className="text-[#05A981] pr-3 font-extrabold">(+389)</span>{" "}
           071-123-456
         </div>
-        <div className="w-3/4 md:w-1/2 flex flex-row justify-center items-center py-10">
+        <div className="w-max md:w-1/2 flex flex-row justify-center items-center py-10">
           <div className="bg-slate-300 w-full h-[1px]" />
           <div className="flex w-max text-white px-3 ">OR</div>
           <div className="bg-slate-300 w-full h-[1px]" />
         </div>
         <form
           onSubmit={onSubmit}
-          className="flex flex-col gap-5 w-3/4 md:w-1/2"
+          className="flex flex-col gap-5 w-max md:w-1/2"
         >
           <div className="flex flex-col">
             <span id="font" className="text-2xl text-[#EFAB3A]">

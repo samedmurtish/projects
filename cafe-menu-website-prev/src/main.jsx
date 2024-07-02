@@ -7,7 +7,6 @@ import Gallery from "./Components/Gallery/Gallery.jsx";
 import Menu from "./Components/Menu/Menu.jsx";
 import About from "./Components/About/About.jsx";
 import Contact from "./Components/ContactUs/Contact.jsx";
-import MenuDetailed from "./Components/MenuDetailed/MenuDetailed.jsx";
 
 const router = createBrowserRouter([
   {
@@ -22,7 +21,6 @@ const router = createBrowserRouter([
     path: "/menu",
     element: <Menu />,
   },
-  { path: "/menu/:category", element: <MenuDetailed /> },
   {
     path: "/about",
     element: <About />,

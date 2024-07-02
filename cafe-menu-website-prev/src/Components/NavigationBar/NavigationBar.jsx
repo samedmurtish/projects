@@ -9,8 +9,7 @@ export default function NavigationBar() {
         key={valueIndex}
         to={`/${value.route}`}
         className="border-b-[#05A981] border-b-2 pb-2 pt-2 px-5 h-max hover:border-b-[#04c292] transition rounded-t-md hover:bg-[rgba(255,255,255,0.05)]"
-        style={{ display: value.name === "Home" && "none" }}
-        id={value.route == "contact" ? "contact" : ""}
+        id={value.route == "contact" && "contact"}
       >
         {value.name}
       </Link>
