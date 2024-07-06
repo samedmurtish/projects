@@ -7,6 +7,7 @@ import ErrorPage from "./Components/Error/ErrorPage.jsx";
 import ContactMe from "./Components/Contact/ContactMe.jsx";
 import Projects from "./Components/Projects/Projects.jsx";
 import About from "./Components/About/About.jsx";
+import Tetris from "./Components/Projects/data/Projects/Tetris Game/Tetris.jsx";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,11 @@ const router = createBrowserRouter([
   {
     path: "/contact",
     element: <ContactMe />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/tetris",
+    element: <Tetris />,
     errorElement: <ErrorPage />,
   },
 ]);

@@ -1,448 +1,317 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import "./general.css";
 
 export default function Tetris() {
-  const gameContainer = document.querySelector(".game-container");
+  const location = useLocation();
 
-  const data = useLocation();
-
-  console.log(data);
-
-  let grid = [
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-  ];
-
-  let colorGrid = [
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-  ];
-
-  let maxPosition = {
+  const [grid, setGrid] = useState(
+    Array(24)
+      .fill()
+      .map(() => Array(10).fill(""))
+  );
+  const [colorGrid, setColorGrid] = useState(
+    Array(24)
+      .fill()
+      .map(() => Array(10).fill(""))
+  );
+  const [maxPosition, setMaxPosition] = useState({
     left: 0,
     right: 0,
     top: 0,
     bottom: 0,
-  };
-
-  let shapes = ["I", "L", "O"];
-
-  let currentShapeFirstBlockPos = [];
-
-  let currentShapePos = [];
-
-  let pauseGame = false;
-
-  let direction = "";
-
-  let allowReposition = true,
-    allowX = true,
-    allowMaxCheck = false,
-    allowDownBoost = true;
-
-  let bottomBump = false;
-
-  let currentShape = "";
-
-  let positionWidthContainer = [],
-    positionHeightContainer = [];
-
-  let colorList = [
-      "#CC99C9",
-      "#9EC1CF",
-      "#9EE09E",
-      "#FDFD97",
-      "#FEB144",
-      "#FF6663",
-    ],
-    currentColor;
-
-  let deadBlocksList = [];
-  window.addEventListener("click", () => {
-    pauseGame = !pauseGame;
   });
+  const [currentShape, setCurrentShape] = useState("");
+  const [currentShapeFirstBlockPos, setCurrentShapeFirstBlockPos] = useState([
+    { x: 0, y: 0 },
+  ]);
+  const [currentShapePos, setCurrentShapePos] = useState([]);
+  const [pauseGame, setPauseGame] = useState(false);
+  const [direction, setDirection] = useState("");
+  const [allowReposition, setAllowReposition] = useState(true);
+  const [allowDownBoost, setAllowDownBoost] = useState(true);
+  const [bottomBump, setBottomBump] = useState(false);
+  const [deadBlocksList, setDeadBlocksList] = useState([]);
+  const [currentColor, setCurrentColor] = useState("");
+  const [allowLeft, setAllowLeft] = useState(true);
+  const [allowRight, setAllowRight] = useState(true);
 
-  let allowLeft = true,
-    tempAllowLeft = true,
-    allowRight = true,
-    tempAllowRight = true;
+  const shapes = ["I", "L", "O"];
+  const colorList = [
+    "#CC99C9",
+    "#9EC1CF",
+    "#9EE09E",
+    "#FDFD97",
+    "#FEB144",
+    "#FF6663",
+  ];
 
-  window.addEventListener("keypress", () => {
-    if (event.key == "s" || event.key == "ArrowDown") {
-      if (allowDownBoost) {
-        let tempY = maxPosition.bottom;
-        currentShapeFirstBlockPos.forEach((value) => {
-          while (tempY + 1 < 22 && grid[tempY + 2][value.x] != "o") {
-            if (tempY + 1 > 22 || grid[tempY + 1][value.x] == "o") {
-              tempY = maxPosition.bottom;
-              break;
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if (event.key === "s" || event.key === "ArrowDown") {
+        if (allowDownBoost) {
+          let tempY = maxPosition.bottom;
+          currentShapeFirstBlockPos.forEach((value) => {
+            while (tempY + 1 < 22 && grid[tempY + 2][value.x] !== "o") {
+              if (tempY + 1 > 22 || grid[tempY + 1][value.x] === "o") {
+                tempY = maxPosition.bottom;
+                break;
+              }
+              tempY++;
             }
-            tempY++;
-          }
-          removeShape();
-          value.y = tempY - 3;
-          updateScreen();
-        });
-        allowDownBoost = false;
-      }
-    }
-  });
-  window.addEventListener("keydown", () => {
-    renderShape();
-
-    currentShapePos.forEach((value) => {
-      if (grid[value.y][value.x - 1] == "o") tempAllowLeft = false;
-      if (grid[value.y][value.x + 1] == "o") tempAllowRight = false;
-
-      if (!tempAllowLeft) allowLeft = false;
-      if (!tempAllowRight) allowRight = false;
-    });
-
-    if (allowReposition && !pauseGame) {
-      if (
-        event.key == "a" ||
-        event.key == "d" ||
-        event.key == "ArrowRight" ||
-        event.key == "ArrowLeft"
-      ) {
-        removeShape();
-      }
-      if (event.key == "ArrowLeft" || event.key == "a") {
-        direction = "left";
-
-        if (maxPosition.left > 0 && allowLeft) {
-          currentShapeFirstBlockPos[0].x--;
+            removeShape();
+            value.y = tempY - 3;
+            updateScreen();
+          });
+          setAllowDownBoost(false);
         }
-
-        direction = "";
-
-        allowLeft = true;
-        tempAllowLeft = true;
-      } else if (event.key == "ArrowRight" || event.key == "d") {
-        direction = "right";
-
-        if (maxPosition.right < 9 && allowRight) {
-          currentShapeFirstBlockPos[0].x++;
-        }
-
-        direction = "";
-        allowRight = true;
-        tempAllowRight = true;
       }
-      currentShapeFirstBlockPos.forEach((value) => {
-        drawShapeGrid(currentShape, false, value.x, value.y);
-      });
-      updateScreen();
-    }
-  });
+    };
 
-  //drawShapeGrid(shapes[Math.floor(Math.random() * shapes.length)], true, 0, 0);
-  drawShapeGrid("I", true, 0, 0);
-
-  setInterval(() => {
-    if (!pauseGame) {
+    const handleKeyDown = (event) => {
       renderShape();
 
-      if (maxPosition.bottom < 23)
-        for (
-          let index = maxPosition.left;
-          index < maxPosition.right + 1;
-          index++
-        )
-          if (grid[maxPosition.bottom + 1][index] == "o") bottomBump = true;
+      currentShapePos.forEach((value) => {
+        if (grid[value.y][value.x - 1] === "o") setAllowLeft(false);
+        if (grid[value.y][value.x + 1] === "o") setAllowRight(false);
+      });
 
-      currentShapeFirstBlockPos.forEach((value) => {
-        if (maxPosition.bottom < 23 && !bottomBump) {
+      if (allowReposition && !pauseGame) {
+        if (["a", "d", "ArrowRight", "ArrowLeft"].includes(event.key)) {
           removeShape();
-          value.y++;
+        }
+        if (event.key === "ArrowLeft" || event.key === "a") {
+          if (maxPosition.left > 0 && allowLeft) {
+            setCurrentShapeFirstBlockPos((prev) => {
+              const newPos = [...prev];
+              newPos[0].x--;
+              return newPos;
+            });
+          }
+          setAllowLeft(true);
+        } else if (event.key === "ArrowRight" || event.key === "d") {
+          if (maxPosition.right < 9 && allowRight) {
+            setCurrentShapeFirstBlockPos((prev) => {
+              const newPos = [...prev];
+              newPos[0].x++;
+              return newPos;
+            });
+          }
+          setAllowRight(true);
+        }
+        currentShapeFirstBlockPos.forEach((value) => {
           drawShapeGrid(currentShape, false, value.x, value.y);
-          maxPosition.top++;
-        } else {
-          for (let y = 0; y < 24; y++) {
-            for (let x = 0; x < 10; x++) {
-              if (grid[y][x] == "x") {
-                grid[y][x] = "o";
-                colorGrid[y][x] = currentColor;
-              }
-            }
-          }
+        });
+        updateScreen();
+      }
+    };
+
+    window.addEventListener("keypress", handleKeyPress);
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keypress", handleKeyPress);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [
+    currentShapeFirstBlockPos,
+    maxPosition,
+    allowReposition,
+    pauseGame,
+    allowLeft,
+    allowRight,
+  ]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!pauseGame) {
+        renderShape();
+        if (maxPosition.bottom < 23) {
           for (
-            let checkBlockHeight = 0;
-            checkBlockHeight < 10;
-            checkBlockHeight++
+            let index = maxPosition.left;
+            index <= maxPosition.right;
+            index++
           ) {
-            if (grid[3][checkBlockHeight] == "o") {
-              pauseGame = true;
-              console.log("lose");
+            if (grid[maxPosition.bottom + 1][index] === "o")
+              setBottomBump(true);
+          }
+          currentShapeFirstBlockPos.forEach((value) => {
+            if (maxPosition.bottom < 23 && !bottomBump) {
+              removeShape();
+              value.y++;
+              drawShapeGrid(currentShape, false, value.x, value.y);
+            } else {
+              updateGrid();
+              checkLoseCondition();
+              blowLine();
+              setDeadBlocksList([
+                ...deadBlocksList,
+                { currentShapePos, currentColor },
+              ]);
+              drawShapeGrid(
+                shapes[Math.floor(Math.random() * shapes.length)],
+                true,
+                0,
+                0
+              );
+              setBottomBump(false);
+              renderShape();
             }
-          }
+          });
+          updateScreen();
+        }
+      }
+    }, 300);
 
-          for (
-            let maxHeight = 0;
-            maxHeight < maxPosition.bottom - maxPosition.top + 1;
-            maxHeight++
-          ) {
-            blowLine();
-          }
+    return () => clearInterval(interval);
+  }, [pauseGame, maxPosition, currentShapeFirstBlockPos, bottomBump]);
 
-          deadBlocksList.push({ currentShapePos, currentColor });
+  const updateGrid = () => {
+    const newGrid = grid.map((row) =>
+      row.map((cell) => (cell === "x" ? "o" : cell))
+    );
+    const newColorGrid = grid.map((row, y) =>
+      row.map((cell, x) => (cell === "x" ? currentColor : colorGrid[y][x]))
+    );
+    setGrid(newGrid);
+    setColorGrid(newColorGrid);
+  };
 
-          drawShapeGrid(
-            shapes[Math.floor(Math.random() * shapes.length)],
-            true,
-            0,
-            0
-          );
-          //drawShapeGrid('I', true, 0, 0);
-          bottomBump = false;
-          renderShape();
-          maxPosition.top = 0;
+  const checkLoseCondition = () => {
+    for (let checkBlockHeight = 0; checkBlockHeight < 10; checkBlockHeight++) {
+      if (grid[3][checkBlockHeight] === "o") {
+        setPauseGame(true);
+        console.log("lose");
+      }
+    }
+  };
 
-          allowDownBoost = true;
+  const blowLine = () => {
+    const newGrid = [...grid];
+    const newColorGrid = [...colorGrid];
+    for (let y = 23; y > 0; y--) {
+      let isFullLine = true;
+      for (let x = 0; x < 10; x++) {
+        if (newGrid[y][x] === "") {
+          isFullLine = false;
+          break;
+        }
+      }
+      if (isFullLine) {
+        for (let lineIndex = y; lineIndex > 0; lineIndex--) {
+          newGrid[lineIndex] = [...newGrid[lineIndex - 1]];
+          newColorGrid[lineIndex] = [...newColorGrid[lineIndex - 1]];
+        }
+        newGrid[0] = Array(10).fill("");
+        newColorGrid[0] = Array(10).fill("");
+      }
+    }
+    setGrid(newGrid);
+    setColorGrid(newColorGrid);
+  };
+
+  const renderShape = () => {
+    const positionsX = [];
+    const positionsY = [];
+    const newShapePos = [];
+    grid.forEach((row, y) => {
+      row.forEach((cell, x) => {
+        if (cell === "x") {
+          positionsX.push(x);
+          positionsY.push(y);
+          newShapePos.push({ x, y });
         }
       });
-      updateScreen();
-    }
-  }, 300);
+    });
+    setCurrentShapePos(newShapePos);
+    getMaxPos(positionsX, positionsY);
+  };
 
-  function blowLine() {
-    let line = -1;
+  const getMaxPos = (positionsX, positionsY) => {
+    const maxX = Math.max(...positionsX);
+    const minX = Math.min(...positionsX);
+    const maxY = Math.max(...positionsY);
+    setMaxPosition({
+      left: minX,
+      right: maxX,
+      top: positionsY[0],
+      bottom: maxY,
+    });
+  };
 
-    let checker = false;
-    let lineList = [],
-      tempLineList = [];
+  const updateScreen = () => {
+    setAllowReposition(true);
+  };
 
-    for (let y = 23; y > 0; y--) {
-      for (let x = 0; x < 10; x++) {
-        if (checker) continue;
-        if (grid[y][x] == "") checker = true;
-        else if (grid[y][x] == "o") {
-          checker = false;
-          line = y;
-          tempLineList.push(line);
-        }
-      }
-      if (!checker) {
-        for (let index = 0; index < tempLineList.length - 1; index++) {
-          if (tempLineList[index] == tempLineList[index + 1])
-            tempLineList.splice(0, index);
-        }
-        lineList.push(line);
+  const removeShape = () => {
+    const newGrid = grid.map((row) =>
+      row.map((cell) => (cell === "x" ? "" : cell))
+    );
+    setGrid(newGrid);
+  };
 
-        for (let lineIndex = 0; lineIndex < lineList.length; lineIndex++) {
-          for (let y = line; y > 0; y--) {
-            for (let x = 0; x < 10; x++) {
-              grid[y][x] = grid[y - 1][x];
-              colorGrid[y][x] = colorGrid[y - 1][x];
-            }
-          }
-        }
-        lineList.splice(0, lineList.length);
-      }
-      checker = false;
-    }
-  }
-
-  function renderShape() {
-    currentShapePos.splice(0, currentShapePos.length);
-    positionWidthContainer.splice(0, positionWidthContainer.length);
-    positionHeightContainer.splice(0, positionHeightContainer.length);
-    for (let y = 0; y < 24; y++) {
-      for (let x = 0; x < 10; x++) {
-        if (grid[y][x] == "x") {
-          positionHeightContainer.push(y);
-          positionWidthContainer.push(x);
-          currentShapePos.push({
-            x: x,
-            y: y,
-          });
-        }
-      }
-    }
-    getMaxPos(positionWidthContainer, positionHeightContainer);
-  }
-
-  function getMaxPos(positionsX, positionsY) {
-    for (let x = 0; x < positionsX.length; x++) {
-      for (let y = 0; y < positionsX.length; y++) {
-        if (positionsX[x] != positionsX[y] || currentShape == "I") {
-          if (positionsX[x] > positionsX[y]) maxPosition.right = positionsX[x];
-          else if (positionsX[x] < positionsX[y])
-            maxPosition.left = positionsX[x];
-          else if (positionsX[x] == positionsX[y]) {
-            maxPosition.right = positionsX[x];
-            maxPosition.left = positionsX[x];
-          }
-        }
-      }
-    }
-
-    for (let x = 0; x < positionsY.length; x++) {
-      for (let y = 0; y < positionsY.length; y++) {
-        if (positionsY[x] > positionsY[y]) maxPosition.bottom = positionsY[x];
-      }
-    }
-  }
-
-  function updateScreen() {
-    allowReposition = true;
-    gameContainer.innerHTML = "";
-    for (let y = 4; y < 24; y++) {
-      for (let x = 0; x < 10; x++) {
-        if (grid[y][x] == "") {
-          gameContainer.innerHTML += '<div class="game-block"></div>';
-        } else if (grid[y][x] == "x") {
-          gameContainer.innerHTML += `<div class="game-block" style="background-color: ${currentColor};"></div>`;
-        } else if (grid[y][x] != "x" && grid[y][x] != "") {
-          gameContainer.innerHTML += `<div class="game-block" style="background-color: ${colorGrid[y][x]}"></div>`;
-        }
-      }
-    }
-  }
-
-  function rotateShape() {}
-
-  function removeShape() {
-    for (let y = 0; y < 24; y++) {
-      for (let x = 0; x < 10; x++) {
-        if (grid[y][x] == "x") grid[y][x] = "";
-      }
-    }
-  }
-
-  function drawShapeGrid(shape, defaultPos, x, y) {
-    currentShape = shape;
+  const drawShapeGrid = (shape, defaultPos, x, y) => {
+    setCurrentShape(shape);
+    let newGrid = [...grid];
     if (defaultPos) {
       x = 4;
       y = 0;
-
-      currentColor = colorList[Math.floor(Math.random() * colorList.length)];
+      setCurrentColor(colorList[Math.floor(Math.random() * colorList.length)]);
     }
-
     switch (shape) {
       case "I":
-        currentShapeFirstBlockPos.splice(0, 4);
-        for (let yPos = y; yPos < y + 1; yPos++) {
-          for (let blockQuantity = y; blockQuantity < y + 4; blockQuantity++) {
-            grid[blockQuantity][x] = "x";
-          }
-          currentShapeFirstBlockPos.push({
-            x: x,
-            y: y,
-          });
+        setCurrentShapeFirstBlockPos([{ x, y }]);
+        for (let i = y; i < y + 4; i++) {
+          newGrid[i][x] = "x";
         }
         break;
       case "O":
-        currentShapeFirstBlockPos.splice(0, 4);
-        for (let yPos = y; yPos < y + 1; yPos++) {
-          for (
-            let blockQuantityY = y;
-            blockQuantityY < y + 2;
-            blockQuantityY++
-          ) {
-            for (
-              let blockQuantityX = x;
-              blockQuantityX < x + 2;
-              blockQuantityX++
-            ) {
-              grid[blockQuantityY][blockQuantityX] = "x";
-            }
+        setCurrentShapeFirstBlockPos([{ x, y }]);
+        for (let i = y; i < y + 2; i++) {
+          for (let j = x; j < x + 2; j++) {
+            newGrid[i][j] = "x";
           }
-          currentShapeFirstBlockPos.push({
-            x: x,
-            y: y,
-          });
         }
         break;
       case "L":
-        currentShapeFirstBlockPos.splice(0, 4);
-        for (let yPos = y; yPos < y + 1; yPos++) {
-          for (
-            let blockQuantityY = y;
-            blockQuantityY < y + 3;
-            blockQuantityY++
-          ) {
-            grid[blockQuantityY][x] = "x";
-          }
-          for (
-            let blockQuantityX = x;
-            blockQuantityX < x + 2;
-            blockQuantityX++
-          ) {
-            grid[y + 2][blockQuantityX] = "x";
-          }
-          currentShapeFirstBlockPos.push({
-            x: x,
-            y: y,
-          });
+        setCurrentShapeFirstBlockPos([{ x, y }]);
+        for (let i = y; i < y + 3; i++) {
+          newGrid[i][x] = "x";
+        }
+        for (let j = x; j < x + 2; j++) {
+          newGrid[y + 2][j] = "x";
         }
         break;
-      case "T":
-        break;
-      case "J":
-        break;
-      case "Z":
-        break;
-      case "ZZ":
-        break;
+      // Add cases for other shapes
     }
-  }
+    setGrid(newGrid);
+  };
 
   return (
-    <>
-      <div class="main-container">
-        <div class="game-container"></div>
-      </div>
-      <div class="next-block">
-        <div class="next-title-bg">
-          <p class="next-title">QUEUE</p>
+    <div className="flex">
+      <div className="main-container flex flex-col">
+        <div className="game-container">
+          {grid.slice(4).map((row, y) => (
+            <div key={y} className="game-row">
+              {row.map((cell, x) => (
+                <div
+                  key={x}
+                  className="game-block"
+                  style={{
+                    backgroundColor: cell === "" ? "" : colorGrid[y][x],
+                  }}
+                ></div>
+              ))}
+            </div>
+          ))}
         </div>
-        <div class="next-block-queue"></div>
       </div>
-    </>
+      <div className="next-block">
+        <div className="next-title-bg">
+          <p className="next-title">QUEUE</p>
+        </div>
+        <div className="next-block-queue"></div>
+      </div>
+    </div>
   );
 }
