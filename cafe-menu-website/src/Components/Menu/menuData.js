@@ -21,50 +21,51 @@ import drinks1 from "../../assets/images/drinks-1.jpg";
 import drinks2 from "../../assets/images/drinks-2.jpg";
 import drinks3 from "../../assets/images/drinks-3.jpg";
 
-export const menu = [{
-        id: 0,
-        title: "Foods",
-        category: "foods",
-        image: categoryImage1,
-        items: [
-            { id: 0, name: "Crispy Chicken", image: food1, price: 100 },
-            { id: 1, name: "Spaghetti", image: food2, price: 100 },
-            { id: 2, name: "Spaghetti w/sauce", image: food3, price: 100 },
-            { id: 3, name: "Crispy Burger", image: food4, price: 100 },
-        ],
-    },
-    {
-        id: 1,
-        title: "Deserts",
-        category: "deserts",
-        image: categoryImage2,
-        items: [
-            { id: 0, name: "Pancake", image: desert1, price: 100 },
-            { id: 1, name: "Pancake", image: desert2, price: 100 },
-        ],
-    },
-    {
-        id: 2,
-        title: "Drinks",
-        category: "drinks",
-        image: categoryImage3,
-        items: [
-            { id: 0, name: "Americano", image: drinks1, price: 100 },
-            { id: 1, name: "Macchiato", image: drinks2, price: 100 },
-            { id: 2, name: "Sparkling Water", image: drinks3, price: 100 },
-        ],
-    },
-    {
-        id: 3,
-        title: "Alcoholic Drinks",
-        category: "alcohol",
-        image: categoryImage4,
-        items: [
-            { id: 0, name: "Alcohol", image: alcoholic1, price: 100 },
-            { id: 1, name: "Alcohol", image: alcoholic2, price: 100 },
-            { id: 2, name: "Alcohol", image: alcoholic3, price: 100 },
-            { id: 3, name: "Alcohol", image: alcoholic4, price: 100 },
-            { id: 4, name: "Alcohol", image: alcoholic5, price: 100 },
-        ],
-    },
+export const menu = [
+  {
+    id: 0,
+    title: "Foods",
+    category: "foods",
+    image: categoryImage1,
+    items: [
+      { id: 0, name: "Crispy Chicken", image: food1, price: 100 },
+      { id: 1, name: "Spaghetti", image: food2, price: 100 },
+      { id: 2, name: "Spaghetti w/sauce", image: food3, price: 100 },
+      { id: 3, name: "Crispy Burger", image: food4, price: 100 },
+    ],
+  },
+  {
+    id: 1,
+    title: "Deserts",
+    category: "deserts",
+    image: categoryImage2,
+    items: [
+      { id: 0, name: "Pancake", image: desert1, price: 100 },
+      { id: 1, name: "Pancake", image: desert2, price: 100 },
+    ],
+  },
+  {
+    id: 2,
+    title: "Drinks",
+    category: "drinks",
+    image: categoryImage3,
+    items: [
+      { id: 0, name: "Americano", image: drinks1, price: 100 },
+      { id: 1, name: "Macchiato", image: drinks2, price: 100 },
+      { id: 2, name: "Sparkling Water", image: drinks3, price: 100 },
+    ],
+  },
+  {
+    id: 3,
+    title: "Alcoholic Drinks",
+    category: "alcohol",
+    image: alcoholic2,
+    items: [
+      { id: 0, name: "Alcohol", image: alcoholic1, price: 100 },
+      { id: 1, name: "Alcohol", image: alcoholic2, price: 100 },
+      { id: 2, name: "Alcohol", image: alcoholic3, price: 100 },
+      { id: 3, name: "Alcohol", image: alcoholic4, price: 100 },
+      { id: 4, name: "Alcohol", image: alcoholic5, price: 100 },
+    ],
+  },
 ];

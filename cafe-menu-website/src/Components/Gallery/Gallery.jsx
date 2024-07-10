@@ -2,7 +2,7 @@ import React from "react";
 import NavigationBar from "../NavigationBar/NavigationBar";
 import NavigationBarMobile from "../NavigationBar/NavigationBarMobile";
 import { galleryData, sortCategories, sortedCategories } from "./galleryData";
-import { ImGift } from "react-icons/im";
+import MoveToTop from "../MoveToTop/MoveToTop";
 
 export default function Gallery() {
   const renderPhotos = (category) => {
@@ -41,7 +41,10 @@ export default function Gallery() {
       <div className="lg:hidden inline">
         <NavigationBarMobile />
       </div>
-      <div className="pt-32 w-10/12 mx-auto my-0">{renderCategories()}</div>
+      <MoveToTop />
+      <div className="pt-32 w-10/12 mx-auto my-0" id="start">
+        {renderCategories()}
+      </div>
     </div>
   );
 }

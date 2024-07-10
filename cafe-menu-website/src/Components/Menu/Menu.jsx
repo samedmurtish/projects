@@ -2,7 +2,8 @@ import React from "react";
 import NavigationBar from "../NavigationBar/NavigationBar";
 import NavigationBarMobile from "../NavigationBar/NavigationBarMobile";
 import { menu } from "./menuData";
-import { Link, Outlet } from "react-router-dom";
+import { Link } from "react-router-dom";
+import MoveToTop from "../MoveToTop/MoveToTop";
 
 export default function Menu() {
   const renderCategories = () => {
@@ -23,7 +24,7 @@ export default function Menu() {
           />
         )}
 
-        <span className="px-5 md:px-16 text-2xl md:text-5xl" id="font">
+        <span className="px-5 md:px-16 text-3xl sm:4xl md:text-5xl" id="font">
           {value.title}
         </span>
 
@@ -47,13 +48,17 @@ export default function Menu() {
       <div className="lg:hidden inline">
         <NavigationBarMobile />
       </div>
-      <div className="pt-24 md:pt-32 flex mx-auto my-0 w-3/4 lg:w-1/2 flex-col pb-16 text-[#EFAB3A]">
-        <span
+      <MoveToTop />
+      <div
+        className="pt-24 md:pt-32 flex mx-auto my-0 w-3/4 lg:w-1/2 flex-col pb-16 text-[#EFAB3A]"
+        id="start"
+      >
+        <div
           className="flex justify-center items-center w-full text-4xl md:text-6xl pb-10"
           id="font"
         >
           Menu
-        </span>
+        </div>
         {renderCategories()}
       </div>
     </div>

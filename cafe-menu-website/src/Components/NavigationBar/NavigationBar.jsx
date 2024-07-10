@@ -1,8 +1,9 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { navigations } from "./Navigations";
 
 export default function NavigationBar() {
+  const link = useLocation();
   const renderNavigations = () => {
     return navigations.map((value, valueIndex) => (
       <Link
@@ -24,6 +25,14 @@ export default function NavigationBar() {
           HOLIDAY
         </Link>
         <div className="md:flex flex-row h-full gap-10 items-center hidden">
+          <a
+            href="#location"
+            className="border-b-[#05A981] border-b-2 pb-2 pt-2 px-5 h-max hover:border-b-[#04c292] transition rounded-t-md hover:bg-[rgba(255,255,255,0.05)]"
+            style={{ visibility: link.pathname == "/" ? "" : "hidden" }}
+          >
+            Location
+          </a>
+
           {renderNavigations()}
         </div>
       </div>
