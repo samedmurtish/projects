@@ -2,7 +2,6 @@ import { GoHomeFill } from "react-icons/go";
 import { Link } from "react-router-dom";
 
 export default function ErrorPage() {
-  document.title = "Harun Spaho`s Portfolio";
   return (
     <div className="bg-red-500 flex justify-center items-center">
       <div className="h-screen w-11/12 text-center flex flex-col items-center justify-center">

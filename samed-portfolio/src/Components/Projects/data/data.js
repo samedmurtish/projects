@@ -6,7 +6,8 @@ import calculator from "./Projects/Basic Calculator/calculator.png";
 
 export const projects = [
   {
-    route: "tetris",
+    id: 0,
+    purejs: true,
     name: "Tetris",
     description: "Tetris Game !",
     image: tetris,
@@ -14,7 +15,8 @@ export const projects = [
     languages: ["HTML", "CSS", "Javascript"],
   },
   {
-    route: "pixel",
+    id: 1,
+    purejs: true,
     name: "Pixel Coloring",
     description: "Pixel Coloring Game !",
     image: cpalette,
@@ -22,7 +24,8 @@ export const projects = [
     languages: ["HTML", "CSS", "Javascript"],
   },
   {
-    route: "snake",
+    id: 2,
+    purejs: true,
     name: "Snake",
     description: "Snake Game !",
     image: snake,
@@ -30,7 +33,8 @@ export const projects = [
     languages: ["HTML", "CSS", "Javascript"],
   },
   {
-    route: "todolist",
+    id: 3,
+    purejs: true,
     name: "To Do List",
     description: "To Do List !",
     image: todo,
@@ -38,7 +42,8 @@ export const projects = [
     languages: ["HTML", "CSS", "Javascript"],
   },
   {
-    route: "calculator",
+    id: 4,
+    purejs: true,
     name: "Basic Calculator",
     description: "Basic Calculator !",
     image: calculator,

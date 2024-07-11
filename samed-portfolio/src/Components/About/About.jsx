@@ -45,9 +45,9 @@ export default function About() {
 
   const handleSkills = () => {
     return skills.map((value, valueIndex) => (
-      <div key={valueIndex} className="w-full">
+      <div key={valueIndex} className="md:w-4/12 w-full">
         <div
-          className="flex flex-col justify-center items-center w-full gap-5"
+          className="flex flex-col justify-center items-center w-full gap-5 "
           style={{ color: value.color }}
         >
           <span className="text-7xl">{value.icon}</span>
@@ -57,7 +57,7 @@ export default function About() {
               style={{ width: `${value.progress}%` }}
             ></div>
           </div>
-          <span className="text-lg font-extrabold">
+          <span className="text-lg font-extrabold text-nowrap">
             {value.progress} <span className="text-white">%</span>
           </span>
         </div>
@@ -73,13 +73,13 @@ export default function About() {
       <div className="md:hidden inline">
         <NavigationBarMobile />
       </div>
-      <div className="overflow-x-hidden md:pt-10 pt-10 text-white flex justify-start items-center h- mx-auto my-0 w-5/6 flex-col">
+      <div className="md:pt-10 pt-10 text-white flex justify-start items-center mx-auto my-0 w-5/6 md:5/6 flex-col">
         <div className="mt-28 flex flex-col md:flex-row md:justify-start md:items-start justify-center items-center">
           <div className="w-6/12 md:w-3/12 flex flex-col gap-10">
             <div className="overflow-hidden flex justify-center items-center border-b-8 border-[#1D2537] rounded-full md:mb-0 mb-16">
               <img src={me} className="bg-[rgba(0,0,0,.1)]" />
             </div>
-            <span className="hidden flex-col gap-10 lg:hidden sm:hidden md:flex">
+            <span className="hidden flex-col md:flex-row flex-wrap gap-10 lg:hidden sm:hidden md:flex">
               {handleSkills()}
             </span>
           </div>
@@ -88,15 +88,15 @@ export default function About() {
               <p className="font-extrabold lg:text-8xl text-7xl m-0 text-justify">
                 SAMED <span className="font">MURTISH</span>
               </p>
-              <p className="font-extralight lg:text-7xl text-6xl text-sky-500 m-0 teko flex">
+              <p className="font-extralight lg:text-7xl text-6xl text-sky-500 m-0 teko flex flex-col xl:flex-row items-start xl:items-center gap-2 md:gap-0">
                 <span className="font-extralight">Front-End</span>{" "}
-                <span className="ml-5 text-white px-5 pt-2  bg-sky-500 overflow-hidden h-max w-max text-4xl lg:text-5xl">
+                <span className="xl:ml-5 text-white px-5 pt-2  bg-sky-500 overflow-hidden h-max w-max text-4xl lg:text-5xl">
                   developer
                 </span>
               </p>
             </div>
             <div className="w-full h-1 bg-[#1D2537] my-10 mt-6"></div>
-            <p className="text-justify text-lg h-full w-full bg-[rgba(255,255,255,.05)] p-3 px-5 rounded-lg">
+            <p className="text-justify text-lg h-full w-11/12 md:w-full mx-auto my-0 bg-[rgba(255,255,255,.05)] p-3 px-5 rounded-lg">
               Hello, I`m{" "}
               <span className="font-bold text-rose-500">Samed Murtish</span> and
               I`m a <span className="font-bold">self-taught</span> front-end

@@ -13,21 +13,19 @@ export default function Projects() {
 
   const renderTags = (project) => {
     return project.languages.map((value, valueIndex) => (
-      <>
-        <div
-          key={valueIndex}
-          className="w-max h-max hover:bg-sky-400 bg-sky-500 px-2 rounded-full flex font-normal text-white border-[3px] border-sky-600"
-        >
-          {value}
-        </div>
-      </>
+      <div
+        key={valueIndex}
+        className="w-max h-max hover:bg-sky-400 bg-sky-500 px-2 rounded-full flex font-normal text-white border-[3px] border-sky-600"
+      >
+        {value}
+      </div>
     ));
   };
 
   const renderProjects = (category) => {
-    return projects.map((value, valueIndex) => (
-      <>
-        {value.category == category && (
+    return projects.map((value, valueIndex) => {
+      if (value.category === category) {
+        return (
           <div key={valueIndex}>
             <Link to={`/project/${value.id}`} state={{ project: value.id }}>
               <div className="w-[280px] h-[300px] bg-[#212121] flex items-center flex-col p-5 pb-0 rounded-t-3xl justify-center">
@@ -38,12 +36,13 @@ export default function Projects() {
                 />
               </div>
             </Link>
-            <p className="bg-[#1b1b1b] py-5 text-2xl flex justify-center items-center w-full text-center flex-col h-max gap-4">
+            <div className="bg-[#1b1b1b] py-5 text-2xl flex justify-center items-center w-full text-center flex-col h-max gap-4">
               {value.name} <br />
-              <span className="text-lg text-gray-300 w-full flex px-3 gap-1 justify-center select-none">
+              <div className="text-lg text-gray-300 w-full flex px-3 gap-1 justify-center select-none">
+                {/* Assuming renderTags(value) returns some JSX */}
                 {renderTags(value)}
-              </span>
-            </p>
+              </div>
+            </div>
             <div className="bg-sky-400 h-1 w-full"></div>
             <div className="flex w-full h-full">
               <Link
@@ -61,9 +60,11 @@ export default function Projects() {
               </Link>
             </div>
           </div>
-        )}
-      </>
-    ));
+        );
+      } else {
+        return null; // Handle other cases if needed
+      }
+    });
   };
   /* 
 	<button
@@ -102,6 +103,13 @@ export default function Projects() {
         <NavigationBarMobile />
       </div>
       <div className="w-5/6 mx-auto my-0 text-white pt-32 ">
+        <a
+          href={"../../Projects/snakeGame/index.html"}
+          className="bg-white w-full h-full"
+        >
+          s
+        </a>
+
         <div className="text-7xl font-extrabold">Projects</div>
         <div className="w-full h-1 bg-sky-500 " />
         <div className="w-full h-full pl-0 md:pl-10 pt-10 text-5xl font-extrabold">

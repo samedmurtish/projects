@@ -100,7 +100,7 @@ export default function MenuDetailed() {
       </div>
       <MoveToTop />
       <div
-        className="h-full text-white flex flex-col w-3/4 md:w-5/6 mx-auto my-0"
+        className="h-full text-white flex flex-col w-5/6 md:w-5/6 mx-auto my-0"
         id="start"
       >
         <div className="md:pt-20 pt-5 flex flex-col justify-center items-center md:items-start pb-20">
