@@ -36,8 +36,13 @@ export default function Projects() {
                 />
               </div>
             </div>
-            <div className="bg-[#1b1b1b] py-5 text-2xl flex justify-center items-center w-full text-center flex-col h-max gap-4">
-              {value.name} <br />
+            <div
+              className="bg-[#1b1b1b] py-5 text-2xl flex justify-center items-center w-full text-center flex-col h-max gap-4"
+              title={value.description}
+            >
+              <div className="w-[250px] text-ellipsis overflow-hidden text-nowrap">
+                {value.name} <br />
+              </div>
               <div className="text-lg text-gray-300 w-full flex px-3 gap-1 justify-center select-none flex-wrap">
                 {renderTags(value)}
               </div>
@@ -48,6 +53,8 @@ export default function Projects() {
                 to={
                   value.purejs
                     ? `http://projects.samedmurtish.xyz/${value.route}/index.html`
+                    : value.react
+                    ? `http://${value.reactRoute.toLowerCase()}.samedmurtish.xyz/`
                     : `/project/${value.id}`
                 }
                 target="_blank"
@@ -101,13 +108,6 @@ export default function Projects() {
         <NavigationBarMobile />
       </div>
       <div className="w-5/6 mx-auto my-0 text-white pt-32 ">
-        <a
-          href={"../../Projects/snakeGame/index.html"}
-          className="bg-white w-full h-full"
-        >
-          s
-        </a>
-
         <div className="text-7xl font-extrabold">Projects</div>
         <div className="w-full h-1 bg-sky-500 " />
         <div className="w-full h-full pl-0 md:pl-10 pt-10 text-5xl font-extrabold">
