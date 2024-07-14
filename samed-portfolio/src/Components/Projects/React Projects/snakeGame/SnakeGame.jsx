@@ -255,14 +255,17 @@ const SnakeGame = () => {
   }
 
   return (
-    <div className="h-screen w-5/6 mx-auto my-0 flex justify-center items-center bg">
-      <div className="main-container">
+    <div className="w-full h-screen flex justify-center items-center">
+      <div className="main-container w-full h-full">
         <div ref={gamePausePanelRef} className="game-paused hide">
           <div ref={gamePausePanelTextRef} className="game-paused-text"></div>
         </div>
         <div ref={gameInfoRef} className="game-info"></div>
-        <div className="game-bg">
-          <div ref={gameContainerRef} className="game-container"></div>
+        <div className="game-bg w-full h-full">
+          <div
+            ref={gameContainerRef}
+            className="h-full grid grid-rows-9 grid-cols-9"
+          ></div>
         </div>
       </div>
     </div>

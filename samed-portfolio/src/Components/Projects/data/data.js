@@ -1,68 +1,81 @@
-import tetris from "./Projects/Tetris Game/tetris.png";
-import cpalette from "./Projects/Pixel Coloring/colorpalette.png";
-import snake from "./Projects/Snake Game/snake.png";
-import todo from "./Projects/ToDo List/todo.png";
-import calculator from "./Projects/Basic Calculator/calculator.png";
+import tetris from "./Project Logos/Tetris Game/tetris.png";
+import cpalette from "./Project Logos/Pixel Coloring/colorpalette.png";
+import snake from "./Project Logos/Snake Game/snake.png";
+import todo from "./Project Logos/ToDo List/todo.png";
+import calculator from "./Project Logos/Basic Calculator/calculator.png";
+import cafe from "./Project Logos/Holiday/logo.png";
 
-export const projects = [
-  {
-    id: 0,
-    purejs: true,
-    name: "Tetris",
-    description: "Tetris Game !",
-    image: tetris,
-    category: "Web Game",
-    languages: ["HTML", "CSS", "Javascript"],
-  },
-  {
-    id: 1,
-    purejs: true,
-    name: "Pixel Coloring",
-    description: "Pixel Coloring Game !",
-    image: cpalette,
-    category: "Web Game",
-    languages: ["HTML", "CSS", "Javascript"],
-  },
-  {
-    id: 2,
-    purejs: true,
-    name: "Snake",
-    description: "Snake Game !",
-    image: snake,
-    category: "Web Game",
-    languages: ["HTML", "CSS", "Javascript"],
-  },
-  {
-    id: 3,
-    purejs: true,
-    name: "To Do List",
-    description: "To Do List !",
-    image: todo,
-    category: "Web Tool",
-    languages: ["HTML", "CSS", "Javascript"],
-  },
-  {
-    id: 4,
-    purejs: true,
-    name: "Basic Calculator",
-    description: "Basic Calculator !",
-    image: calculator,
-    category: "Web Tool",
-    languages: ["HTML", "CSS", "Javascript"],
-  },
+export const projects = [{
+        id: 5,
+        purejs: false,
+        name: "Holiday Beach Bar",
+        description: "Holiday Beach Bar Website !",
+        image: cafe,
+        category: "eCommerce",
+        languages: ["React", "TailwindCSS", "Javascript"],
+    },
+    {
+        id: 0,
+        purejs: true,
+        route: "tetrisGame",
+        name: "Tetris",
+        description: "Tetris Game !",
+        image: tetris,
+        category: "Web Game",
+        languages: ["HTML", "CSS", "Javascript"],
+    },
+    {
+        id: 1,
+        purejs: true,
+        route: "pixelColoringGame",
+        name: "Pixel Coloring",
+        description: "Pixel Coloring Game !",
+        image: cpalette,
+        category: "Web Game",
+        languages: ["HTML", "CSS", "Javascript"],
+    },
+    {
+        id: 2,
+        purejs: false,
+        name: "Snake",
+        description: "Snake Game !",
+        image: snake,
+        category: "Web Game",
+        languages: ["HTML", "CSS", "Javascript"],
+    },
+    {
+        id: 3,
+        purejs: true,
+        route: "to-do-list",
+        name: "To Do List",
+        description: "To Do List !",
+        image: todo,
+        category: "Web Tool",
+        languages: ["HTML", "CSS", "Javascript"],
+    },
+    {
+        id: 4,
+        purejs: true,
+        route: "basicCalculator",
+        name: "Basic Calculator",
+        description: "Basic Calculator !",
+        image: calculator,
+        category: "Web Tool",
+        languages: ["HTML", "CSS", "Javascript"],
+    },
 ];
 
 export let sortedCategories = [];
 
 export function sortCategories() {
-  projects.map((value) => {
-    let matches = false;
-    sortedCategories.forEach((sortedValue) => {
-      if (sortedCategories.length > 0)
-        if (value.category == sortedValue) matches = true;
+    projects.map((value) => {
+        let matches = false;
+        sortedCategories.forEach((sortedValue) => {
+            if (sortedCategories.length > 0)
+                if (value.category == sortedValue) matches = true;
+        });
+        if (!matches) sortedCategories = [...sortedCategories, value.category];
     });
-    if (!matches) sortedCategories = [...sortedCategories, value.category];
-  });
 }
 
 sortCategories();

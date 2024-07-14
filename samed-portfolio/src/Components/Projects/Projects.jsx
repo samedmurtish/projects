@@ -26,35 +26,33 @@ export default function Projects() {
     return projects.map((value, valueIndex) => {
       if (value.category === category) {
         return (
-          <div key={valueIndex}>
-            <Link to={`/project/${value.id}`} state={{ project: value.id }}>
-              <div className="w-[280px] h-[300px] bg-[#212121] flex items-center flex-col p-5 pb-0 rounded-t-3xl justify-center">
+          <div key={valueIndex} className="w-[300px]">
+            <div>
+              <div className="w-[300px] h-[300px] bg-[#212121] flex items-center flex-col p-5 pb-0 rounded-t-3xl justify-center">
                 <img
                   src={value.image}
                   alt={value.name}
                   className="justify-self-center self-center rounded-xl w-full h-max overflow-hidden"
                 />
               </div>
-            </Link>
+            </div>
             <div className="bg-[#1b1b1b] py-5 text-2xl flex justify-center items-center w-full text-center flex-col h-max gap-4">
               {value.name} <br />
-              <div className="text-lg text-gray-300 w-full flex px-3 gap-1 justify-center select-none">
-                {/* Assuming renderTags(value) returns some JSX */}
+              <div className="text-lg text-gray-300 w-full flex px-3 gap-1 justify-center select-none flex-wrap">
                 {renderTags(value)}
               </div>
             </div>
             <div className="bg-sky-400 h-1 w-full"></div>
             <div className="flex w-full h-full">
               <Link
-                to={`/project/${value.id}`}
+                to={
+                  value.purejs
+                    ? `http://projects.samedmurtish.xyz/${value.route}/index.html`
+                    : `/project/${value.id}`
+                }
+                target="_blank"
                 state={{ project: value.id }}
                 className="w-full bg-sky-600 hover:bg-sky-700 active:bg-sky-800 h-full p-5 transition text-xl flex justify-center items-center rounded-b-xl"
-                onClick={() =>
-                  setShowBar({
-                    clicked: true,
-                    message: "Redirecting to project..",
-                  })
-                }
               >
                 View Project
               </Link>
