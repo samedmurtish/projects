@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import NavigationBar from "../NavigationBar/NavigationBar";
 import NavigationBarMobile from "../NavigationBar/NavigationBarMobile";
 import { projects, sortCategories, sortedCategories } from "./data/data";
@@ -10,7 +10,7 @@ export default function Projects() {
       <div key={valueIndex}>{value.name}</div>
     ));
   }; */
-
+  const checkMobile = useRef();
   const renderTags = (project) => {
     return project.languages.map((value, valueIndex) => (
       <div
@@ -27,8 +27,23 @@ export default function Projects() {
       if (value.category === category) {
         return (
           <div key={valueIndex} className="w-[300px]">
-            <div>
-              <div className="w-[300px] h-[300px] bg-[#212121] flex items-center flex-col p-5 pb-0 rounded-t-3xl justify-center">
+            <div className="flex md:hidden" ref={checkMobile}></div>
+            <div
+              className="rounded-t-3xl"
+              style={{
+                backgroundColor: value.highlighted ? "rgb(253 224 71)" : "",
+              }}
+            >
+              <div
+                className="w-full bg-yellow-300 hover:font-extrabold text-3xl font-bold p-3 flex justify-center items-center rounded-t-3xl font-outline-2 hover:font-outline-4"
+                style={{ visibility: !value.highlighted ? "hidden" : "" }}
+              >
+                Highlighted
+              </div>
+              <div
+                className="w-[300px] h-[300px] bg-[#212121] flex items-center flex-col p-5 pb-0 justify-center rounded-t-3xl"
+                style={{ borderTopWidth: value.highlighted ? "4px" : "" }}
+              >
                 <img
                   src={value.image}
                   alt={value.name}
@@ -57,7 +72,7 @@ export default function Projects() {
                     ? `http://${value.reactRoute.toLowerCase()}.samedmurtish.xyz/`
                     : `/project/${value.id}`
                 }
-                target="_blank"
+                target="_self"
                 state={{ project: value.id }}
                 className="w-full bg-sky-600 hover:bg-sky-700 active:bg-sky-800 h-full p-5 transition text-xl flex justify-center items-center rounded-b-xl"
               >
@@ -93,7 +108,7 @@ export default function Projects() {
           <div className="w-[10%] bg-sky-400 h-1 my-5" />
           <div className="w-[5%] bg-sky-300 h-1 my-5" />
         </div>
-        <div className="flex w-full h-full gap-5 justify-start items-start flex-wrap">
+        <div className="flex w-full h-full gap-5 justify-center md:justify-start items-start flex-wrap">
           {renderProjects(value)}
         </div>
       </div>

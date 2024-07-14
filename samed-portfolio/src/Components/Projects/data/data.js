@@ -42,6 +42,7 @@ export const projects = [
   {
     id: 3,
     purejs: false,
+    highlighted: true,
     name: "Snake",
     description: "Snake Game !",
     image: snake,
@@ -72,6 +73,7 @@ export const projects = [
     id: 6,
     purejs: false,
     react: true,
+    highlighted: true,
     reactRoute: "ecommerce",
     name: "eCommerce Prototype Website",
     description: "eCommerce Prototype Website !",
