@@ -58,14 +58,13 @@ export default function App() {
 
   return (
     <>
-      <div className="h-full mx-auto my-0 w-11/12 mt-10 mb-10 select-none">
+      <div className="h-full mx-auto my-0 w-11/12 mt-28 md:mt-10 mb-10 select-none">
         <>
           {/* Render the left menu with category selection handler */}
           <LeftMenu category={handleCategories} />
           <div className="flex flex-col h-full w-full gap-5">
-            <div className="pl-80">
-              <div className="flex justify-between items-center">
-                {/* Render the sorting component with sort handler */}
+            <div className="md:pl-80">
+              <div className="flex justify-between items-center flex-col md:flex-row">
                 <Sorting sortProducts={handleSortProducts} />
                 <div className="flex">
                   <Link
@@ -106,8 +105,7 @@ export default function App() {
                   </Link>
                 </div>
               </div>
-              <div className="flex justify-between items-center overflow-auto flex-wrap gap-3 w-full pt-5">
-                {/* Render products with sorting, category, and wishlist update handler */}
+              <div className="flex md:justify-between justify-center items-center overflow-auto flex-wrap gap-3 w-full pt-5">
                 <Products
                   products={products}
                   sortBy={sortType}

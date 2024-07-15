@@ -130,7 +130,7 @@ export default function Cart() {
   return (
     <>
       <SnackbarShow get={showBar} set={setShowBar} />
-      <div className="mx-auto my-0 w-[70%] h-max pt-10 select-none">
+      <div className="mx-auto my-0 md:w-[70%] w-[80%] h-max pt-10 select-none">
         <div className="flex justify-center items-start h-full w-full flex-col">
           <div className="py-5 h-full w-full">
             <RedirectIcons
@@ -141,7 +141,7 @@ export default function Cart() {
               wishlist={true}
             />
           </div>
-          <div className="h-full w-full flex flex-row justify-center">
+          <div className="h-full w-full flex flex-col md:flex-row justify-center">
             <div className="h-[80%] w-full flex justify-start items-center flex-col">
               <div className="bg-slate-600 flex justify-center items-center h-[75px] w-full font-semibold text-white text-2xl shadow-xl z-50 rounded-md">
                 CART
@@ -159,7 +159,7 @@ export default function Cart() {
                 </ul>
               </div>
             </div>{" "}
-            <div className="h-max w-[50%] flex justify-start items-center flex-col ml-5">
+            <div className="h-max md:w-[50%] w-[90%] flex justify-start items-center flex-col ml-5">
               <div className="bg-slate-600 flex justify-center items-center h-[75px] w-full font-semibold text-white text-2xl shadow-xl z-50 rounded-md">
                 CHECKOUT
               </div>

@@ -68,7 +68,7 @@ export default function Wishlist() {
   return (
     <>
       <SnackbarShow get={showBar} set={setShowBar} />
-      <div className="mx-auto my-0 w-[60%] h-screen ">
+      <div className="mx-auto my-0 w-[80%] md:w-[60%] h-screen ">
         <div className="flex flex-col justify-center items-center h-full w-full">
           <div className="w-full py-5">
             <RedirectIcons wishlist={false} home={true} cart={true} />
