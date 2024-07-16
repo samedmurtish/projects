@@ -3,28 +3,71 @@ import React, { useEffect, useState } from "react";
 export default function Sudoku() {
   const [blockData, setBlockData] = useState([]);
 
-  const newBlockData = [];
+  const initializeBlockData = () => {
+    const newBlockData = [];
+    for (let index = 0; index < 9; index++) {
+      newBlockData.push({
+        items: [
+          [0, 0, 0],
+          [0, 0, 0],
+          [0, 0, 0],
+        ],
+      });
+    }
+    setBlockData(newBlockData);
+  };
 
-  const generateBlockNumbers = () => {
-    let newBlockNumbersData = blockData;
+  const checkX = (block, blockItem, data) => {
+    let match = false;
+
+    for (let index = 1; index < 9 + 1; index++) {
+      if (match) match = false;
+      for (let blockItemCheck = 0; blockItemCheck < 3; blockItemCheck++) {
+        if (match) break;
+        for (
+          let blockItemValueCheck = 0;
+          blockItemValueCheck < 3;
+          blockItemValueCheck++
+        ) {
+          if (block.items[blockItemCheck][blockItemValueCheck] != index) {
+            block.items[blockItemCheck][blockItemValueCheck] = index;
+            match = true;
+            break;
+          }
+        }
+      }
+    }
+
+    console.log(block);
+
+    return true;
+  };
+
+  const generateSudoku = () => {
+    const newBlockData = [...blockData];
+    console.log(newBlockData);
+    newBlockData.forEach((block) => {
+      block.items.forEach((blockItem) => {
+        blockItem.forEach((value) => {
+          if (value === 0) {
+            checkX(block, blockItem, newBlockData);
+          }
+        });
+      });
+    });
   };
 
   useEffect(() => {
-    if (newBlockData[length] == null) {
-      setBlockData([]);
-      for (let index = 0; index < 9; index++) {
-        newBlockData.push({
-          items: [
-            [0, 0, 0],
-            [0, 0, 0],
-            [0, 0, 0],
-          ],
-        });
-      }
-
-      setBlockData((prev) => [...prev, ...newBlockData]);
+    if (blockData.length === 0) {
+      initializeBlockData();
     }
-  }, []);
+  }, []); // Only run once on mount
+
+  useEffect(() => {
+    if (blockData.length > 0) {
+      generateSudoku();
+    }
+  }, [blockData]);
 
   const renderBlocks = () => {
     return blockData.map((value, valueIndex) => (
@@ -57,7 +100,6 @@ export default function Sudoku() {
     <div className="bg-black w-5/6 h-5/6 flex justify-center items-center rounded-xl">
       <div className="bg-white w-[99%] h-[99%] justify-center items-center rounded-lg grid grid-cols-3">
         {renderBlocks()}
-        {generateBlockNumbers()}
       </div>
     </div>
   );
