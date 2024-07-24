@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Sudoku from "./components/Sudoku";
 
 function App() {
