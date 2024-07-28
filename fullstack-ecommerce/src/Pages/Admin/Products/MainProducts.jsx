@@ -25,7 +25,7 @@ function MainProducts() {
   };
 
   return (
-    <div className="w-3/4 h-full mx-auto my-0 flex justify-center items-center">
+    <div className="min-w-[400px] max-w-[700px] h-full flex justify-center items-center ml-48">
       <div className="w-full h-max max-h-[75%] bg-slate-200 rounded-2xl p-5 ">
         {currentPage == "Products" && (
           <Products
