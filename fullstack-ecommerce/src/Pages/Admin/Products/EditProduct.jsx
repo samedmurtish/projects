@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { IoArrowBack } from "react-icons/io5";
-import { editItem } from "../../../Database/connection";
+import { editProduct } from "../../../Database/connection";
 
-export default function EditItem({
+export default function EditProduct({
   page,
   productId,
   productName,
@@ -24,7 +24,7 @@ export default function EditItem({
             <IoArrowBack />
           </button>
           <div className="w-full h-16 bg-slate-300 rounded-lg p-3 items-center flex">
-            <p className="text-xl text-slate-700">Edit Item</p>
+            <p className="text-xl text-slate-700">Edit Product</p>
           </div>
         </div>
         <div
@@ -69,7 +69,7 @@ export default function EditItem({
             <button
               className="w-full h-16 bg-green-400 hover:bg-green-500 hover:green-500 text-2xl text-white font-semibold rounded-lg"
               onClick={() => {
-                editItem(productId, name, price);
+                editProduct(productId, name, price);
                 page("");
               }}
             >

@@ -1,7 +1,6 @@
 import React from "react";
-
-import MainItems from "./Pages/Admin/Items/MainItems";
+import AdminPanel from "./Pages/Admin/AdminPanel";
 
 export default function App() {
-  return <MainItems />;
+  return <AdminPanel />;
 }

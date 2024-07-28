@@ -1,27 +1,27 @@
 import { useEffect, useState } from "react";
-import { deleteItem, getItems } from "../../../Database/connection";
+import { deleteProduct, getProducts } from "../../../Database/connection";
 
-function Items({ page, id, name, price }) {
-  const [items, setItems] = useState([]);
+function Products({ page, id, name, price }) {
+  const [Products, setProducts] = useState([]);
 
   useEffect(() => {
-    async function fetchItems() {
-      const tempItems = await getItems();
-      setItems(tempItems);
+    async function fetchProducts() {
+      const tempProducts = await getProducts();
+      setProducts(tempProducts);
     }
 
-    fetchItems();
+    fetchProducts();
   }, []);
 
-  const handleDelete = async (itemId) => {
-    await deleteItem(itemId);
-    setItems(items.filter((item) => item.id !== itemId));
+  const handleDelete = async (ProductId) => {
+    await deleteProduct(ProductId);
+    setProducts(Products.filter((Product) => Product.id !== ProductId));
   };
 
-  const renderItems = () => {
-    return items.map((value) => (
+  const renderProducts = () => {
+    return Products.map((value) => (
       <div
-        className="w-full bg-slate-300 px-3 py-4 flex justify-between rounded-lg items-center shadow-md "
+        className="w-full bg-slate-300 px-3 py-4 flex justify-between rounded-lg items-center shadow-md items-center text-slate-600"
         key={value.id}
       >
         <div>
@@ -34,7 +34,7 @@ function Items({ page, id, name, price }) {
               id(value.id);
               name(value.name);
               price(value.price);
-              page("editItem");
+              page("editProduct");
             }}
           >
             Edit
@@ -57,22 +57,22 @@ function Items({ page, id, name, price }) {
       <div className="flex flex-col gap-5">
         <div className="bg-slate-300 rounded-lg p-3 items-center flex justify-between w-full">
           <div>
-            <p className="text-xl text-slate-700">Items:</p>
+            <p className="text-xl text-slate-700">Products:</p>
           </div>
           <div>
             <button
               className="bg-green-400 hover:bg-green-500 transition text-white font-bold p-2 px-3 rounded-lg hover:shadow-md"
-              onClick={() => page("addItem")}
+              onClick={() => page("addProduct")}
             >
-              Add Item
+              Add Product
             </button>
           </div>
         </div>
         <div className="w-full h-[25rem] rounded-lg gap-2 flex flex-col overflow-hidden overflow-y-auto">
-          {items.length != 0 ? (
-            renderItems()
+          {Products.length != 0 ? (
+            renderProducts()
           ) : (
-            <div className="w-full text-center">No items found.</div>
+            <div className="w-full text-center">No Products found.</div>
           )}
         </div>
       </div>
@@ -80,4 +80,4 @@ function Items({ page, id, name, price }) {
   );
 }
 
-export default Items;
+export default Products;

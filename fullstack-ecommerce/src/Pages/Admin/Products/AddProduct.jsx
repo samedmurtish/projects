@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { IoArrowBack } from "react-icons/io5";
 
-import { addItem } from "../../../Database/connection";
+import { addProduct } from "../../../Database/connection";
 import { MdSettingsRemote } from "react-icons/md";
 
-export default function AddItem({ page }) {
+export default function AddProduct({ page }) {
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
 
@@ -21,7 +21,7 @@ export default function AddItem({ page }) {
             <IoArrowBack />
           </button>
           <div className="w-full h-16 bg-slate-300 rounded-lg p-3 items-center flex">
-            <p className="text-xl text-slate-700">Add Item</p>
+            <p className="text-xl text-slate-700">Add Product</p>
           </div>
         </div>
         <div
@@ -66,11 +66,11 @@ export default function AddItem({ page }) {
             <button
               className="w-full h-16 bg-green-400 hover:bg-green-500 hover:green-500 text-2xl text-white font-semibold rounded-lg"
               onClick={(e) => {
-                addItem(name, price);
+                addProduct(name, price);
                 page("");
               }}
             >
-              Add Item
+              Add Product
             </button>
           </div>
         </div>
