@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
 import SignUpCover from "../../Images/cover.jpg";
 import { Link, useNavigate } from "react-router-dom";
-import { signUp } from "../../Database/connection.js";
+import { supabase } from "../../Database/connection.js";
 
 export default function SignUp() {
+  const [errorText, setErrorText] = useState("");
+  const [warnText, setWarnText] = useState("");
+
+  const [disabled, setDisabled] = useState(false);
+
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,6 +17,32 @@ export default function SignUp() {
   const [isPasswordsMatching, setIsPasswordsMatching] = useState(
     password == confirmPassword ? true : false
   );
+
+  async function signUp(email, password, username) {
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            username,
+          },
+        },
+      });
+      if (!error && !isPasswordsMatching) {
+        setErrorText("Passwords do not match.");
+        return;
+      }
+      if (error) {
+        setErrorText(error.message);
+        return;
+      }
+      setWarnText("Check your email for verification link");
+      setDisabled(true);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const navigate = useNavigate();
 
@@ -28,7 +59,6 @@ export default function SignUp() {
       <form
         className="min-w-[500px] max-w-[600px] h-max rounded-lg bg-white shadow-2xl pb-10"
         onSubmit={(e) => {
-          signUp(email, password, username);
           e.preventDefault();
         }}
       >
@@ -43,28 +73,46 @@ export default function SignUp() {
             <input
               type="text"
               placeholder="Username"
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => {
+                setUsername(e.target.value);
+                setErrorText("");
+              }}
               className="p-2 px-3 rounded-lg border-[1px]"
             />
             <input
               type="text"
               placeholder="Email"
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setErrorText("");
+              }}
               className="p-2 px-3 rounded-lg border-[1px]"
             />
             <input
               type="password"
               placeholder="Password"
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setErrorText("");
+              }}
               className="p-2 px-3 rounded-lg border-[1px]"
             />
             <input
               type="password"
               placeholder="Confirm Password"
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              onChange={(e) => {
+                setConfirmPassword(e.target.value);
+                setErrorText("");
+              }}
               className="p-2 px-3 rounded-lg border-[1px]"
             />
-            <button className="bg-emerald-400 hover:bg-emerald-500 transition w-full h-14 mt-3 text-white rounded-lg text-md">
+            <button
+              className="bg-emerald-400 hover:bg-emerald-500 transition w-full h-14 mt-3 text-white rounded-lg text-md"
+              onClick={() => {
+                if (!disabled) signUp(email, password, username);
+              }}
+              style={{ backgroundColor: disabled ? "rgb(16, 185, 129)" : "" }}
+            >
               Sign Up
             </button>
             <p className="flex justify-center items-center pt-5">
@@ -78,6 +126,12 @@ export default function SignUp() {
             </p>
           </div>
         </div>
+        <span className="w-full text-center flex justify-center items-center text-rose-400">
+          {errorText}
+        </span>
+        <span className="w-full text-center flex justify-center items-center text-emerald-400">
+          {warnText}
+        </span>
       </form>
     </div>
   );

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import SignUpCover from "../../Images/signincover.jpeg";
 import { Link, useNavigate } from "react-router-dom";
-import { signIn } from "../../Database/connection.js";
+import { supabase } from "../../Database/connection.js";
 
 export default function SignIn() {
+  const [errorText, setErrorText] = useState();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -12,6 +14,24 @@ export default function SignIn() {
   useEffect(() => {
     if (sessionStorage.getItem("token")) navigate("/");
   }, []);
+
+  async function signIn(email, password) {
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (error) {
+        setErrorText(error.message);
+        return;
+      }
+      sessionStorage.setItem("token", JSON.stringify(data));
+
+      window.location = "/";
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <div className="w-screen h-screen flex justify-center items-center bg-zinc-100">
@@ -56,6 +76,9 @@ export default function SignIn() {
             </p>
           </div>
         </div>
+        <span className="w-full text-center flex justify-center items-center text-rose-400">
+          {errorText}
+        </span>
       </form>
     </div>
   );
