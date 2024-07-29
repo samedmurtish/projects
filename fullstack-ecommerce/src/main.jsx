@@ -7,6 +7,7 @@ import ErrorPage from "./Pages/components/Error/ErrorPage.jsx";
 import Home from "./Pages/Home.jsx";
 import SignUp from "./Pages/Authentication/SignUp.jsx";
 import SignIn from "./Pages/Authentication/SignIn.jsx";
+import AdminPanel from "./Pages/Admin/AdminPanel.jsx";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,11 @@ const router = createBrowserRouter([
   {
     path: "/sign-in",
     element: <SignIn />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/admin",
+    element: <AdminPanel />,
     errorElement: <ErrorPage />,
   },
 ]);

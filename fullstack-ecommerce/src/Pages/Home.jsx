@@ -2,6 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { signOut } from "../Database/connection.js";
 export default function Home() {
+  if (sessionStorage.getItem("token"))
+    console.log(JSON.parse(sessionStorage.getItem("token")).user.role);
+
   return (
     <div className="w-full h-screen flex justify-center items-center">
       {!sessionStorage.getItem("token") ? (

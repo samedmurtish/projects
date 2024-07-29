@@ -21,7 +21,7 @@ function Products({ page, id, name, price }) {
   const renderProducts = () => {
     return Products.map((value) => (
       <div
-        className="w-full bg-slate-300 px-3 py-4 flex justify-between rounded-lg items-center shadow-md items-center text-slate-600"
+        className="w-full bg-slate-300 px-3 py-4 flex justify-between rounded-lg items-center shadow-md text-slate-600"
         key={value.id}
       >
         <div>
@@ -55,9 +55,9 @@ function Products({ page, id, name, price }) {
   return (
     <>
       <div className="flex flex-col gap-5">
-        <div className="bg-slate-300 rounded-lg p-3 items-center flex justify-between w-full">
+        <div className="bg-slate-700 rounded-lg items-center flex justify-between w-full">
           <div>
-            <p className="text-xl text-slate-700">Products:</p>
+            <p className="text-xl text-slate-100">Products:</p>
           </div>
           <div>
             <button

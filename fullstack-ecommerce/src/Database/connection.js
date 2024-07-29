@@ -5,21 +5,6 @@ const supabase = createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV3eGNubHJpd3libWlleGhwbXpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjIxODMxMjYsImV4cCI6MjAzNzc1OTEyNn0.u5idIvsmbfHiF9y1zGZmC2gUdNHMIWZ-7wVgYS8u2bw"
 );
 
-export async function checkUserLoggedIn() {
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser();
-
-  if (user) console.log(true);
-  else console.log(false);
-
-  if (error) {
-    console.log("Error fetching user:", error);
-    return null;
-  }
-}
-
 export async function signOut() {
   const { error } = await supabase.auth.signOut();
   if (error) {
