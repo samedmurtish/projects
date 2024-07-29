@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import SignUpCover from "../../Images/cover.jpg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { signUp } from "../../Database/connection.js";
+
 export default function SignUp() {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -9,13 +13,25 @@ export default function SignUp() {
     password == confirmPassword ? true : false
   );
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (sessionStorage.getItem("token")) navigate("/");
+  }, []);
+
   useEffect(() => {
     setIsPasswordsMatching(password == confirmPassword ? true : false);
   }, [password, confirmPassword]);
 
   return (
     <div className="w-screen h-screen flex justify-center items-center bg-zinc-100">
-      <div className="min-w-[500px] max-w-[600px] h-max rounded-lg bg-white shadow-2xl pb-10">
+      <form
+        className="min-w-[500px] max-w-[600px] h-max rounded-lg bg-white shadow-2xl pb-10"
+        onSubmit={(e) => {
+          signUp(email, password, username);
+          e.preventDefault();
+        }}
+      >
         <div className="h-[200px] overflow-hidden rounded-t-lg relative">
           <img src={SignUpCover} className="absolute w-full overflow-hidden" />
         </div>
@@ -27,11 +43,13 @@ export default function SignUp() {
             <input
               type="text"
               placeholder="Username"
+              onChange={(e) => setUsername(e.target.value)}
               className="p-2 px-3 rounded-lg border-[1px]"
             />
             <input
               type="text"
               placeholder="Email"
+              onChange={(e) => setEmail(e.target.value)}
               className="p-2 px-3 rounded-lg border-[1px]"
             />
             <input
@@ -60,7 +78,7 @@ export default function SignUp() {
             </p>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
