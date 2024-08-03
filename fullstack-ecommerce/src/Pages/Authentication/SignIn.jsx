@@ -12,7 +12,7 @@ export default function SignIn() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (sessionStorage.getItem("token")) navigate("/");
+    if (localStorage.getItem("token")) navigate("/");
   }, []);
 
   async function signIn(email, password) {
@@ -25,7 +25,7 @@ export default function SignIn() {
         setErrorText(error.message);
         return;
       }
-      sessionStorage.setItem("token", JSON.stringify(data));
+      localStorage.setItem("token", JSON.stringify(data));
 
       window.location = "/";
     } catch (error) {

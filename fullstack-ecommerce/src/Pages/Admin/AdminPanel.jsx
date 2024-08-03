@@ -8,7 +8,7 @@ export default function AdminPanel() {
 
   // useEffect(() => {
   //   if (
-  //     JSON.parse(sessionStorage.getItem("token")).user.role != "supabase_admin"
+  //     JSON.parse(localStorage.getItem("token")).user.role != "supabase_admin"
   //   )
   //     navigate("/");
   // }, []);

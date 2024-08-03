@@ -47,7 +47,7 @@ export default function SignUp() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (sessionStorage.getItem("token")) navigate("/");
+    if (localStorage.getItem("token")) navigate("/");
   }, []);
 
   useEffect(() => {

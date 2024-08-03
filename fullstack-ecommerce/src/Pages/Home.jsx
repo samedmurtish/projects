@@ -2,12 +2,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { signOut } from "../Database/connection.js";
 export default function Home() {
-  if (sessionStorage.getItem("token"))
-    console.log(JSON.parse(sessionStorage.getItem("token")).user.role);
+  if (localStorage.getItem("token"))
+    console.log(JSON.parse(localStorage.getItem("token")).user.role);
 
   return (
     <div className="w-full h-screen flex justify-center items-center">
-      {!sessionStorage.getItem("token") ? (
+      {!localStorage.getItem("token") ? (
         <>
           <Link
             to={"/sign-in"}
@@ -33,7 +33,7 @@ export default function Home() {
             Sign Out
           </button>
           {
-            JSON.parse(sessionStorage.getItem("token")).user.user_metadata
+            JSON.parse(localStorage.getItem("token")).user.user_metadata
               .username
           }
         </>
