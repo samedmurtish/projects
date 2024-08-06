@@ -4,9 +4,8 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import { useRouter } from "next/navigation";
 import SideBar from "./Components/SideBar";
-import UserManagement from "./Components/Categories/UserManagement";
-import Dashboard from "./Components/Categories/Dashboard";
-
+import UserManagement from "./Components/UserManagement";
+import Dashboard from "./Components/Dashboard";
 import Categories from "./Components/Categories/Products/Categories";
 const Panel = () => {
   const router = useRouter();

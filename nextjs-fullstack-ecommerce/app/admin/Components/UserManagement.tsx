@@ -13,7 +13,7 @@ export default function UserManagement({ usersData, id, getUsers }: any) {
     if (error) console.log(error);
     if (data) {
       console.log(data);
-      getUsers(); // Fetch updated users list
+      getUsers();
     }
   };
 
