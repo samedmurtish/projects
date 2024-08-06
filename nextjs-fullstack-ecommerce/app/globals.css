@@ -12,6 +12,12 @@
 :root {
   background-color: rgb(9 9 11);
 }
+
+#sidebar-category:hover #sidebar-category-info {
+  opacity: 1;
+  transition: 0.15s;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

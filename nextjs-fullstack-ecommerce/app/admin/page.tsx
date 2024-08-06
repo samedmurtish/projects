@@ -3,15 +3,16 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import { useRouter } from "next/navigation";
-import UsersTable from "./Components/UsersTable";
-
-const Users = () => {
+import SideBar from "./Components/SideBar";
+import UserManagement from "./Components/Categories/UserManagement";
+import Dashboard from "./Components/Categories/Dashboard";
+import ProductManagement from "./Components/Categories/ProductManagement";
+const Panel = () => {
   const router = useRouter();
   const [userID, setUserID] = useState<string>();
-  const [role, setRole] = useState("user");
-  const [id, setId] = useState("");
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [users, setUsers] = useState<any>([]);
+  const [category, setCategory] = useState("Dashboard");
 
   const getUsers = async () => {
     const { data: users, error } = await supabase.from("user_data").select("*");
@@ -36,15 +37,6 @@ const Users = () => {
     }
   };
 
-  const addUserRole = async () => {
-    const { data, error } = await supabase
-      .from("user_data")
-      .insert({ id, role });
-
-    if (error) console.log(error);
-    if (data) console.log(data);
-  };
-
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -55,55 +47,27 @@ const Users = () => {
   }, [router]);
 
   useEffect(() => {
-    getUsers();
+    if (userID) {
+      getUsers();
+    }
   }, [userID]);
 
   return (
     <>
       {isAdmin && (
-        <div className="text-white w-full flex justify-center items-center flex-col h-screen gap-10">
-          <UsersTable usersData={users} id={userID} />
-
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              addUserRole();
-            }}
-          >
-            <input
-              type="text"
-              className="border-2"
-              placeholder="id"
-              onChange={(e) => {
-                setId(e.target.value);
-              }}
-            />
-            <input
-              type="text"
-              className="border-2"
-              placeholder="role"
-              onChange={(e) => {
-                setRole(e.target.value);
-              }}
-            />
-            <button>Add</button>
-          </form>
-          <button
-            onClick={() => {
-              try {
-                getUsers();
-                console.log("updated users");
-              } catch (error) {
-                console.log(error);
-              }
-            }}
-          >
-            update
-          </button>
+        <div className="text-white w-full flex items-center flex-col h-screen gap-10">
+          <SideBar setCategory={setCategory} />
+          {category === "Dashboard" ? (
+            <Dashboard />
+          ) : category === "Product Management" ? (
+            <ProductManagement />
+          ) : (
+            <UserManagement usersData={users} id={userID} getUsers={getUsers} />
+          )}
         </div>
       )}
     </>
   );
 };
 
-export default Users;
+export default Panel;
