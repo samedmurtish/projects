@@ -133,7 +133,9 @@ export default function UserManagement({ usersData, id, getUsers }: any) {
                     Delete
                   </button>
                 ) : (
-                  <p className="bg-zinc-800 p-2 w-full rounded-md">Current</p>
+                  <p className="bg-emerald-500 hover:bg-emerald-600 transition p-2 px-3 w-full rounded-md cursor-default text-base text-nowrap">
+                    Current Session
+                  </p>
                 )}
               </th>
             </tr>

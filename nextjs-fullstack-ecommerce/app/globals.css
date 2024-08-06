@@ -15,7 +15,8 @@
 
 #sidebar-category:hover #sidebar-category-info {
   opacity: 1;
-  transition: 0.15s;
+  left: 6rem;
+  transition: opacity 0.35s;
 }
 
 @layer utilities {

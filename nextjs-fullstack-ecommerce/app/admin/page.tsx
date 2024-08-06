@@ -55,7 +55,7 @@ const Panel = () => {
   return (
     <>
       {isAdmin && (
-        <div className="text-white w-full flex items-center flex-col h-screen gap-10">
+        <div className="text-white w-full flex items-center flex-col h-screen">
           <SideBar setCategory={setCategory} />
           {category === "Dashboard" ? (
             <Dashboard />

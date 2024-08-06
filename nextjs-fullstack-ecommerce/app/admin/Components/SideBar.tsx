@@ -54,7 +54,7 @@ export default function SideBar({ setCategory }: any) {
   return (
     <div>
       {isOpen ? (
-        <div className="w-64 text-xl text-black h-screen fixed left-0 bg-white 50 p-5 gap-10 flex-col flex">
+        <div className="w-64 text-xl text-black h-screen fixed left-0 bg-white 50 p-5 gap-10 flex-col flex z[999	]">
           <div className="flex items-center justify-between">
             <h1>Admin Panel</h1>
             <div className="p-2 flex justify-center items-center hover:bg-zinc-200 active:bg-zinc-300 rounded-full transition">
@@ -91,8 +91,8 @@ export default function SideBar({ setCategory }: any) {
           </div>
         </div>
       ) : (
-        <div className="w-20 text-black h-screen fixed left-0 bg-white ">
-          <div className="flex p-5 pt-3 pb-0 justify-center items-center text-xl flex-col gap-5 h-full">
+        <div className="w-20 text-black h-screen fixed left-0 bg-white z-[999]">
+          <div className="flex p-5 pt-3 pb-0 justify-center items-center text-xl flex-col gap-5 h-full z-[999]">
             <div className="flex flex-col gap-2">
               <button
                 className="text-2xl hover:bg-zinc-100 active:bg-zinc-200 rounded-full transition p-3 pt-3"
@@ -101,7 +101,7 @@ export default function SideBar({ setCategory }: any) {
               >
                 <FaAlignLeft />
                 <div
-                  className="fixed left-24 top-3 bg-white p-2 text-base rounded-lg border-2 shadow-lg opacity-0"
+                  className="absolute top-4 left-[-500px] bg-white p-2 text-base rounded-lg border-2 shadow-lg opacity-0 transition z-[-1] text-nowrap"
                   id="sidebar-category-info"
                 >
                   Toggle Side Bar
@@ -110,12 +110,12 @@ export default function SideBar({ setCategory }: any) {
               <div className="w-full border-2  border-zinc-100"></div>
             </div>
 
-            <div className="flex flex-col justify-between h-full pb-5">
+            <div className="flex flex-col justify-between h-full pb-5 z-[999]">
               <div className="flex flex-col">
                 {categories.map((category) => (
                   <div
                     key={category.id}
-                    className="flex items-center p-3 cursor-pointer hover:bg-zinc-100 active:bg-zinc-200 rounded-full transition"
+                    className="flex items-center p-3 cursor-pointer hover:bg-zinc-100 active:bg-zinc-200 rounded-full transition z-[999]"
                     id="sidebar-category"
                     onClick={() => handleToggle(category.id, category.name)}
                   >
@@ -125,7 +125,7 @@ export default function SideBar({ setCategory }: any) {
                         : category.node.closed}
                     </span>
                     <div
-                      className="fixed left-24 bg-white p-2 text-base rounded-lg border-2 shadow-lg opacity-0"
+                      className="absolute left-[-500px] bg-white p-2 text-base rounded-lg border-2 shadow-lg opacity-0 transition z-[-1] text-nowrap"
                       id="sidebar-category-info"
                     >
                       {category.name}
@@ -140,7 +140,7 @@ export default function SideBar({ setCategory }: any) {
               >
                 <IoMdArrowRoundBack />
                 <div
-                  className="fixed left-24 bg-white p-2 text-base rounded-lg border-2 shadow-lg opacity-0"
+                  className="absolute left-[-500px] bg-white p-2 text-base rounded-lg border-2 shadow-lg opacity-0 transition z-[-1] text-nowrap"
                   id="sidebar-category-info"
                 >
                   Back To Home
