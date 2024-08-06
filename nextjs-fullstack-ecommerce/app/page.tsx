@@ -1,3 +1,4 @@
+import HomePage from "./components/General/Home/HomePage";
 import { supabase } from "./lib/supabase";
 
 export default function Home() {
@@ -8,6 +9,7 @@ export default function Home() {
     if (error) console.log(error);
     if (data) console.log(data);
   };
+
   // createProduct();
-  return <></>;
+  return <HomePage />;
 }
