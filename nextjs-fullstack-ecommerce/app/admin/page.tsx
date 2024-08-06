@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import SideBar from "./Components/SideBar";
 import UserManagement from "./Components/Categories/UserManagement";
 import Dashboard from "./Components/Categories/Dashboard";
-import ProductManagement from "./Components/Categories/ProductManagement";
+
+import Categories from "./Components/Categories/Products/Categories";
 const Panel = () => {
   const router = useRouter();
   const [userID, setUserID] = useState<string>();
@@ -60,7 +61,7 @@ const Panel = () => {
           {category === "Dashboard" ? (
             <Dashboard />
           ) : category === "Product Management" ? (
-            <ProductManagement />
+            <Categories />
           ) : (
             <UserManagement usersData={users} id={userID} getUsers={getUsers} />
           )}
