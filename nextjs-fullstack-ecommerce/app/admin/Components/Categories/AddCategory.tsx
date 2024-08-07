@@ -112,6 +112,7 @@ export default function AddCategory({ setPage, updateCategories }: any) {
         postSubCategory(category);
       }
     });
+    updateCategories();
   };
 
   return (
@@ -147,9 +148,11 @@ export default function AddCategory({ setPage, updateCategories }: any) {
               placeholder="Create Sub Category"
               className="p-3 px-5 rounded-md w-full"
               onChange={(e) => setSubCategoryName(e.target.value)}
+              value={subCategoryName}
               onKeyDown={(e) => {
                 preventFormSubmit(e);
                 if (e.key === "Enter" && subCategoryName !== "") {
+                  setSubCategoryName("");
                   handleAddSubCategory(subCategoryName);
                 }
               }}
@@ -196,7 +199,7 @@ export default function AddCategory({ setPage, updateCategories }: any) {
           </button>
         </form>
         <div className="w-64 h-max">
-          <div className="text-white flex justify-center items-center bg-slate-600 p-3 rounded-lg rounded-b-none font-extrabold">
+          <div className="text-white flex justify-center items-center bg-blue-600 p-3 rounded-lg rounded-b-none font-extrabold">
             Sub Categories
           </div>
           <div className="bg-white p-3 rounded-b-lg cursor-default flex flex-wrap gap-1">
