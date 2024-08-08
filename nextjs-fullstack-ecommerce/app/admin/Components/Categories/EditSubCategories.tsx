@@ -2,7 +2,7 @@ import { supabase } from "@/app/lib/supabase";
 import React, { useEffect, useState } from "react";
 import { IoMdArrowRoundBack } from "react-icons/io";
 
-export default function EditSubCategories({ setPage }: any) {
+export default function EditSubCategories({ setPage, pageName }: any) {
   const [subCategories, setSubCategories] = useState<any>([]);
 
   const [defaultData, setDefaultData] = useState<any>([]);
@@ -144,13 +144,25 @@ export default function EditSubCategories({ setPage }: any) {
   };
 
   return (
-    <div className="flex gap-5">
-      <div
-        className="rounded-full p-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 transition flex justify-center items-center h-16 w-16 text-3xl"
-        onClick={() => setPage("Categories")}
-      >
-        <IoMdArrowRoundBack />
+    <div className="flex flex-col gap-5 h-full justify-center items-center">
+      <div className="flex justify-start items-center w-full">
+        {!pageName ? (
+          <div className="text-3xl text-white font-extrabold flex items-center gap-3">
+            <div
+              className="rounded-full p-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 transition flex justify-center items-center cursor-pointer"
+              onClick={() => setPage("Categories")}
+            >
+              <IoMdArrowRoundBack />
+            </div>
+            <div>Edit Sub Categories</div>
+          </div>
+        ) : (
+          <div className="text-3xl text-white font-extrabold flex items-center gap-3">
+            <div>Edit Sub Categories</div>
+          </div>
+        )}
       </div>
+
       <div className="flex flex-col gap-3">
         {subCategories.length === 0 ? (
           <div className="flex flex-col gap-5 justify-center items-center">

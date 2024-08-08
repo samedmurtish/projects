@@ -6,14 +6,15 @@ import { useRouter } from "next/navigation";
 import SideBar from "./Components/SideBar";
 import UserManagement from "./Components/UserManagement";
 import Dashboard from "./Components/Dashboard";
-import Categories from "./Components/Categories/Products/Categories";
+import ProductManagement from "./Components/Categories/Products/ProductManagement";
 const Panel = () => {
   const router = useRouter();
   const [userID, setUserID] = useState<string>();
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [users, setUsers] = useState<any>([]);
   const [category, setCategory] = useState("Dashboard");
-
+  const [clicked, setClicked] = useState("");
+  const [isSideBarOpened, setIsSideBarOpened] = useState(false);
   const getUsers = async () => {
     const { data: users, error } = await supabase.from("user_data").select("*");
 
@@ -55,12 +56,19 @@ const Panel = () => {
   return (
     <>
       {isAdmin && (
-        <div className="text-white w-full flex items-center flex-col h-screen">
-          <SideBar setCategory={setCategory} />
+        <div
+          className="text-white w-full flex items-center flex-col h-screen"
+          style={{ paddingLeft: !isSideBarOpened ? "5rem" : "16rem" }}
+        >
+          <SideBar
+            setCategory={setCategory}
+            setClicked={setClicked}
+            setIsSideBarOpened={setIsSideBarOpened}
+          />
           {category === "Dashboard" ? (
             <Dashboard />
           ) : category === "Product Management" ? (
-            <Categories />
+            <ProductManagement clicked={clicked} setClicked={setClicked} />
           ) : (
             <UserManagement usersData={users} id={userID} getUsers={getUsers} />
           )}

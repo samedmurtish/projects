@@ -119,7 +119,7 @@ export default function AddCategory({ setPage, updateCategories }: any) {
     <div className="flex flex-col gap-3 text-black">
       <div className="text-3xl text-white font-extrabold flex items-center gap-3">
         <div
-          className="rounded-full p-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 transition flex justify-center items-center	"
+          className="rounded-full p-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 transition flex justify-center items-center cursor-pointer"
           onClick={() => setPage("Categories")}
         >
           <IoMdArrowRoundBack />
@@ -175,11 +175,9 @@ export default function AddCategory({ setPage, updateCategories }: any) {
           <select
             className="p-3 px-5 rounded-md text-black w-full"
             onChange={(e: any) => {
-              if (e.target.value !== addSubCategoryText) {
-                e.target.value === "Public"
-                  ? setIsPublic(true)
-                  : setIsPublic(false);
-              }
+              e.target.value === "Public"
+                ? setIsPublic(true)
+                : setIsPublic(false);
             }}
           >
             <option>Public</option>
@@ -195,7 +193,7 @@ export default function AddCategory({ setPage, updateCategories }: any) {
               updateCategories();
             }}
           >
-            Submit
+            Create
           </button>
         </form>
         <div className="w-64 h-max">

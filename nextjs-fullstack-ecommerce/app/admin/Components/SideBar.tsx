@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaAlignLeft, FaAlignJustify } from "react-icons/fa6";
 import { MdOutlineManageAccounts, MdManageAccounts } from "react-icons/md";
 import { RiShoppingCart2Line, RiShoppingCart2Fill } from "react-icons/ri";
@@ -8,7 +8,11 @@ import { MdOutlineSpaceDashboard, MdSpaceDashboard } from "react-icons/md";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useRouter } from "next/navigation";
 
-export default function SideBar({ setCategory }: any) {
+export default function SideBar({
+  setCategory,
+  setClicked,
+  setIsSideBarOpened,
+}: any) {
   const [isOpen, setIsOpen] = useState(true);
   const router = useRouter();
   const [categories, setCategories] = useState([
@@ -51,10 +55,14 @@ export default function SideBar({ setCategory }: any) {
     );
   };
 
+  useEffect(() => {
+    setIsSideBarOpened(isOpen);
+  }, [isOpen]);
+
   return (
     <div>
       {isOpen ? (
-        <div className="w-64 text-xl text-black h-screen fixed left-0 bg-white 50 p-5 gap-10 flex-col flex z[999	]">
+        <div className="w-64 text-xl text-black h-screen fixed left-0 bg-white p-5 gap-10 flex-col flex z[999]">
           <div className="flex items-center justify-between">
             <h1>Admin Panel</h1>
             <div className="p-2 flex justify-center items-center hover:bg-zinc-200 active:bg-zinc-300 rounded-full transition">
@@ -70,7 +78,10 @@ export default function SideBar({ setCategory }: any) {
                   key={category.id}
                   className="flex text-base items-center gap-2 cursor-pointer hover:bg-zinc-200 active:bg-zinc-300 transition p-2 rounded-md
 							"
-                  onClick={() => handleToggle(category.id, category.name)}
+                  onClick={() => {
+                    handleToggle(category.id, category.name);
+                    setClicked(category.name);
+                  }}
                 >
                   <span className="text-2xl ">
                     {category.onMenu
@@ -117,7 +128,10 @@ export default function SideBar({ setCategory }: any) {
                     key={category.id}
                     className="flex items-center p-3 cursor-pointer hover:bg-zinc-100 active:bg-zinc-200 rounded-full transition z-[999]"
                     id="sidebar-category"
-                    onClick={() => handleToggle(category.id, category.name)}
+                    onClick={() => {
+                      handleToggle(category.id, category.name);
+                      setClicked(category.name);
+                    }}
                   >
                     <span className="text-3xl">
                       {category.onMenu
