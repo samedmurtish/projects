@@ -1,36 +1,24 @@
 import { supabase } from "@/app/lib/supabase";
-import React, { useEffect } from "react";
-import { IoMdCloseCircle, IoMdArrowRoundBack } from "react-icons/io";
+import React, { useEffect, useState } from "react";
+import { IoMdArrowRoundBack, IoMdCloseCircle } from "react-icons/io";
 
-export default function AddCategory({ setPage, updateCategories }: any) {
+export default function EditProduct({ product, setPage, getProducts }: any) {
+  const [isPublic, setIsPublic] = useState(true);
+  const [productName, setProductName] = useState(product.name);
+  const [price, setPrice] = useState(product.price);
+
+  const [subCategories, setSubCategories] = useState(
+    Array.isArray(product.sub_categories) ? [...product.sub_categories] : []
+  );
   const addSubCategoryText = "Add Sub Category";
 
-  const [subCategoriesToSelect, setSubCategoriesToSelect] = React.useState<any>(
-    []
-  );
+  const [subCategoriesToSelect, setSubCategoriesToSelect] = useState<any>([]);
+  const [newSubCategories, setNewSubCategories] = useState<any>([]);
 
-  const [newSubCategories, setNewSubCategories] = React.useState<any>([]);
-
-  const [categoryName, setCategoryName] = React.useState<string>("");
-
-  const [subCategories, setSubCategories] = React.useState<any>([]);
-
-  const [subCategoryName, setSubCategoryName] = React.useState<string>("");
-
-  const [isPublic, setIsPublic] = React.useState<boolean>(true);
-
+  const [subCategoryName, setSubCategoryName] = useState<string>("");
   useEffect(() => {
     getSubCategories();
   }, []);
-
-  const postSubCategory = async (name: any) => {
-    const { data, error } = await supabase
-      .from("sub_categories")
-      .insert([{ name: name }]);
-
-    if (error) return console.log(error);
-    if (data) console.log(data);
-  };
 
   const getSubCategories = async () => {
     const { data, error } = await supabase.from("sub_categories").select("*");
@@ -40,44 +28,24 @@ export default function AddCategory({ setPage, updateCategories }: any) {
     const uniqueCategories = new Set(data.map((item: any) => item.name));
     setSubCategoriesToSelect(Array.from(uniqueCategories));
   };
-
-  const postCategory = async () => {
-    const { data, error } = await supabase.from("categories").insert([
-      {
-        name: categoryName,
+  const handleUpdateProduct = async () => {
+    const { data, error } = await supabase
+      .from("products")
+      .update({
+        name: productName,
+        price,
         sub_categories: subCategories,
         is_public: isPublic,
-      },
-    ]);
-
-    if (error) return console.log(error);
+      })
+      .eq("id", product.id);
+    if (error) console.log(error);
     if (data) console.log(data);
   };
-
-  const handleAddSubCategory = (category: string) => {
-    if (!subCategories.includes(category)) {
-      setSubCategories((prev: any) => [...prev, category]);
-      setNewSubCategories((prev: any) => [...prev, category]);
-    } else {
-      console.log("Category already exists");
-    }
-    updateCategories();
-  };
-
-  const handleAddSubCategoryValues = () => {
-    return subCategoriesToSelect.map((subCategory: any) => (
-      <option key={subCategory} value={subCategory}>
-        {subCategory}
-      </option>
-    ));
-  };
-
   const handleRemoveSubCategory = (category: string) => {
     setSubCategories(
       subCategories.filter((subCategory: any) => subCategory !== category)
     );
   };
-
   const handleRenderSubCategories = () => {
     return subCategories.map((subCategory: any) => (
       <div className="flex h-8" key={subCategory}>
@@ -89,7 +57,6 @@ export default function AddCategory({ setPage, updateCategories }: any) {
           className="bg-blue-500 hover:bg-rose-500 text-rose-500 active:bg-rose-600 h-full w-max p-1 px-1 rounded-r-lg transition flex justify-center items-center text-2xl relative"
           onClick={() => {
             handleRemoveSubCategory(subCategory);
-            updateCategories();
           }}
         >
           <div className="z-[11]">
@@ -100,11 +67,13 @@ export default function AddCategory({ setPage, updateCategories }: any) {
       </div>
     ));
   };
+  const postSubCategory = async (name: any) => {
+    const { data, error } = await supabase
+      .from("sub_categories")
+      .insert([{ name: name }]);
 
-  const preventFormSubmit = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-    }
+    if (error) return console.log(error);
+    if (data) console.log(data);
   };
   const handleSubmitSubCategories = () => {
     newSubCategories.map((category: string) => {
@@ -112,41 +81,67 @@ export default function AddCategory({ setPage, updateCategories }: any) {
         postSubCategory(category);
       }
     });
-    updateCategories();
   };
-
+  const handleAddSubCategory = (category: string) => {
+    if (!subCategories.includes(category)) {
+      setSubCategories((prev: any) => [...prev, category]);
+      setNewSubCategories((prev: any) => [...prev, category]);
+    } else {
+      console.log("Category already exists");
+    }
+  };
+  const handleAddSubCategoryValues = () => {
+    return subCategoriesToSelect.map((subCategory: any) => (
+      <option key={subCategory} value={subCategory}>
+        {subCategory}
+      </option>
+    ));
+  };
+  const preventFormSubmit = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+    }
+  };
   return (
-    <div className="flex flex-col gap-3 text-black">
+    <div className="flex flex-col gap-3">
       <div className="text-3xl text-white font-extrabold flex items-center gap-3">
         <div
           className="rounded-full p-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 transition flex justify-center items-center cursor-pointer"
-          onClick={() => setPage("Categories")}
+          onClick={() => setPage("")}
         >
           <IoMdArrowRoundBack />
         </div>
-        <div>Create Category</div>
+        <div>Edit Product</div>
       </div>
-      <div className="flex gap-3">
-        <form
-          className="flex flex-col gap-3"
-          onSubmit={(e) => {
-            e.preventDefault();
-            setPage("Categories");
-          }}
-        >
+      <form
+        className="flex gap-3 text-black"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleUpdateProduct();
+          handleSubmitSubCategories();
+          setPage("");
+          getProducts();
+        }}
+      >
+        <div className="flex flex-col gap-2">
           <input
             type="text"
-            placeholder="Category Name"
-            className="p-3 px-5 rounded-md"
-            required
-            onChange={(e) => setCategoryName(e.target.value)}
-            onKeyDown={preventFormSubmit}
+            placeholder={product.name}
+            onChange={(e) => setProductName(e.target.value)}
+            className="p-3 px-5 rounded-lg"
           />
-          <div className="flex">
+          <input
+            type="number"
+            min={0}
+            placeholder={product.price}
+            onChange={(e) => setPrice(e.target.value)}
+            className="p-3 px-5 rounded-lg"
+          />
+          <div className="flex justify-center items-center">
             <input
               type="text"
               placeholder="Create Sub Category"
-              className="p-3 px-5 rounded-md w-full"
+              className="p-3 px-5 rounded-md w-full text-black"
               onChange={(e) => setSubCategoryName(e.target.value)}
               value={subCategoryName}
               onKeyDown={(e) => {
@@ -173,29 +168,18 @@ export default function AddCategory({ setPage, updateCategories }: any) {
             </select>
           </div>
           <select
-            className="p-3 px-5 rounded-md text-black w-full"
-            onChange={(e: any) => {
-              e.target.value === "Public"
-                ? setIsPublic(true)
-                : setIsPublic(false);
-            }}
+            className="p-3 px-5 rounded-lg"
+            onChange={(e) =>
+              setIsPublic(e.target.value == "Public" ? true : false)
+            }
           >
-            <option>Public</option>
-            <option>Private</option>
-          </select>
-          <button
-            className="text-white bg-green-500 p-3 w-full h-12 rounded-lg border-b-[3px] border-b-green-600 active:border-b-0 active:bg-green-700 hover:bg-green-600 hover:border-green-700 transition"
-            onClick={() => {
-              if (categoryName !== "") {
-                postCategory();
-              }
-              handleSubmitSubCategories();
-              updateCategories();
-            }}
-          >
-            Create
+            <option value="Public">Public</option>
+            <option value="Private">Private</option>
+          </select>{" "}
+          <button className="w-full bg-blue-500 hover:bg-blue-600 active:bg-blue-700 h-16 disabled:bg-zinc-700 rounded-md transition text-white">
+            Save Changes
           </button>
-        </form>
+        </div>
         <div className="w-64 h-max">
           <div className="text-white flex justify-center items-center bg-blue-600 p-3 rounded-lg rounded-b-none font-extrabold">
             Sub Categories
@@ -207,7 +191,7 @@ export default function AddCategory({ setPage, updateCategories }: any) {
             {handleRenderSubCategories()}
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
