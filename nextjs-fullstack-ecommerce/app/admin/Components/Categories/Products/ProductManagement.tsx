@@ -3,8 +3,9 @@ import { AiOutlineProduct, AiFillProduct } from "react-icons/ai";
 import { IoIosList, IoIosListBox } from "react-icons/io";
 import { IoMdList, IoMdListBox } from "react-icons/io";
 import Categories from "./Categories";
-import EditSubCategories from "../EditSubCategories";
+import SubCategories from "./SubCategories";
 import Products from "./Products";
+import { supabase } from "@/app/lib/supabase";
 
 export default function ProductManagement({ clicked, setClicked }: any) {
   const [isMouseOver, setIsMouseOver] = useState([false, false, false]);
@@ -55,6 +56,17 @@ export default function ProductManagement({ clicked, setClicked }: any) {
       hoverIcon: <IoMdListBox />,
     },
   ];
+
+  const [subCategories, setSubCategories] = useState<string[]>([]);
+  useEffect(() => {
+    getSubCategories();
+  }, [clicked]);
+  const getSubCategories = async () => {
+    const { data, error } = await supabase.from("sub_categories").select("*");
+    if (error) return console.log(error);
+    const uniqueCategories = new Set(data.map((item: any) => item.name));
+    setSubCategories(Array.from(uniqueCategories));
+  };
 
   const handleIsMouseOver = (index: any, event: any) => {
     setIsMouseOver((prevIsMouseOver) => {
@@ -115,9 +127,12 @@ export default function ProductManagement({ clicked, setClicked }: any) {
       {pageName == "Products" ? (
         <Products />
       ) : pageName == "Categories" ? (
-        <Categories setPageName={setPageName} />
+        <Categories
+          setPageName={setPageName}
+          updatedSubCategoryList={subCategories}
+        />
       ) : pageName == "Sub Categories" ? (
-        <EditSubCategories setPage={setPageName} pageName={pageName} />
+        <SubCategories setPage={setPageName} pageName={pageName} />
       ) : (
         pageName == "" && (
           <div className="flex gap-5">{handleRenderButtons()}</div>

@@ -37,6 +37,7 @@ export default function AddProduct({ setPage, getProducts }: any) {
         sub_categories: subCategories,
       },
     ]);
+
     if (error) return console.log(error);
     if (data) console.log(data);
   };

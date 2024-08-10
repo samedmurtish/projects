@@ -2,14 +2,24 @@ import { supabase } from "@/app/lib/supabase";
 import React, { useEffect, useState } from "react";
 import { DiJava } from "react-icons/di";
 import AddCategory from "../AddCategory";
-import EditSubCategories from "../EditSubCategories";
+import SubCategories from "./SubCategories";
 import EditCategory from "../EditCategory";
 
-export default function Categories({ setPageName }: any) {
+export default function Categories({
+  setPageName,
+  updatedSubCategoryList,
+}: any) {
   const [categories, setCategories] = React.useState<any>([]);
   const [page, setPage] = useState("Categories");
   const [selectedCategory, setSelectedCategory] = useState<any>(null);
 
+  const [subCategories, setSubCategories] = useState<any>([{}]);
+
+  useEffect(() => {
+    // console.log(updatedSubCategoryList);
+    // console.log(subCategories);
+    //updateSubCategories();
+  }, []);
   const deleteCategory = async (id: string) => {
     const { data, error } = await supabase
       .from("categories")
@@ -35,7 +45,52 @@ export default function Categories({ setPageName }: any) {
   useEffect(() => {
     getCategories();
   }, [page]);
+  useEffect(() => {
+    updateSubCategories();
+  }, []);
 
+  const updateSubCategories = () => {
+    const filteredList = categories.map((category: any) => {
+      console.log(category);
+      category.sub_categories.filter((name: any) =>
+        updatedSubCategoryList.includes(name)
+      );
+    });
+
+    console.log(filteredList);
+
+    // const { data, error } = await supabase
+    //   .from("categories")
+    //   .update([{ sub_categories: subCategories.list }])
+    //   .eq("id", subCategories.id);
+
+    // if (error) console.log(error);
+    // if (data) console.log(data);
+  };
+
+  const handleRenderSubCategories = (subCategories: any, id: any) => {
+    const filteredList = subCategories.filter((name: any) =>
+      updatedSubCategoryList.includes(name)
+    );
+    //setSubCategories((prev: any) => [...prev, { id: id, list: filteredList }]);
+
+    return (
+      <div className="w-32 h-5 text-nowrap text-ellipsis flex">
+        {filteredList.map((data: any, index: number) => (
+          <span key={index}>
+            {data}
+            {index >= filteredList.length - 1 ? (
+              ""
+            ) : (
+              <>
+                , <span className="ml-1" />
+              </>
+            )}
+          </span>
+        ))}
+      </div>
+    );
+  };
   const handleRenderCategories = () => {
     return (
       <div className="table-container overflow-y-auto max-h-96">
@@ -104,18 +159,9 @@ export default function Categories({ setPageName }: any) {
                 >
                   <div className="w-[200px] h-10 overflow-hidden overflow-y-auto flex flex-col resize border-b-2 border-b-zinc-700 justify-center max-w-[300px] max-h-[200px] min-h-12">
                     {category.sub_categories &&
-                      category.sub_categories.map(
-                        (data: any, index: number) => (
-                          <div
-                            key={index}
-                            className="w-32 h-5 text-nowrap text-ellipsis flex"
-                          >
-                            {data}
-                            {index >= category.sub_categories.length - 1
-                              ? ""
-                              : ", "}
-                          </div>
-                        )
+                      handleRenderSubCategories(
+                        category.sub_categories,
+                        category.id
                       )}
                   </div>
                 </th>
@@ -166,7 +212,7 @@ export default function Categories({ setPageName }: any) {
         <button
           className="w-40 h-16 p-5 rounded-lg bg-purple-500 flex justify-center items-center cursor-pointer hover:bg-purple-600 transition active:bg-purple-700 text-white"
           onClick={() => {
-            setPage("Edit Sub Categories");
+            setPage("Sub Categories");
           }}
         >
           Edit <br />
@@ -203,9 +249,7 @@ export default function Categories({ setPageName }: any) {
         (page == "Add Category" && (
           <AddCategory setPage={setPage} updateCategories={getCategories} />
         )) ||
-        (page == "Edit Sub Categories" && (
-          <EditSubCategories setPage={setPage} />
-        )) ||
+        (page == "Sub Categories" && <SubCategories setPage={setPage} />) ||
         (page == "Edit Category" && (
           <EditCategory
             setPage={setPage}
