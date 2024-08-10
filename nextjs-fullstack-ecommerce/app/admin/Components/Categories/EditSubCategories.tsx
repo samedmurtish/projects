@@ -187,7 +187,10 @@ export default function EditSubCategories({ setPage, pageName }: any) {
             {handleRenderTable()}
             <button
               className="w-full bg-blue-500 hover:bg-blue-600 active:bg-blue-700 h-16 disabled:bg-zinc-700 rounded-md transition"
-              onClick={() => handleSubmitSubCategories()}
+              onClick={() => {
+                handleSubmitSubCategories();
+                setPage("");
+              }}
               disabled={!canSave}
             >
               Save Changes

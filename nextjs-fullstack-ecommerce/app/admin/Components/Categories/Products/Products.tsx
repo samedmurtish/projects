@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import image from "../../../../../images/register.jpg";
 import AddProduct from "../AddProduct";
 import EditProduct from "../EditProduct";
-import { render } from "react-dom";
+
 export default function Products() {
   const [products, setProducts] = useState<any>([]);
   const [page, setPage] = useState<string>("");
@@ -107,7 +107,7 @@ export default function Products() {
   const renderAddProduct = () => {
     return (
       <button
-        className="w-52 h-64 bg-blue-500 rounded-lg border-[15px] text-white border-blue-600 font-bold text-3xl"
+        className="w-52 h-64 bg-blue-500 hover:bg-blue-600 hover:border-blue-700 active:bg-blue-800 active:border-blue-900 transition rounded-lg border-[15px] text-white border-blue-600 font-bold text-3xl"
         onClick={() => setPage("Add Product")}
       >
         Add
