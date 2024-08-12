@@ -1,6 +1,5 @@
 import { supabase } from "@/app/lib/supabase";
 import React, { useEffect, useState } from "react";
-import { DiJava } from "react-icons/di";
 import AddCategory from "../AddCategory";
 import SubCategories from "./SubCategories";
 import EditCategory from "../EditCategory";
@@ -9,17 +8,67 @@ export default function Categories({
   setPageName,
   updatedSubCategoryList,
 }: any) {
-  const [categories, setCategories] = React.useState<any>([]);
+  const [categories, setCategories] = useState<any>([]);
   const [page, setPage] = useState("Categories");
   const [selectedCategory, setSelectedCategory] = useState<any>(null);
 
-  const [subCategories, setSubCategories] = useState<any>([{}]);
+  useEffect(() => {
+    getValidSubCategories();
+  }, []);
+
+  const getValidSubCategories = async () => {
+    const { data, error } = await supabase
+      .from("sub_categories")
+      .select("name");
+    if (error) {
+      console.log(error);
+      return [];
+    }
+    return data.map((subCategory: any) => subCategory.name);
+  };
+
+  const getCategories = async () => {
+    const validSubCategories = await getValidSubCategories();
+
+    const { data, error } = await supabase.from("categories").select("*");
+    if (error) return console.log(error);
+
+    const updatedCategories = data.map((category: any) => {
+      const filteredSubCategories = category.sub_categories.filter(
+        (subCategory: any) => validSubCategories.includes(subCategory)
+      );
+      return { ...category, sub_categories: filteredSubCategories };
+    });
+
+    updatedCategories.forEach(async (category: any) => {
+      const { error } = await supabase
+        .from("categories")
+        .update({ sub_categories: category.sub_categories })
+        .eq("id", category.id);
+
+      if (error) return console.log(error);
+    });
+
+    setCategories(updatedCategories);
+  };
 
   useEffect(() => {
-    // console.log(updatedSubCategoryList);
-    // console.log(subCategories);
-    //updateSubCategories();
-  }, []);
+    getValidSubCategories();
+    getCategories();
+  }, [page]);
+
+  const handleRenderSubCategories = (subCategories: any) => {
+    return (
+      <div className="w-32 h-5 text-nowrap text-ellipsis flex">
+        {subCategories.map((data: any, index: number) => (
+          <span key={index}>
+            {data}
+            {index >= subCategories.length - 1 ? "" : ", "}
+          </span>
+        ))}
+      </div>
+    );
+  };
   const deleteCategory = async (id: string) => {
     const { data, error } = await supabase
       .from("categories")
@@ -32,64 +81,6 @@ export default function Categories({
     );
     setCategories(filteredList);
     if (data) console.log(data);
-  };
-
-  const getCategories = async () => {
-    const { data, error } = await supabase.from("categories").select("*");
-    if (error) return console.log(error);
-    setCategories(data);
-  };
-  useEffect(() => {
-    getCategories();
-  }, []);
-  useEffect(() => {
-    getCategories();
-  }, [page]);
-  useEffect(() => {
-    updateSubCategories();
-  }, []);
-
-  const updateSubCategories = () => {
-    const filteredList = categories.map((category: any) => {
-      console.log(category);
-      category.sub_categories.filter((name: any) =>
-        updatedSubCategoryList.includes(name)
-      );
-    });
-
-    console.log(filteredList);
-
-    // const { data, error } = await supabase
-    //   .from("categories")
-    //   .update([{ sub_categories: subCategories.list }])
-    //   .eq("id", subCategories.id);
-
-    // if (error) console.log(error);
-    // if (data) console.log(data);
-  };
-
-  const handleRenderSubCategories = (subCategories: any, id: any) => {
-    const filteredList = subCategories.filter((name: any) =>
-      updatedSubCategoryList.includes(name)
-    );
-    //setSubCategories((prev: any) => [...prev, { id: id, list: filteredList }]);
-
-    return (
-      <div className="w-32 h-5 text-nowrap text-ellipsis flex">
-        {filteredList.map((data: any, index: number) => (
-          <span key={index}>
-            {data}
-            {index >= filteredList.length - 1 ? (
-              ""
-            ) : (
-              <>
-                , <span className="ml-1" />
-              </>
-            )}
-          </span>
-        ))}
-      </div>
-    );
   };
   const handleRenderCategories = () => {
     return (
@@ -159,10 +150,7 @@ export default function Categories({
                 >
                   <div className="w-[200px] h-10 overflow-hidden overflow-y-auto flex flex-col resize border-b-2 border-b-zinc-700 justify-center max-w-[300px] max-h-[200px] min-h-12">
                     {category.sub_categories &&
-                      handleRenderSubCategories(
-                        category.sub_categories,
-                        category.id
-                      )}
+                      handleRenderSubCategories(category.sub_categories)}
                   </div>
                 </th>
                 <th
