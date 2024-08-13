@@ -1,15 +1,11 @@
 import HomePage from "./components/General/Home/HomePage";
+import NavigationBar from "./components/General/Navigation/NavigationBar";
 import { supabase } from "./lib/supabase";
 
 export default function Home() {
-  const createProduct = async () => {
-    const { data, error } = await supabase
-      .from("products")
-      .insert({ name: "test", price: 150 });
-    if (error) console.log(error);
-    if (data) console.log(data);
-  };
-
-  // createProduct();
-  return <HomePage />;
+  return (
+    <div className="w-full h-screen">
+      <NavigationBar />
+    </div>
+  );
 }

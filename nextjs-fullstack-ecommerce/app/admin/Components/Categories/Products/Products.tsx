@@ -8,23 +8,61 @@ export default function Products() {
   const [products, setProducts] = useState<any>([]);
   const [page, setPage] = useState<string>("");
   const [selectedProduct, setSelectedProduct] = useState<any>({});
+  useEffect(() => {
+    getValidSubCategories();
+  }, []);
+
+  const getValidSubCategories = async () => {
+    const { data, error } = await supabase
+      .from("sub_categories")
+      .select("name");
+    if (error) {
+      console.log(error);
+      return [];
+    }
+    return data.map((subCategory: any) => subCategory.name);
+  };
+
   const getProducts = async () => {
+    const validSubProducts = await getValidSubCategories();
+
     const { data, error } = await supabase.from("products").select("*");
     if (error) return console.log(error);
-    setProducts(data);
-    console.log(data);
+
+    const updatedProducts = data.map((product: any) => {
+      const filteredSubProducts = product.sub_categories.filter(
+        (subProduct: any) => validSubProducts.includes(subProduct)
+      );
+      return { ...product, sub_categories: filteredSubProducts };
+    });
+
+    updatedProducts.forEach(async (product: any) => {
+      const { error } = await supabase
+        .from("products")
+        .update({ sub_categories: product.sub_categories })
+        .eq("id", product.id);
+
+      if (error) return console.log(error);
+    });
+
+    setProducts(updatedProducts);
   };
   useEffect(() => {
+    getValidSubCategories();
     getProducts();
   }, []);
 
   useEffect(() => {
+    getValidSubCategories();
     getProducts();
   }, [page]);
 
   const renderProductSubCategories = (product: any) => {
-    return product.sub_categories.map((subCategory: any) => (
-      <span className="p-1 px-3 bg-slate-500 hover:bg-slate-600 transition w-max rounded-full text-white text-base font-bold justify-self-start self-start ">
+    return product.sub_categories.map((subCategory: any, index: any) => (
+      <span
+        className="p-1 px-3 bg-slate-500 hover:bg-slate-600 transition w-max rounded-full text-white text-base font-bold justify-self-start self-start"
+        key={subCategory + index}
+      >
         <span className="text-slate-300">#</span> {subCategory}
       </span>
     ));
@@ -155,6 +193,7 @@ export default function Products() {
             product={selectedProduct}
             setPage={setPage}
             getProducts={getProducts}
+            getValidSubCategories={getValidSubCategories}
           />
         )
       )}

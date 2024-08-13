@@ -2,7 +2,12 @@ import { supabase } from "@/app/lib/supabase";
 import React, { useEffect, useState } from "react";
 import { IoMdArrowRoundBack, IoMdCloseCircle } from "react-icons/io";
 
-export default function EditProduct({ product, setPage, getProducts }: any) {
+export default function EditProduct({
+  product,
+  setPage,
+  getProducts,
+  getValidSubCategories,
+}: any) {
   const [isPublic, setIsPublic] = useState(true);
   const [productName, setProductName] = useState(product.name);
   const [price, setPrice] = useState(product.price);
@@ -120,6 +125,8 @@ export default function EditProduct({ product, setPage, getProducts }: any) {
           handleUpdateProduct();
           handleSubmitSubCategories();
           setPage("");
+
+          getValidSubCategories();
           getProducts();
         }}
       >

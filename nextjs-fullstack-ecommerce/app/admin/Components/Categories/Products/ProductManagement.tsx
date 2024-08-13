@@ -57,17 +57,6 @@ export default function ProductManagement({ clicked, setClicked }: any) {
     },
   ];
 
-  const [subCategories, setSubCategories] = useState<string[]>([]);
-  useEffect(() => {
-    getSubCategories();
-  }, [clicked]);
-  const getSubCategories = async () => {
-    const { data, error } = await supabase.from("sub_categories").select("*");
-    if (error) return console.log(error);
-    const uniqueCategories = new Set(data.map((item: any) => item.name));
-    setSubCategories(Array.from(uniqueCategories));
-  };
-
   const handleIsMouseOver = (index: any, event: any) => {
     setIsMouseOver((prevIsMouseOver) => {
       const updatedState = [...prevIsMouseOver];
@@ -127,10 +116,7 @@ export default function ProductManagement({ clicked, setClicked }: any) {
       {pageName == "Products" ? (
         <Products />
       ) : pageName == "Categories" ? (
-        <Categories
-          setPageName={setPageName}
-          updatedSubCategoryList={subCategories}
-        />
+        <Categories setPageName={setPageName} />
       ) : pageName == "Sub Categories" ? (
         <SubCategories setPage={setPageName} pageName={pageName} />
       ) : (
