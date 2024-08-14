@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import NavigationBar from "./components/General/Navigation/NavigationBar";
 import { supabase } from "./lib/supabase";
+import Banners from "./components/General/Home/Banners";
 
 export default function Home() {
   const [categories, setCategories] = useState<any>([]);
@@ -23,8 +24,9 @@ export default function Home() {
   };
 
   return (
-    <div className="w-full h-screen">
+    <div className="w-full h-screen text-black">
       <NavigationBar categories={categories} subCategories={subCategories} />
+      <Banners />
     </div>
   );
 }
