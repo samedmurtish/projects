@@ -133,6 +133,7 @@ export default function AddProduct({ setPage, getProducts }: any) {
               type="number"
               placeholder="Price"
               className="p-3 px-5 rounded-md"
+              min={0}
               required
               onChange={(e: any) => setPrice(e.target.value)}
             />
