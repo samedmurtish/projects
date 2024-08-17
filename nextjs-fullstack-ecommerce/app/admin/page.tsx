@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import SideBar from "./Components/SideBar";
 import UserManagement from "./Components/UserManagement";
 import Dashboard from "./Components/Dashboard";
-import ProductManagement from "./Components/Categories/Products/ProductManagement";
+import ProductManagement from "./Components/Product Management Components/Product Management/ProductManagement";
 const Panel = () => {
   const router = useRouter();
   const [userID, setUserID] = useState<string>();

@@ -70,9 +70,9 @@ export default function Products() {
 
   const handleRenderProducts = () => {
     return products.map((product: any) => (
-      <div key={product.id} className="flex select-none max-w-[25rem]">
-        <div className="relative w-52 h-64 bg-white rounded-lg text-white font-bold text-3xl overflow-hidden rounded-r-none select-none">
-          <div className="relative z-10 flex justify-center items-center w-full h-full bg-opacity-50 hover:bg-opacity-30 bg-black flex-col transition "></div>
+      <div key={product.id} className="flex select-none max-w-[30rem]">
+        <div className="relative w-52 hover:w-64 h-64 bg-white rounded-lg text-white font-bold text-3xl overflow-hidden rounded-r-none select-none transition-width duration-300 ease-out">
+          <div className="relative z-10 flex justify-center items-center w-full h-full bg-opacity-50 hover:bg-opacity-30 bg-black flex-col transition duration-300 ease-out"></div>
           <div className="absolute inset-0 z-0">
             <img
               src={image.src}
@@ -80,62 +80,64 @@ export default function Products() {
               alt="Product Image"
             />
           </div>
-        </div>{" "}
-        <div className="flex justify-between items-center w-full h-full flex-col gap-3 bg-white rounded-tr-lg text-slate-500 rounded-b-lg pt-5 relative">
-          <div
-            className="absolute right-3 top-3 z-20 bg-rose-500 rounded-full w-3 h-3"
-            title={product.is_public ? "Public" : "Private"}
-            style={{
-              backgroundColor: product.is_public
-                ? "rgb(74 222 128)"
-                : "rgb(244 63 94)",
-            }}
-          ></div>
-          <div className="px-5">
-            <div className="text-2xl flex flex-col gap-2">
-              <div className="w-52 text-ellipsis text-nowrap overflow-hidden">
-                <div className="w-full"></div>
-                <span>{product.name}</span>
-              </div>
-              <span className="p-1 px-3 bg-green-400 hover:bg-green-500 transition w-max rounded-full text-white text-base font-bold">
-                <span className="text-green-100">$</span> {product.price}
-              </span>
-              <div className="flex flex-wrap h-24 overflow-y-auto border-2 border-slate-200 rounded-lg bg-slate-100 justify-start items-center">
-                <div className="text-base sticky top-0 bg-slate-300 h-max w-full p-1 px-3 rounded-lg rounded-t-none text-slate-500 self-start">
-                  Sub Categories
+        </div>
+        <div key={product.id} className="flex select-none max-w-[25rem]">
+          <div className="flex justify-between items-center w-full h-full flex-col gap-3 bg-white rounded-tr-lg text-slate-500 rounded-b-lg pt-5 relative">
+            <div
+              className="absolute right-3 top-3 z-20 bg-rose-500 rounded-full w-3 h-3"
+              title={product.is_public ? "Public" : "Private"}
+              style={{
+                backgroundColor: product.is_public
+                  ? "rgb(74 222 128)"
+                  : "rgb(244 63 94)",
+              }}
+            ></div>
+            <div className="px-5">
+              <div className="text-2xl flex flex-col gap-2">
+                <div className="w-52 text-ellipsis text-nowrap overflow-hidden">
+                  <div className="w-full"></div>
+                  <span>{product.name}</span>
                 </div>
-                <div
-                  className="p-1 flex flex-wrap gap-1 w-full"
-                  style={{ justifySelf: "start", alignSelf: "start" }}
-                >
-                  {product.sub_categories != null &&
-                  product.sub_categories.length > 0 ? (
-                    renderProductSubCategories(product)
-                  ) : (
-                    <span className="text-base self-center justify-self-center text-center w-full">
-                      No Sub Categories found.
-                    </span>
-                  )}
+                <span className="p-1 px-3 bg-green-400 hover:bg-green-500 transition w-max rounded-full text-white text-base font-bold">
+                  <span className="text-green-100">$</span> {product.price}
+                </span>
+                <div className="flex flex-wrap h-24 overflow-y-auto border-2 border-slate-200 rounded-lg bg-slate-100 justify-start items-center">
+                  <div className="text-base sticky top-0 bg-slate-300 h-max w-full p-1 px-3 rounded-lg rounded-t-none text-slate-500 self-start">
+                    Sub Categories
+                  </div>
+                  <div
+                    className="p-1 flex flex-wrap gap-1 w-full"
+                    style={{ justifySelf: "start", alignSelf: "start" }}
+                  >
+                    {product.sub_categories != null &&
+                    product.sub_categories.length > 0 ? (
+                      renderProductSubCategories(product)
+                    ) : (
+                      <span className="text-base self-center justify-self-center text-center w-full">
+                        No Sub Categories found.
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="flex w-full text-white">
-            <button
-              className="w-full p-3 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 transition"
-              onClick={() => {
-                setSelectedProduct(product);
-                setPage("Edit Product");
-              }}
-            >
-              Edit
-            </button>
-            <button
-              className="w-full p-3 bg-rose-500 hover:bg-rose-600 active:bg-rose-700 transition rounded-br-lg"
-              onClick={() => handleDeleteProduct(product.id)}
-            >
-              Delete
-            </button>
+            <div className="flex w-full text-white">
+              <button
+                className="w-full p-3 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 transition"
+                onClick={() => {
+                  setSelectedProduct(product);
+                  setPage("Edit Product");
+                }}
+              >
+                Edit
+              </button>
+              <button
+                className="w-full p-3 bg-rose-500 hover:bg-rose-600 active:bg-rose-700 transition rounded-br-lg"
+                onClick={() => handleDeleteProduct(product.id)}
+              >
+                Delete
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -145,12 +147,10 @@ export default function Products() {
   const renderAddProduct = () => {
     return (
       <button
-        className="w-52 h-64 bg-blue-500 hover:bg-blue-600 hover:border-blue-700 active:bg-blue-800 active:border-blue-900 transition rounded-lg border-[15px] text-white border-blue-600 font-bold text-3xl"
+        className="p-5 px-7 bg-blue-500 hover:bg-blue-600 active:bg-blue-800  transition rounded-lg text-white font-bold text-xl"
         onClick={() => setPage("Add Product")}
       >
-        Add
-        <br />
-        Product
+        Add Product
       </button>
     );
   };
@@ -173,11 +173,11 @@ export default function Products() {
         <AddProduct setPage={setPage} getProducts={getProducts} />
       ) : page == "" ? (
         <div
-          className="flex w-full gap-5"
+          className="flex flex-col w-full gap-5"
           style={{ gap: products.length == 0 ? "20px" : "12px" }}
         >
           <div>{renderAddProduct()}</div>
-          <div className="flex flex-wrap max-w-[870px] max-h-[500px] overflow-hidden overflow-y-auto gap-3 bg-zinc-200 p-5 rounded-lg">
+          <div className="flex flex-wrap w-[1270px] overflow-hidden overflow-y-auto gap-3 bg-zinc-200 p-5 rounded-lg">
             {products.length > 0 ? (
               <>{handleRenderProducts()}</>
             ) : (
