@@ -1,4 +1,4 @@
-import { supabase } from "@/app/lib/supabase";
+import { supabase, supabaseAdmin } from "@/app/lib/supabase";
 import React, { useEffect, useState } from "react";
 import { IoMdArrowRoundBack, IoMdCloseCircle } from "react-icons/io";
 import { TbCircleArrowDownFilled } from "react-icons/tb";
@@ -38,18 +38,22 @@ export default function AddProduct({ setPage, getProducts }: any) {
     if (data) console.log(data);
   };
   const postProduct = async () => {
+    const uploadedImages = await postImages();
+
     const { data, error } = await supabase.from("products").insert([
       {
         name: productName,
         price,
         is_public: isPublic,
         sub_categories: subCategories,
+        images: uploadedImages,
       },
     ]);
 
     if (error) return console.log(error);
-    if (data) console.log(data);
+    if (data) console.log("Product created successfully:", data);
   };
+
   const preventFormSubmit = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -118,7 +122,57 @@ export default function AddProduct({ setPage, getProducts }: any) {
   const postImages = async () => {
     checkBeforePost();
 
-    images.forEach(async (element: any) => {});
+    let uploadedImageURLs = [];
+
+    if (thumbnail) {
+      const fileName = `images/${Date.now()}_${thumbnail.name}`;
+      const { data, error } = await supabaseAdmin.storage
+        .from("product.images")
+        .upload(fileName, thumbnail, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      if (error) {
+        console.log("Error uploading thumbnail:", error);
+      } else {
+        const imageURL = supabaseAdmin.storage
+          .from("product.images")
+          .getPublicUrl(fileName);
+        uploadedImageURLs.push(imageURL.data.publicUrl);
+        console.log(
+          "Thumbnail uploaded successfully:",
+          imageURL.data.publicUrl
+        );
+      }
+    }
+    for (let i = 0; i < images.length; i++) {
+      const image = images[i].rawImage;
+      if (image) {
+        const fileName = `images/${Date.now()}_${image.name}`;
+        const { data, error } = await supabaseAdmin.storage
+          .from("product.images")
+          .upload(fileName, image, {
+            cacheControl: "3600",
+            upsert: false,
+          });
+
+        if (error) {
+          console.log(`Error uploading image ${i + 1}:`, error);
+        } else {
+          const imageURL = supabaseAdmin.storage
+            .from("product.images")
+            .getPublicUrl(fileName);
+          uploadedImageURLs.push(imageURL.data.publicUrl);
+          console.log(
+            `Image ${i + 1} uploaded successfully:`,
+            imageURL.data.publicUrl
+          );
+        }
+      }
+    }
+
+    return uploadedImageURLs;
   };
 
   const handleUpdateImage = (index: number, image: any) => {
