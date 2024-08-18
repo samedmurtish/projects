@@ -1,8 +1,14 @@
-import { supabase, supabaseAdmin } from "@/app/lib/supabase";
+import { supabase } from "@/app/lib/supabase";
 import React, { useEffect, useState } from "react";
 import { IoMdArrowRoundBack, IoMdCloseCircle } from "react-icons/io";
 import { TbCircleArrowDownFilled } from "react-icons/tb";
-export default function AddProduct({ setPage, getProducts }: any) {
+
+type UploadedImageURLs = {
+  thumbnail: string | undefined;
+  images: string[];
+};
+
+export default function AddProduct({ setPage, getProducts, highestId }: any) {
   const [isPublic, setIsPublic] = useState(false);
   const [productName, setProductName] = useState("");
   const [price, setPrice] = useState(0);
@@ -15,10 +21,12 @@ export default function AddProduct({ setPage, getProducts }: any) {
   const [thumbnail, setThumbnail] = useState<any>(null);
   const [images, setImages] = useState<any>([]);
 
+  const [now, setNow] = useState(Date.now());
+
   const handleFileChange = (e: any) => {
     const image = e.target.files[0];
 
-    setThumbnail(URL.createObjectURL(image));
+    setThumbnail(image);
   };
 
   const getSubCategories = async () => {
@@ -46,7 +54,9 @@ export default function AddProduct({ setPage, getProducts }: any) {
         price,
         is_public: isPublic,
         sub_categories: subCategories,
-        images: uploadedImages,
+        thumbnail: uploadedImages.thumbnail,
+        images: uploadedImages.images,
+        now,
       },
     ]);
 
@@ -119,14 +129,18 @@ export default function AddProduct({ setPage, getProducts }: any) {
     });
   };
 
-  const postImages = async () => {
+  const postImages = async (): Promise<UploadedImageURLs> => {
     checkBeforePost();
 
-    let uploadedImageURLs = [];
-
+    let uploadedImageURLs: UploadedImageURLs = {
+      thumbnail: undefined,
+      images: [],
+    };
+    console.log(thumbnail);
+    // Upload thumbnail
     if (thumbnail) {
-      const fileName = `images/${Date.now()}_${thumbnail.name}`;
-      const { data, error } = await supabaseAdmin.storage
+      const fileName = `images/thumbnail_${now}`;
+      const { data, error } = await supabase.storage
         .from("product.images")
         .upload(fileName, thumbnail, {
           cacheControl: "3600",
@@ -136,21 +150,22 @@ export default function AddProduct({ setPage, getProducts }: any) {
       if (error) {
         console.log("Error uploading thumbnail:", error);
       } else {
-        const imageURL = supabaseAdmin.storage
+        const imageURL = supabase.storage
           .from("product.images")
           .getPublicUrl(fileName);
-        uploadedImageURLs.push(imageURL.data.publicUrl);
+        uploadedImageURLs.thumbnail = imageURL.data.publicUrl;
         console.log(
           "Thumbnail uploaded successfully:",
           imageURL.data.publicUrl
         );
       }
     }
+
     for (let i = 0; i < images.length; i++) {
       const image = images[i].rawImage;
       if (image) {
-        const fileName = `images/${Date.now()}_${image.name}`;
-        const { data, error } = await supabaseAdmin.storage
+        const fileName = `images/image_${i + 1}_${now}`;
+        const { data, error } = await supabase.storage
           .from("product.images")
           .upload(fileName, image, {
             cacheControl: "3600",
@@ -160,10 +175,10 @@ export default function AddProduct({ setPage, getProducts }: any) {
         if (error) {
           console.log(`Error uploading image ${i + 1}:`, error);
         } else {
-          const imageURL = supabaseAdmin.storage
+          const imageURL = supabase.storage
             .from("product.images")
             .getPublicUrl(fileName);
-          uploadedImageURLs.push(imageURL.data.publicUrl);
+          uploadedImageURLs.images.push(imageURL.data.publicUrl);
           console.log(
             `Image ${i + 1} uploaded successfully:`,
             imageURL.data.publicUrl
@@ -172,6 +187,7 @@ export default function AddProduct({ setPage, getProducts }: any) {
       }
     }
 
+    console.log(uploadedImageURLs);
     return uploadedImageURLs;
   };
 
@@ -286,7 +302,7 @@ export default function AddProduct({ setPage, getProducts }: any) {
                   <div className="flex flex-col justify-center items-center gap-3">
                     {thumbnail ? (
                       <img
-                        src={thumbnail}
+                        src={URL.createObjectURL(thumbnail)}
                         className="w-32 h-32 object-cover rounded-full"
                       />
                     ) : (

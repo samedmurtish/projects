@@ -60,9 +60,11 @@ export default function SideBar({
   }, [isOpen]);
 
   return (
-    <div>
+    <div
+      className={`${isOpen ? "w-64" : "w-20"} transition-width duration-300`}
+    >
       {isOpen ? (
-        <div className="w-64 text-xl text-black h-screen fixed left-0 bg-white p-5 gap-10 flex-col flex z[999]">
+        <div className="text-xl text-black h-screen fixed left-0 bg-white p-5 gap-10 flex-col flex z[999]">
           <div className="flex items-center justify-between">
             <h1>Admin Panel</h1>
             <div className="p-2 flex justify-center items-center hover:bg-zinc-200 active:bg-zinc-300 rounded-full transition">
@@ -102,7 +104,7 @@ export default function SideBar({
           </div>
         </div>
       ) : (
-        <div className="w-20 text-black h-screen fixed left-0 bg-white z-[999]">
+        <div className="text-black h-screen fixed left-0 bg-white z-[999]">
           <div className="flex p-5 pt-3 pb-0 justify-center items-center text-xl flex-col gap-5 h-full z-[999]">
             <div className="flex flex-col gap-2">
               <button

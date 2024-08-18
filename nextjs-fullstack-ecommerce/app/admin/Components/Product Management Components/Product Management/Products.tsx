@@ -1,4 +1,4 @@
-import { supabase } from "@/app/lib/supabase";
+import { supabase, supabaseAdmin } from "@/app/lib/supabase";
 import React, { useEffect, useState } from "react";
 import image from "../../../../../images/register.jpg";
 import AddProduct from "../AddProduct";
@@ -8,10 +8,20 @@ export default function Products() {
   const [products, setProducts] = useState<any>([]);
   const [page, setPage] = useState<string>("");
   const [selectedProduct, setSelectedProduct] = useState<any>({});
+
+  const [productIds, setProductIds] = useState<any>([]);
+  const [highestId, setHighestId] = useState<any>(0);
+
   useEffect(() => {
     getValidSubCategories();
   }, []);
 
+  useEffect(() => {
+    setHighestId(Math.max(...productIds));
+  }, [productIds]);
+  useEffect(() => {
+    console.log("highestId", highestId);
+  }, [highestId]);
   const getValidSubCategories = async () => {
     const { data, error } = await supabase
       .from("sub_categories")
@@ -26,8 +36,13 @@ export default function Products() {
   const getProducts = async () => {
     const validSubProducts = await getValidSubCategories();
 
-    const { data, error } = await supabase.from("products").select("*");
+    const { data, error } = await supabaseAdmin.from("products").select("*");
     if (error) return console.log(error);
+
+    data.map((product: any) => {
+      setProductIds((prev: any) => [...prev, product.id]);
+      console.log(product.thumbnail);
+    });
 
     const updatedProducts = data.map((product: any) => {
       const filteredSubProducts = product.sub_categories.filter(
@@ -70,12 +85,12 @@ export default function Products() {
 
   const handleRenderProducts = () => {
     return products.map((product: any) => (
-      <div key={product.id} className="flex select-none max-w-[30rem]">
+      <div key={product.id} className="flex select-none w-[30rem]">
         <div className="relative w-52 hover:w-64 h-64 bg-white rounded-lg text-white font-bold text-3xl overflow-hidden rounded-r-none select-none transition-width duration-300 ease-out">
           <div className="relative z-10 flex justify-center items-center w-full h-full bg-opacity-50 hover:bg-opacity-30 bg-black flex-col transition duration-300 ease-out"></div>
           <div className="absolute inset-0 z-0">
             <img
-              src={image.src}
+              src={product.thumbnail}
               className="w-full h-full object-cover"
               alt="Product Image"
             />
@@ -170,7 +185,11 @@ export default function Products() {
   return (
     <>
       {page == "Add Product" ? (
-        <AddProduct setPage={setPage} getProducts={getProducts} />
+        <AddProduct
+          setPage={setPage}
+          getProducts={getProducts}
+          highestId={highestId}
+        />
       ) : page == "" ? (
         <div
           className="flex flex-col w-full gap-5"
