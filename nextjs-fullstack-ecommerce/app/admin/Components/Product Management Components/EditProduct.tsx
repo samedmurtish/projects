@@ -74,14 +74,14 @@ export default function EditProduct({
       }
     }
 
-    for (let i = 0; i < updatedImages.length; i++) {
-      if (typeof updatedImages[i] !== "string") {
+    for (let i = 0; i < images.length; i++) {
+      if (typeof images[i] !== "string") {
         const image = images[i].rawImage;
         if (image) {
           const fileName = `images/image_${i + 1}_${product.now}`;
           const { data, error } = await supabase.storage
             .from("product.images")
-            .upload(fileName, image, {
+            .update(fileName, image, {
               cacheControl: "3600",
               upsert: false,
             });
@@ -93,10 +93,7 @@ export default function EditProduct({
               .from("product.images")
               .getPublicUrl(fileName);
 
-            setUpdatedImages((prev: any) => {
-              prev[i] = imageURL.data.publicUrl;
-              return prev;
-            });
+            setUpdatedImages((prev: any) => [...prev, imageURL.data.publicUrl]);
 
             console.log(
               `Image ${i + 1} updated successfully:`,
@@ -109,11 +106,13 @@ export default function EditProduct({
   };
 
   const handleUpdateProduct = async () => {
+    await checkBeforePost();
+
     const updatedThumbnail = `${product.thumbnail}?t=${new Date().getTime()}`;
 
-    updatedImages.map((image: any, index: number) => {
-      return (image = `${product.images[index]}?t=${new Date().getTime()}`);
-    });
+    // updatedImages.map((image: any, index: number) => {
+    //   return (image = `${product.images[index]}?t=${new Date().getTime()}`);
+    // });
 
     console.log(
       "thumbnail: ",
@@ -207,7 +206,8 @@ export default function EditProduct({
     newImages[index].id = index;
     newImages[index].thumbnail = URL.createObjectURL(image);
     newImages[index].rawImage = image;
-    setUpdatedImages(newImages);
+    console.log(newImages);
+    setImages(newImages);
   };
 
   const handleRemoveImage = (index: number) => {
