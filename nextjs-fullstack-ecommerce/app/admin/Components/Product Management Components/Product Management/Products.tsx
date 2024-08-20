@@ -41,7 +41,6 @@ export default function Products() {
 
     data.map((product: any) => {
       setProductIds((prev: any) => [...prev, product.id]);
-      console.log(product.thumbnail);
     });
 
     const updatedProducts = data.map((product: any) => {
@@ -148,7 +147,7 @@ export default function Products() {
               </button>
               <button
                 className="w-full p-3 bg-rose-500 hover:bg-rose-600 active:bg-rose-700 transition rounded-br-lg"
-                onClick={() => handleDeleteProduct(product.id)}
+                onClick={() => handleDeleteProduct(product.id, product)}
               >
                 Delete
               </button>
@@ -170,7 +169,29 @@ export default function Products() {
     );
   };
 
-  const handleDeleteProduct = async (id: any) => {
+  const handleDeleteProduct = async (id: any, product: any) => {
+    const fileName = `images/thumbnail_${product.now}`;
+
+    const { error: errorMessage } = await supabase.storage
+      .from("product.images")
+      .remove([fileName]);
+
+    if (errorMessage) {
+      console.log("Error deleting thumbnail:", errorMessage);
+    }
+
+    for (let i = 0; i < product.images.length; i++) {
+      const fileName = `images/image_${i + 1}_${product.now}`;
+      const { data, error } = await supabase.storage
+        .from("product.images")
+        .remove([fileName]);
+      if (error) {
+        console.log("Error deleting image ", i + 1, ":", error);
+      } else {
+        console.log("Image ", i + 1, "deleted successfully");
+      }
+    }
+
     const { data, error } = await supabase
       .from("products")
       .delete()
@@ -196,7 +217,7 @@ export default function Products() {
           style={{ gap: products.length == 0 ? "20px" : "12px" }}
         >
           <div>{renderAddProduct()}</div>
-          <div className="flex flex-wrap w-[1270px] overflow-hidden overflow-y-auto gap-3 bg-zinc-200 p-5 rounded-lg">
+          <div className="flex flex-wrap max-w-[1270px] overflow-hidden overflow-y-auto gap-3 bg-zinc-200 p-5 rounded-lg">
             {products.length > 0 ? (
               <>{handleRenderProducts()}</>
             ) : (

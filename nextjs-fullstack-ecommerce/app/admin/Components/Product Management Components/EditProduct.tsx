@@ -35,15 +35,9 @@ export default function EditProduct({
     product.images ? [...product.images] : []
   );
 
-  const [updatedImages, setUpdatedImages] = useState<any>([]);
-
   useEffect(() => {
     getSubCategories();
   }, []);
-
-  useEffect(() => {
-    console.log(thumbnail);
-  }, [thumbnail]);
 
   const getSubCategories = async () => {
     const { data, error } = await supabase.from("sub_categories").select("*");
@@ -55,6 +49,8 @@ export default function EditProduct({
   };
 
   const checkBeforePost = async () => {
+    let tempUpdatedImages = [];
+
     if (typeof thumbnail !== "string") {
       const fileName = `images/thumbnail_${product.now}`;
       const { data, error } = await supabase.storage
@@ -67,7 +63,7 @@ export default function EditProduct({
       if (error) {
         console.log("Error updating thumbnail:", error);
       } else {
-        const { data: publicUrl } = supabase.storage
+        const { data: publicUrl } = await supabase.storage
           .from("product.images")
           .getPublicUrl(fileName);
         setThumbnail(`${publicUrl}?t=${new Date().getTime()}`);
@@ -85,41 +81,77 @@ export default function EditProduct({
               cacheControl: "3600",
               upsert: false,
             });
+          if (error && error.message.includes("Object not found")) {
+            const { data, error } = await supabase.storage
+              .from("product.images")
+              .upload(fileName, image, {
+                cacheControl: "3600",
+                upsert: false,
+              });
 
-          if (error) {
-            console.log(`Error updating image ${i + 1}:`, error);
-          } else {
-            const imageURL = supabase.storage
+            const { data: publicUrl } = await supabase.storage
               .from("product.images")
               .getPublicUrl(fileName);
 
-            setUpdatedImages((prev: any) => [...prev, imageURL.data.publicUrl]);
-
-            console.log(
-              `Image ${i + 1} updated successfully:`,
-              imageURL.data.publicUrl
+            tempUpdatedImages.push(
+              `${publicUrl.publicUrl}?t=${new Date().getTime()}`
             );
+
+            // console.log(
+            //   `Image ${i + 1} uploaded successfully:`,
+            //   `${publicUrl.publicUrl}?t=${new Date().getTime()}`
+            // );
+            continue;
+          }
+          if (error) {
+            console.log(`Error updating image ${i + 1}:`, error);
+          } else {
+            const { data: publicUrl } = await supabase.storage
+              .from("product.images")
+              .getPublicUrl(fileName);
+
+            tempUpdatedImages.push(
+              `${publicUrl.publicUrl}?t=${new Date().getTime()}`
+            );
+
+            // console.log(
+            //   `Image ${i + 1} updated successfully:`,
+            //   `${publicUrl.publicUrl}?t=${new Date().getTime()}`
+            // );
           }
         }
+      } else {
+        tempUpdatedImages.push(images[i]);
       }
     }
+
+    getProducts();
+    return { tempUpdatedImages };
   };
 
   const handleUpdateProduct = async () => {
-    await checkBeforePost();
+    const { tempUpdatedImages } = await checkBeforePost();
 
-    const updatedThumbnail = `${product.thumbnail}?t=${new Date().getTime()}`;
+    let newThumbnailText = product.thumbnail;
+    for (let index = newThumbnailText.length; index > 0; index--) {
+      if (newThumbnailText[index] === "?") {
+        newThumbnailText = newThumbnailText.slice(0, index);
+        break;
+      }
+    }
 
-    // updatedImages.map((image: any, index: number) => {
-    //   return (image = `${product.images[index]}?t=${new Date().getTime()}`);
-    // });
+    const updatedThumbnail = `${newThumbnailText}?t=${new Date().getTime()}`;
 
-    console.log(
-      "thumbnail: ",
-      updatedThumbnail,
-      "updatedImages: ",
-      updatedImages
-    );
+    const updatedImages = tempUpdatedImages.map((image: any) => {
+      let newImageText = image;
+      for (let index = newImageText.length; index > 0; index--) {
+        if (newImageText[index] === "?") {
+          newImageText = newImageText.slice(0, index);
+          break;
+        }
+      }
+      return `${newImageText}?t=${new Date().getTime()}`;
+    });
 
     const { data, error } = await supabase
       .from("products")
@@ -134,7 +166,7 @@ export default function EditProduct({
       .eq("id", product.id);
 
     if (error) console.log(error);
-    if (data) await getProducts();
+    getProducts();
   };
 
   const handleRemoveSubCategory = (category: string) => {
@@ -206,7 +238,7 @@ export default function EditProduct({
     newImages[index].id = index;
     newImages[index].thumbnail = URL.createObjectURL(image);
     newImages[index].rawImage = image;
-    console.log(newImages);
+    // console.log(newImages, newImages[index]);
     setImages(newImages);
   };
 
@@ -221,13 +253,12 @@ export default function EditProduct({
     setThumbnail(image);
   };
   const handleRenderAddImagesButtons = () => {
-    console.log(typeof product.thumbnail, typeof product.images);
+    //console.log(typeof product.thumbnail, typeof product.images);
     const addImageSchema = (
       <div
         className="w-32 h-32 object-cover rounded-full flex justify-center items-center text-6xl border-slate-300 border-4 bg-slate-200 text-slate-400 text-center select-none cursor-pointer hover:bg-slate-300 transition hover:border-slate-400 hover:text-slate-500"
         onClick={() => {
           setImages([...images, { thumbnail: null, id: images.length }]);
-          console.log(images);
         }}
       >
         +
@@ -316,7 +347,6 @@ export default function EditProduct({
           handleUpdateProduct();
           handleSubmitSubCategories();
           setPage("");
-
           getValidSubCategories();
           getProducts();
         }}

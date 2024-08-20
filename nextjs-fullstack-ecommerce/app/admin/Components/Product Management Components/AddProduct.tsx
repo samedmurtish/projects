@@ -188,6 +188,7 @@ export default function AddProduct({ setPage, getProducts, highestId }: any) {
     }
 
     console.log(uploadedImageURLs);
+    getProducts();
     return uploadedImageURLs;
   };
 

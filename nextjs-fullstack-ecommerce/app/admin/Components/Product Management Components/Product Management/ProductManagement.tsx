@@ -7,10 +7,14 @@ import SubCategories from "./SubCategories";
 import Products from "./Products";
 import { supabase } from "@/app/lib/supabase";
 
-export default function ProductManagement({ clicked, setClicked }: any) {
+export default function ProductManagement({
+  clicked,
+  setClicked,
+  directPage,
+}: any) {
   const [isMouseOver, setIsMouseOver] = useState([false, false, false]);
   const [isMouseClicked, setIsMouseClicked] = useState([false, false, false]);
-  const [pageName, setPageName] = useState("");
+  const [pageName, setPageName] = useState(directPage ? directPage : "");
 
   useEffect(() => {
     if (clicked == "Product Management") {
@@ -18,8 +22,12 @@ export default function ProductManagement({ clicked, setClicked }: any) {
       setPageName("");
       setIsMouseClicked([false, false, false]);
       setIsMouseOver([false, false, false]);
-    }
+    } else setPageName(directPage);
   });
+
+  useEffect(() => {
+    console.log(directPage);
+  }, []);
 
   const buttons = [
     {

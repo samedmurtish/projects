@@ -15,6 +15,7 @@ const Panel = () => {
   const [category, setCategory] = useState("Dashboard");
   const [clicked, setClicked] = useState("");
   const [isSideBarOpened, setIsSideBarOpened] = useState(false);
+  const [directMenu, setDirectMenu] = useState("");
   const getUsers = async () => {
     const { data: users, error } = await supabase.from("user_data").select("*");
 
@@ -53,22 +54,31 @@ const Panel = () => {
     }
   }, [userID]);
 
+  useEffect(() => {
+    console.log(directMenu);
+  }, [directMenu]);
+
   return (
     <>
       {isAdmin && (
         <div
           className="text-white w-full flex items-center flex-col h-screen"
-          style={{ paddingLeft: !isSideBarOpened ? "5rem" : "16rem" }}
+          style={{ paddingLeft: !isSideBarOpened ? "4rem" : "16rem" }}
         >
           <SideBar
             setCategory={setCategory}
             setClicked={setClicked}
             setIsSideBarOpened={setIsSideBarOpened}
+            setDirectMenu={setDirectMenu}
           />
           {category === "Dashboard" ? (
             <Dashboard />
           ) : category === "Product Management" ? (
-            <ProductManagement clicked={clicked} setClicked={setClicked} />
+            <ProductManagement
+              clicked={clicked}
+              setClicked={setClicked}
+              directPage={directMenu}
+            />
           ) : (
             <UserManagement usersData={users} id={userID} getUsers={getUsers} />
           )}
