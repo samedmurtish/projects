@@ -7,6 +7,7 @@ import SideBar from "./Components/SideBar";
 import UserManagement from "./Components/UserManagement";
 import Dashboard from "./Components/Dashboard";
 import ProductManagement from "./Components/Product Management Components/Product Management/ProductManagement";
+import BannerManagement from "./Components/BannerManagement";
 const Panel = () => {
   const router = useRouter();
   const [userID, setUserID] = useState<string>();
@@ -62,7 +63,7 @@ const Panel = () => {
     <>
       {isAdmin && (
         <div
-          className="text-white w-full flex items-center flex-col h-screen"
+          className="text-white w-full flex items-center flex-col h-screen bg-zinc-800"
           style={{ paddingLeft: !isSideBarOpened ? "4rem" : "16rem" }}
         >
           <SideBar
@@ -79,9 +80,11 @@ const Panel = () => {
               setClicked={setClicked}
               directPage={directMenu}
             />
-          ) : (
+          ) : category === "User Management" ? (
             <UserManagement usersData={users} id={userID} getUsers={getUsers} />
-          )}
+          ) : category === "Banner Management" ? (
+            <BannerManagement />
+          ) : null}
         </div>
       )}
     </>

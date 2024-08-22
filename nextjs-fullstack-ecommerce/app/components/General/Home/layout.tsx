@@ -7,7 +7,7 @@ export default function layout({
   children: React.ReactNode;
 }>) {
   return (
-    <div>
+    <div className="w-3/4 mx-auto my-0">
       <NavigationBar />
       {children}
     </div>

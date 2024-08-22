@@ -27,7 +27,7 @@ export default function NavigationBar({ categories, subCategories }: any) {
   const renderCategories = () => {
     return (
       <div
-        className="min-w-[500px] max-w-max min-h-[200px] max-h-[300px] bg-zinc-100 p-5 flex rounded-b-xl shadow-md"
+        className="min-w-[500px] max-w-max min-h-[200px] max-h-[300px] bg-zinc-100 p-5 flex rounded-b-xl shadow-md z-50"
         onMouseEnter={() => {
           handleMouseEnter();
           setMouseOnPopup(true);
@@ -91,7 +91,7 @@ export default function NavigationBar({ categories, subCategories }: any) {
 
   return (
     <div>
-      <div className="w-full bg-white h-[7rem] select-none">
+      <div className="w-full bg-white h-[7rem] select-none  z-50">
         <div className="text-black flex items-center h-full w-3/4 mx-auto my-0">
           <div className="flex justify-between items-center w-full">
             <div className="flex items-center gap-10">
@@ -120,7 +120,7 @@ export default function NavigationBar({ categories, subCategories }: any) {
                   Categories
                 </button>
                 {isCategoriesPopupVisible && (
-                  <div className="absolute left-[10rem] top-[202px] mt-1 w-full justify-center items-center categories-popup flex h-full z-[0]">
+                  <div className="absolute left-[10rem] top-[202px] mt-1 w-full justify-center items-center categories-popup flex h-full z-[100]">
                     {renderCategories()}
                   </div>
                 )}
