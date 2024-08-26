@@ -1,5 +1,4 @@
 import { supabase } from "@/app/lib/supabase";
-import { redirect } from "next/dist/server/api-utils";
 import React, { useEffect, useState } from "react";
 
 export default function BannerManagement() {
@@ -128,7 +127,6 @@ export default function BannerManagement() {
     });
 
     setBanners(tempBanners);
-    console.log(tempBanners);
   };
 
   useEffect(() => {
@@ -137,7 +135,9 @@ export default function BannerManagement() {
 
   const renderCategoriesOptions = () => {
     return categories.map((category: any) => (
-      <option value={category.name}>{category.name}</option>
+      <option key={category.name + category.id} value={category.name}>
+        {category.name}
+      </option>
     ));
   };
 
@@ -219,7 +219,7 @@ export default function BannerManagement() {
 
   const renderMainBanners = () => {
     return (
-      <div className="w-full h-full justify-center items-center flex flex-col">
+      <div className="w-full h-full justify-center items-center flex flex-col rounded-t-lg">
         <div className="flex justify-center items-center gap-5">
           <div className="flex gap-5">
             <label className="w-52 h-16 bg-blue-500 text-white text-lg flex justify-center items-center cursor-pointer">
@@ -235,21 +235,21 @@ export default function BannerManagement() {
             </label>
           </div>
         </div>
-        <div className="flex gap-5 flex-wrap overflow-y-auto justify-center items-center mt-10 px-[10rem] w-full">
+        <div className="flex gap-5 flex-wrap overflow-y-auto justify-center items-center mt-10 px-[10rem] w-full rounded-t-lg">
           {banners.map((banner: any, index: number) => {
             return (
               <div
                 key={banner?.id + index + banner?.now}
-                className={`flex justify-center items-center bg-white w-52 hover:${
-                  dragging ? "w-52" : "w-96"
-                } transition-width duration-300 ease-in-out flex-col`}
+                className={`flex justify-center items-center bg-white w-64 hover:${
+                  dragging ? "w-64" : "w-96"
+                } transition-width duration-300 ease-in-out flex-col rounded-t-xl`}
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => {
                   handleOnDrop(e, index);
                 }}
               >
                 <div
-                  className={`w-full h-10 bg-indigo-500 text-white font-semibold text-xl flex justify-center items-center`}
+                  className={`w-full h-10 bg-indigo-500 text-white font-semibold text-xl flex justify-center items-center select-none rounded-t-lg`}
                   onDragOver={(e) => e.preventDefault()}
                   onDrop={(e) => {
                     handleOnDrop(e, index);
@@ -270,7 +270,7 @@ export default function BannerManagement() {
                   }}
                   src={banner?.image}
                   key={banner?.id + index + banner?.now}
-                  className="w-full h-52 object-contain py-5"
+                  className="w-full h-52 object-contain"
                 />
                 <div className="w-full h-full text-black flex justify-center items-center bg-slate-100 p-2 ">
                   <select
@@ -299,20 +299,18 @@ export default function BannerManagement() {
                     <option value="false">Private</option>
                   </select>
                 </div>
-                <div className="w-full flex justify-center items-center [&_button]:w-full [&_button]:p-3">
-                  <button className="bg-sky-500 hover:bg-sky-600 active:bg-sky-700">
-                    <label className="cursor-pointer">
-                      Update
-                      <input
-                        type="file"
-                        onChange={(e: any) => {
-                          handleUpdateImage(index, e.target.files[0]);
-                        }}
-                        className="sr-only"
-                        accept="image/*"
-                      />
-                    </label>
-                  </button>
+                <div className="w-full flex justify-center items-center h-full [&_button]:w-full [&_button]:p-3 [&_label]:w-full [&_label]:h-full">
+                  <label className="cursor-pointer bg-sky-500 hover:bg-sky-600 active:bg-sky-700 flex justify-center items-center py-3">
+                    Update
+                    <input
+                      type="file"
+                      onChange={(e: any) => {
+                        handleUpdateImage(index, e.target.files[0]);
+                      }}
+                      className="sr-only"
+                      accept="image/*"
+                    />
+                  </label>
                   <button
                     className="bg-red-500 hover:bg-red-600 active:bg-red-700"
                     onClick={() => handleDeleteBanner(index)}

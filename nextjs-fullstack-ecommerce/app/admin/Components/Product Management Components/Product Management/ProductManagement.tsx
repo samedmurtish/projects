@@ -22,12 +22,8 @@ export default function ProductManagement({
       setPageName("");
       setIsMouseClicked([false, false, false]);
       setIsMouseOver([false, false, false]);
-    } else setPageName(directPage);
+    } else if (directPage) setPageName(directPage);
   });
-
-  useEffect(() => {
-    console.log(directPage);
-  }, []);
 
   const buttons = [
     {
