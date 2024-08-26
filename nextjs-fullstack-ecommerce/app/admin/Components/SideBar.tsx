@@ -145,7 +145,7 @@ export default function SideBar({
                     <div className="flex h-full py-2 pt-0">
                       <div
                         className={`pl-4 
-													h-[96	px] flex justify-center items-center`}
+													h-[96px] flex justify-center items-center`}
                       >
                         <div className="w-1 h-full bg-[rgba(43,44,102,0.3)]"></div>
                       </div>

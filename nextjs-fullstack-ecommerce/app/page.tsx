@@ -26,6 +26,7 @@ export default function Home() {
   return (
     <div className="w-full h-screen text-black">
       <NavigationBar categories={categories} subCategories={subCategories} />
+
       <Banners />
     </div>
   );
