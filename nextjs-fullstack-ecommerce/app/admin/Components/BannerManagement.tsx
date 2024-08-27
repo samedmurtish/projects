@@ -240,8 +240,8 @@ export default function BannerManagement() {
             return (
               <div
                 key={banner?.id + index + banner?.now}
-                className={`flex justify-center items-center bg-white w-64 hover:${
-                  dragging ? "w-64" : "w-96"
+                className={`flex justify-center items-center bg-white w-52 hover:w-${
+                  !dragging && "64"
                 } transition-width duration-300 ease-in-out flex-col rounded-t-xl`}
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => {
