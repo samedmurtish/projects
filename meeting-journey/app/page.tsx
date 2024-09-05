@@ -49,21 +49,26 @@ export default function Home() {
     return journeys.map((journey: any, index: number) => (
       <div
         className={`flex flex-col w-full h-full z-50 justify-center items-center ${
-          index == 0 ? "mt-[45rem]" : "mt-0"
+          index == 0 ? "mt-[90rem] md:mt-[70rem] xl:mt-[60rem]" : "mt-0"
         }`}
+        key={index}
       >
-        <h1 className="text-7xl font-extrabold text-white p-3 flex flex-col justify-center items-center">
+        <div className="text-7xl font-extrabold text-white p-3 flex flex-col justify-center items-center mb-5">
           <h2>{journey.date.year},</h2>
           <h2 className="text-4xl text-slate-400">{journey.date.month},</h2>
           <h2 className="text-3xl text-slate-500">{journey.date.day},</h2>
-        </h1>
-        <div className="bg-slate-100 w-1/2 h-full text-white p-5 min-w-[450px] rounded-3xl">
+          <p className="text-slate-500 font-semibold text-xl text-center">
+            {journey.description}
+          </p>
+        </div>
+        <div className="bg-slate-100 w-screen md:w-1/2 h-full text-white p-5 md:min-w-[450px] rounded-3xl">
           <div className="relative flex flex-col">
             <div className="flex gap-2 justify-center flex-wrap ">
-              {journey.images.map((image: any) => (
+              {journey.images.map((image: any, index: number) => (
                 <img
                   className="w-32 h-32 bg-white rounded-3xl transition-all ease-in-out duration-300 object-cover hover:flex-grow-[1]"
                   src={image}
+                  key={index}
                 ></img>
               ))}
             </div>
@@ -74,31 +79,40 @@ export default function Home() {
           </div>
         </div>
         {index != journeys.length - 1 ? (
-          <img src={arrowColored.src} className="w-48 h-48 mt-24 mb-12" />
+          <img
+            src={arrowColored.src}
+            className="w-48 h-48 mt-24 mb-32 md:mb-12"
+          />
         ) : null}
       </div>
     ));
   };
-  /*<div
-          className={`text-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ${
+  /**/
+  return (
+    <main className="flex h-full flex-col items-center justify-center">
+      <div className="h-[100vh] w-screen">
+        <div
+          className={`text-white absolute top-[10%] left-1/2 -translate-x-1/2 -translate-y-1/2 ${
             clicked ? "left-[30%]" : "left-1/2"
-          } transition-all duration-300 ease-in-out`}
+          } transition-all duration-300 ease-in-out z-[200]`}
           onClick={() => setClicked(!clicked)}
         >
           <button className="bg-green-400 hover:bg-green-500 active:bg-green-600 font-semibold text-white text-xl p-3 px-5 rounded-lg">
             Add Memory
           </button>
-        </div>*/
-  return (
-    <main className="flex h-full flex-col items-center justify-center">
-      <div className="h-[100vh] w-screen">
+        </div>
+        <span className="absolute top-[20%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-[200] text-white">
+          OR
+        </span>
         <img
           src={bottomBG.src}
           className="relative w-full h-full object-cover"
         />
-        <div className="text-slate-500 font-semibold z-[100] text-5xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center w-full flex justify-center items-center flex-col">
-          <p>Scroll down to begin the journey of our memories!</p>
-          <img src={arrowColored.src} className="w-48 h-48 mt-12" />
+        <div className="text-slate-500 font-semibold z-[100] text-5xl absolute top-[43%] left-1/2 -translate-x-1/2 -translate-y-1/2 text-center w-full flex justify-center items-center flex-col">
+          <p className="px-5">
+            Scroll down to begin the journey of our memories!
+          </p>
+          <img src={arrowColored.src} className="w-48 h-48 mt-5 md:mt-12" />
         </div>
       </div>
       <div className="w-screen h-[100vh] flex justify-center items-center flex-col relative ">
