@@ -54,9 +54,9 @@ export default function Home() {
         key={index}
       >
         <div className="text-7xl font-extrabold text-white p-3 flex flex-col justify-center items-center mb-5">
-          <h2>{journey.date.year},</h2>
-          <h2 className="text-4xl text-slate-400">{journey.date.month},</h2>
-          <h2 className="text-3xl text-slate-500">{journey.date.day},</h2>
+          <h2>{journey.date.year}</h2>
+          <h2 className="text-4xl text-slate-400">{journey.date.month}</h2>
+          <h2 className="text-3xl text-slate-500">{journey.date.day}</h2>
           <p className="text-slate-500 font-semibold text-xl text-center">
             {journey.description}
           </p>
@@ -92,7 +92,7 @@ export default function Home() {
     <main className="flex h-full flex-col items-center justify-center">
       <div className="h-[100vh] w-screen">
         <div
-          className={`text-white absolute top-[10%] left-1/2 -translate-x-1/2 -translate-y-1/2 ${
+          className={`text-white absolute top-[10%] md:top-[20%] left-1/2 -translate-x-1/2 -translate-y-1/2 ${
             clicked ? "left-[30%]" : "left-1/2"
           } transition-all duration-300 ease-in-out z-[200]`}
           onClick={() => setClicked(!clicked)}
@@ -101,14 +101,14 @@ export default function Home() {
             Add Memory
           </button>
         </div>
-        <span className="absolute top-[20%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-[200] text-white">
+        <span className="absolute top-[18%] md:top-[30%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-[200] text-white">
           OR
         </span>
         <img
           src={bottomBG.src}
           className="relative w-full h-full object-cover"
         />
-        <div className="text-slate-500 font-semibold z-[100] text-5xl absolute top-[43%] left-1/2 -translate-x-1/2 -translate-y-1/2 text-center w-full flex justify-center items-center flex-col">
+        <div className="text-slate-500 font-semibold z-[100] text-5xl absolute top-[43%] md:top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2 text-center w-full flex justify-center items-center flex-col">
           <p className="px-5">
             Scroll down to begin the journey of our memories!
           </p>
