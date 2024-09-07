@@ -93,7 +93,7 @@ export default function Home() {
       <div className="h-[100vh] w-screen">
         <div
           className={`text-white absolute top-[10%] md:top-[20%] left-1/2 -translate-x-1/2 -translate-y-1/2 ${
-            clicked ? "left-[30%]" : "left-1/2"
+            clicked ? "left-[35%]" : "left-1/2"
           } transition-all duration-300 ease-in-out z-[200]`}
           onClick={() => setClicked(!clicked)}
         >
