@@ -65,9 +65,7 @@ export default function Home() {
     return journeys.map((journey: any, index: number) => (
       <div
         className={`flex flex-col w-full h-full z-50 justify-center items-center ${
-          index == 0
-            ? "mt-[90rem] md:mt-[80rem] xl:mt-[60rem] xs:mt-[150rem]"
-            : "mt-0"
+          index == 0 ? "mt-[20rem]" : "mt-0"
         }`}
         key={index}
       >
@@ -79,7 +77,7 @@ export default function Home() {
             {journey.description}
           </p>
         </div>
-        <div className="bg-slate-100 w-screen md:w-1/2 h-full text-white p-5 md:min-w-[450px] rounded-3xl">
+        <div className="bg-slate-100 w-screen md:w-1/2 md:h-full h-max text-white p-5 md:min-w-[450px] rounded-3xl">
           <div className="relative flex flex-col">
             <div className="flex gap-2 justify-center flex-wrap ">
               {journey.images.map((image: any, index: number) => (
@@ -92,7 +90,7 @@ export default function Home() {
             </div>
             <img
               className="w-32 h-32 rounded-full self-center absolute bottom-[-5rem] bg-black border-2 hover:w-44 hover:h-44 hover:bottom-[-6rem] transition-all object-cover"
-              src={image1.src}
+              src={journey.thumbnail}
             />
           </div>
         </div>
@@ -146,6 +144,9 @@ export default function Home() {
   };
   const handlePostJourney = async () => {
     console.log("posting, ", newJourney);
+
+    setJourneys((prev: any) => [...prev, newJourney]);
+
     return setNewJourney({
       thumbnail: "",
       date: {
@@ -394,10 +395,10 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="w-screen h-[100vh] flex justify-center items-center flex-col relative ">
+      <div className="w-screen h-full flex justify-center items-center flex-col relative ">
         <img
           src={topBG.src}
-          className="absolute w-full h-full object-cover pointer-events-none "
+          className="absolute w-full h-[100vh] top-0 object-cover pointer-events-none "
         />
         {renderImages()}
       </div>
