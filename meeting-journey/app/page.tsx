@@ -13,6 +13,7 @@ import bottomBG from "../backgroundImages/bottom.svg";
 import topBG from "../backgroundImages/top.svg";
 
 import { useEffect, useState } from "react";
+import { supabase } from "./lib/supabase";
 
 export default function Home() {
   const [clicked, setClicked] = useState(false);
@@ -142,8 +143,31 @@ export default function Home() {
       images: prev.images.filter((_: any, i: number) => i !== index),
     }));
   };
+
+  useEffect(() => {
+    getJourneys();
+  }, []);
+
+  const getJourneys = async () => {
+    const { data, error } = await supabase
+      .from("journeys")
+      .select("*")
+      .order("id", { ascending: true });
+    if (error) {
+      console.log(error);
+    } else {
+      console.log(data, JSON.parse(data[0].journey));
+    }
+  };
+
   const handlePostJourney = async () => {
     console.log("posting, ", newJourney);
+
+    const { data, error } = await supabase
+      .from("journeys")
+      .insert({ journey: JSON.stringify(newJourney) });
+
+    console.log(data, error);
 
     setJourneys((prev: any) => [...prev, newJourney]);
 
@@ -362,6 +386,7 @@ export default function Home() {
                         : "h-0 text-[0px] border-0 w-0"
                     } px-5 rounded-full transition-all duration-1000 border-zinc-100`}
                     onChange={(e) => handleSeperateDate(e.target.value)}
+                    onLoad={(e: any) => console.log(e.target.value)}
                     required
                   />
 
