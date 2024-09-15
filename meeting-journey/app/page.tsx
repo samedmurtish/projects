@@ -33,34 +33,14 @@ export default function Home() {
       year: 0,
     },
     images: [],
+    rawImages: [],
   });
 
-  const [journeys, setJourneys] = useState([
-    {
-      date: {
-        day: "Thursday",
-        month: "September",
-        year: 2024,
-      },
-      images: [
-        image1.src,
-        image2.src,
-        image3.src,
-        image4.src,
-        image5.src,
-        image6.src,
-        image7.src,
-      ],
-    },
-    {
-      date: {
-        day: "Wednesday",
-        month: "September",
-        year: 2024,
-      },
-      images: [image1.src, image2.src, image3.src, image4.src],
-    },
-  ]);
+  const [newJourneyRawImages, setNewJourneyRawImages] = useState<string[]>([]);
+
+  const [journeys, setJourneys] = useState<any[]>([]);
+
+  const [now, setNow] = useState(Date.now());
 
   const renderImages = () => {
     return journeys.map((journey: any, index: number) => (
@@ -71,11 +51,15 @@ export default function Home() {
         key={index}
       >
         <div className="text-7xl font-extrabold text-white p-3 flex flex-col justify-center items-center mb-5">
-          <h2>{journey.date.year}</h2>
-          <h2 className="text-4xl text-slate-400">{journey.date.month}</h2>
-          <h2 className="text-3xl text-slate-500">{journey.date.day}</h2>
+          <h2>{journey.journey.date.year}</h2>
+          <h2 className="text-4xl text-slate-400">
+            {journey.journey.date.month}
+          </h2>
+          <h2 className="text-3xl text-slate-500">
+            {journey.journey.date.day}
+          </h2>
           <p className="text-slate-500 font-semibold text-xl text-center">
-            {journey.description}
+            {journey.journey.description}
           </p>
         </div>
         <div className="bg-slate-100 w-screen md:w-1/2 md:h-full h-max text-white p-5 md:min-w-[450px] rounded-3xl">
@@ -91,7 +75,7 @@ export default function Home() {
             </div>
             <img
               className="w-32 h-32 rounded-full self-center absolute bottom-[-5rem] bg-black border-2 hover:w-44 hover:h-44 hover:bottom-[-6rem] transition-all object-cover"
-              src={journey.thumbnail}
+              src={journey.journey.thumbnail}
             />
           </div>
         </div>
@@ -134,6 +118,7 @@ export default function Home() {
         ...prev,
         images: [...prev.images, URL.createObjectURL(image)],
       }));
+      setNewJourneyRawImages((prev: any) => [...prev, image]);
     });
   };
 
@@ -149,6 +134,7 @@ export default function Home() {
   }, []);
 
   const getJourneys = async () => {
+    console.log("getJourneys");
     const { data, error } = await supabase
       .from("journeys")
       .select("*")
@@ -156,18 +142,61 @@ export default function Home() {
     if (error) {
       console.log(error);
     } else {
-      console.log(data, JSON.parse(data[0].journey));
+      data.map((data: any) => {
+        setJourneys((prev: any) => [
+          ...prev,
+          { ...data, journey: JSON.parse(data.journey) },
+        ]);
+      });
     }
   };
 
   const handlePostJourney = async () => {
+    setNow(Date.now());
     console.log("posting, ", newJourney);
 
-    const { data, error } = await supabase
-      .from("journeys")
-      .insert({ journey: JSON.stringify(newJourney) });
+    const uploadJourney = async (newImages: any) => {
+      const { data, error } = await supabase.from("journeys").insert({
+        journey: JSON.stringify(newJourney),
+        now,
+        images: newImages,
+      });
 
-    console.log(data, error);
+      console.log(data, error);
+    };
+
+    let uploadedImageURLs: any = [];
+    const uploadImages = async () => {
+      for (let i = 0; i < newJourneyRawImages.length; i++) {
+        const image = newJourneyRawImages[i];
+        if (image) {
+          const fileName = `images/journey_${journeys.length}_${i + 1}_${now}`;
+          const { data, error } = await supabase.storage
+            .from("journey.images")
+            .upload(fileName, image, {
+              cacheControl: "3600",
+              upsert: false,
+            });
+
+          if (error) {
+            console.log(`Error uploading image ${i + 1}:`, error);
+          } else {
+            const imageURL = supabase.storage
+              .from("journey.images")
+              .getPublicUrl(fileName);
+            uploadedImageURLs.push(imageURL.data.publicUrl);
+            console.log(
+              `Image ${i + 1} uploaded successfully:`,
+              imageURL.data.publicUrl
+            );
+          }
+        }
+      }
+      console.log("uploadedImageURLs", uploadedImageURLs);
+
+      await uploadJourney(uploadedImageURLs);
+    };
+    await uploadImages();
 
     setJourneys((prev: any) => [...prev, newJourney]);
 
@@ -184,6 +213,7 @@ export default function Home() {
         year: 0,
       },
       images: [],
+      rawImages: [],
     });
   };
 
@@ -386,7 +416,6 @@ export default function Home() {
                         : "h-0 text-[0px] border-0 w-0"
                     } px-5 rounded-full transition-all duration-1000 border-zinc-100`}
                     onChange={(e) => handleSeperateDate(e.target.value)}
-                    onLoad={(e: any) => console.log(e.target.value)}
                     required
                   />
 
