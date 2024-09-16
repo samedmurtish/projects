@@ -1,11 +1,4 @@
 "use client";
-import image1 from "../images/(1).jpg";
-import image2 from "../images/(2).jpg";
-import image3 from "../images/(3).jpg";
-import image4 from "../images/(4).jpg";
-import image5 from "../images/(5).jpg";
-import image6 from "../images/(6).jpg";
-import image7 from "../images/(7).jpg";
 
 import arrowColored from "../icons/arrowcolored.png";
 
@@ -19,6 +12,8 @@ export default function Home() {
   const [clicked, setClicked] = useState(false);
 
   const [isAdmin, setIsAdmin] = useState(true);
+
+  const [loading, setLoading] = useState(false);
 
   const [newJourney, setNewJourney] = useState({
     thumbnail: "",
@@ -38,6 +33,8 @@ export default function Home() {
 
   const [newJourneyRawImages, setNewJourneyRawImages] = useState<string[]>([]);
 
+  const [thumbnail, setThumbnail] = useState<any>();
+
   const [journeys, setJourneys] = useState<any[]>([]);
 
   const [now, setNow] = useState(Date.now());
@@ -51,15 +48,11 @@ export default function Home() {
         key={index}
       >
         <div className="text-7xl font-extrabold text-white p-3 flex flex-col justify-center items-center mb-5">
-          <h2>{journey.journey.date.year}</h2>
-          <h2 className="text-4xl text-slate-400">
-            {journey.journey.date.month}
-          </h2>
-          <h2 className="text-3xl text-slate-500">
-            {journey.journey.date.day}
-          </h2>
+          <h2>{journey.date.year}</h2>
+          <h2 className="text-4xl text-slate-400">{journey.date.month}</h2>
+          <h2 className="text-3xl text-slate-500">{journey.date.day}</h2>
           <p className="text-slate-500 font-semibold text-xl text-center">
-            {journey.journey.description}
+            {journey.description}
           </p>
         </div>
         <div className="bg-slate-100 w-screen md:w-1/2 md:h-full h-max text-white p-5 md:min-w-[450px] rounded-3xl">
@@ -75,7 +68,7 @@ export default function Home() {
             </div>
             <img
               className="w-32 h-32 rounded-full self-center absolute bottom-[-5rem] bg-black border-2 hover:w-44 hover:h-44 hover:bottom-[-6rem] transition-all object-cover"
-              src={journey.journey.thumbnail}
+              src={journey.thumbnail}
             />
           </div>
         </div>
@@ -109,9 +102,6 @@ export default function Home() {
     e.target.remove();
   };
 
-  useEffect(() => {
-    console.log(newJourney);
-  }, [newJourney]);
   const addImage = (e: any) => {
     Array.from(e).map((image: any) => {
       setNewJourney((prev: any) => ({
@@ -134,7 +124,6 @@ export default function Home() {
   }, []);
 
   const getJourneys = async () => {
-    console.log("getJourneys");
     const { data, error } = await supabase
       .from("journeys")
       .select("*")
@@ -143,30 +132,62 @@ export default function Home() {
       console.log(error);
     } else {
       data.map((data: any) => {
-        setJourneys((prev: any) => [
-          ...prev,
-          { ...data, journey: JSON.parse(data.journey) },
-        ]);
+        setJourneys((prev: any) => {
+          let list = JSON.parse(data.journey);
+          list.images = data.images;
+          list.thumbnail = data.thumbnail;
+          return [...prev, list];
+        });
       });
     }
   };
-
+  useEffect(() => {
+    console.log(loading);
+  }, [loading]);
   const handlePostJourney = async () => {
     setNow(Date.now());
     console.log("posting, ", newJourney);
 
-    const uploadJourney = async (newImages: any) => {
+    const uploadJourney = async (images: any, thumbnail: any) => {
       const { data, error } = await supabase.from("journeys").insert({
         journey: JSON.stringify(newJourney),
         now,
-        images: newImages,
+        images,
+        thumbnail,
       });
-
-      console.log(data, error);
+      if (error) {
+        console.log(error);
+      } else {
+        setLoading(false);
+      }
     };
 
     let uploadedImageURLs: any = [];
+    let thumbnailURL: any = "";
     const uploadImages = async () => {
+      setLoading(true);
+      const fileName = `images/thumbnail_${journeys.length}_${now}`;
+      const { data, error } = await supabase.storage
+        .from("journey.images")
+        .upload(fileName, thumbnail, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      if (error) {
+        console.log("Error uploading thumbnail:", error);
+        return setLoading(false);
+      } else {
+        const imageURL = supabase.storage
+          .from("journey.images")
+          .getPublicUrl(fileName);
+        thumbnailURL = imageURL.data.publicUrl;
+        console.log(
+          "Thumbnail uploaded successfully:",
+          imageURL.data.publicUrl
+        );
+      }
+
       for (let i = 0; i < newJourneyRawImages.length; i++) {
         const image = newJourneyRawImages[i];
         if (image) {
@@ -180,6 +201,7 @@ export default function Home() {
 
           if (error) {
             console.log(`Error uploading image ${i + 1}:`, error);
+            return setLoading(false);
           } else {
             const imageURL = supabase.storage
               .from("journey.images")
@@ -192,13 +214,14 @@ export default function Home() {
           }
         }
       }
-      console.log("uploadedImageURLs", uploadedImageURLs);
 
-      await uploadJourney(uploadedImageURLs);
+      await uploadJourney(uploadedImageURLs, thumbnailURL);
     };
     await uploadImages();
 
     setJourneys((prev: any) => [...prev, newJourney]);
+
+    setNewJourneyRawImages([]);
 
     return setNewJourney({
       thumbnail: "",
@@ -249,6 +272,7 @@ export default function Home() {
   };
 
   const handleAddThumbnail = (e: any) => {
+    setThumbnail(e);
     return (
       e != undefined &&
       setNewJourney((prev: any) => ({
