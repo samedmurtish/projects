@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "handwrite";
+  src: local("handwrite"), url(../fonts/handwrite.otf) format("opentype");
+}
+
+#handwrite {
+  font-family: handwrite;
+  font-weight: 100;
+}
+
 body {
   background-color: #001220;
 }
@@ -9,5 +19,28 @@ body {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 60px;
+  aspect-ratio: 2;
+  --_g: no-repeat radial-gradient(circle closest-side, #ffffff 90%, #ffffff00);
+  background: var(--_g) 0% 50%, var(--_g) 50% 50%, var(--_g) 100% 50%;
+  background-size: calc(100% / 3) 50%;
+  animation: l3 2s infinite ease-in-out;
+}
+@keyframes l3 {
+  20% {
+    background-position: 0% 40%, 50% 50%, 100% 60%;
+  }
+  40% {
+    background-position: 0% 60%, 50% 40%, 100% 50%;
+  }
+  60% {
+    background-position: 0% 40%, 50% 60%, 100% 40%;
+  }
+  80% {
+    background-position: 0% 60%, 50% 50%, 100% 60%;
   }
 }

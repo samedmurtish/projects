@@ -17,6 +17,7 @@ export default function Home() {
 
   const [newJourney, setNewJourney] = useState({
     thumbnail: "",
+    description: "",
     date: {
       day: "",
       month: "",
@@ -51,9 +52,16 @@ export default function Home() {
           <h2>{journey.date.year}</h2>
           <h2 className="text-4xl text-slate-400">{journey.date.month}</h2>
           <h2 className="text-3xl text-slate-500">{journey.date.day}</h2>
-          <p className="text-slate-500 font-semibold text-xl text-center">
-            {journey.description}
-          </p>
+          {journey.description && (
+            <p
+              className="text-slate-500 font-semibold text-5xl mt-3"
+              id="handwrite"
+            >
+              <span className="text-slate-600 mr-3">"</span>
+              {journey.description}
+              <span className="text-slate-600 ml-2">"</span>
+            </p>
+          )}
         </div>
         <div className="bg-slate-100 w-screen md:w-1/2 md:h-full h-max text-white p-5 md:min-w-[450px] rounded-3xl">
           <div className="relative flex flex-col">
@@ -66,10 +74,25 @@ export default function Home() {
                 ></img>
               ))}
             </div>
-            <img
-              className="w-32 h-32 rounded-full self-center absolute bottom-[-5rem] bg-black border-2 hover:w-44 hover:h-44 hover:bottom-[-6rem] transition-all object-cover"
-              src={journey.thumbnail}
-            />
+            <div className="absolute self-center flex justify-center items-center gap-2 bottom-[-5rem]">
+              {isAdmin && (
+                <button className="bg-blue-400 hover:bg-blue-500 active:bg-blue-600 font-semibold text-white text-xl p-3 px-5 rounded-lg w-[7rem]">
+                  Edit
+                </button>
+              )}
+              <img
+                className="w-32 h-32 rounded-full self-center bg-black border-2 hover:w-36 hover:h-36 transition-all object-cover"
+                src={journey.thumbnail}
+              />
+              {isAdmin && (
+                <button
+                  className="bg-red-400 hover:bg-red-500 active:bg-red-600 font-semibold text-white text-xl p-3 px-5 rounded-lg w-[7rem]"
+                  onClick={() => handlDeleteJourney(index)}
+                >
+                  Delete
+                </button>
+              )}
+            </div>
           </div>
         </div>
         {index != journeys.length - 1 ? (
@@ -81,21 +104,38 @@ export default function Home() {
       </div>
     ));
   };
-  /*             <div className="">
-            <div
-              className={`text-white absolute top-[10%] md:top-[20%] left-1/2 -translate-x-1/2 -translate-y-1/2 ${
-                clicked ? "opacity-0 left-[-100%]" : "opacity-100 left-1/2"
-              } transition-all duration-300 ease-in-out z-[200]`}
-              onClick={() => setClicked(!clicked)}
-            >
-              <button className="bg-green-400 hover:bg-green-500 active:bg-green-600 font-semibold text-white text-xl p-3 px-5 rounded-lg">
-                Add Memory
-              </button>
-            </div>
-            <span className="absolute top-[18%] md:top-[30%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-[200] text-white">
-              OR
-            </span>
-          </div>     */
+
+  const handlDeleteJourney = async (id: number) => {
+    const deleteJourneyImages = async () => {
+      for (let i = 0; i < journeys[id].images.length; i++) {
+        // const fileName = `images/thumbnail_${journeys.length}_${now}`;
+        // const fileName = `images/journey_${journeys.length}_${i + 1}_${now}`;
+        const prefix: any = `images/journey_${id}_${i + 1}_${journeys[id].now}`;
+
+        console.log(prefix, journeys[id]);
+        const { data, error } = await supabase.storage
+          .from("journey-images")
+          .remove(prefix + journeys[id].images[i]);
+
+        if (error) {
+          console.log(error);
+        } else {
+          console.log(data);
+        }
+      }
+    };
+    await deleteJourneyImages();
+
+    const { data, error } = await supabase
+      .from("journeys")
+      .delete()
+      .eq("id", id);
+    if (error) {
+      console.log(error);
+    } else {
+      getJourneys();
+    }
+  };
 
   const handleAddButton = (e: any) => {
     setClicked(!clicked);
@@ -141,9 +181,7 @@ export default function Home() {
       });
     }
   };
-  useEffect(() => {
-    console.log(loading);
-  }, [loading]);
+
   const handlePostJourney = async () => {
     setNow(Date.now());
     console.log("posting, ", newJourney);
@@ -225,6 +263,7 @@ export default function Home() {
 
     return setNewJourney({
       thumbnail: "",
+      description: "",
       date: {
         day: "",
         month: "",
@@ -282,6 +321,13 @@ export default function Home() {
     );
   };
 
+  const handleSetDescription = (e: any) => {
+    return setNewJourney((prev: any) => ({
+      ...prev,
+      description: e,
+    }));
+  };
+
   return (
     <main className="flex h-full flex-col items-center justify-center select-none">
       <div className="h-[100vh] w-screen">
@@ -321,6 +367,9 @@ export default function Home() {
                   Add Memory
                 </button>
               </div>
+              {loading && (
+                <div className="w-full h-full absolute loader z-[100]"></div>
+              )}
               <div className="fixed lg:relative sm:bottom-5 md:bottom-12 bottom-48 top-0 left-0 right-0 -translate-y-1/2 lg:-translate-y-0">
                 <div
                   className={`relative ${
@@ -335,7 +384,7 @@ export default function Home() {
                         clicked
                           ? "w-full md:w-32 h-32 text-4xl opacity-100"
                           : "w-0 h-0 text-[0px] opacity-0"
-                      } mt-72 md:mt-0 flex justify-center items-center bg-blue-500 transition-all text-white rounded-lg cursor-pointer border-2 border-transparent hover:border-white hover:border-opacity-40 duration-1000 hover:duration-300`}
+                      } mt-[21rem] md:mt-0 flex justify-center items-center bg-blue-500 transition-all text-white rounded-lg cursor-pointer border-2 border-transparent hover:border-white hover:border-opacity-40 duration-1000 hover:duration-300`}
                     >
                       +
                       <input
@@ -345,6 +394,7 @@ export default function Home() {
                         hidden
                         onChange={(e: any) => addImage(e.target.files)}
                         multiple
+                        disabled={loading}
                       />
                     </label>
                     {newJourney.images.map((image: any, index: any) => (
@@ -354,7 +404,9 @@ export default function Home() {
                         } flex justify-center items-center bg-blue-500 transition-all text-white rounded-lg cursor-pointer border-2 border-transparent hover:border-white hover:border-opacity-40 duration-300 hover:duration-300 bg-transparent hover:bg-[rgba(255,255,255,0.2)] object-cover`}
                         src={image}
                         key={index}
-                        onClick={() => handleRemoveImage(index)}
+                        onClick={() => {
+                          !loading && handleRemoveImage(index);
+                        }}
                       />
                     ))}
                   </div>
@@ -388,6 +440,7 @@ export default function Home() {
                     hidden
                     onChange={(e: any) => handleAddThumbnail(e.target.files[0])}
                     name="thumbnail"
+                    disabled={loading}
                   />
                 </label>
                 <label
@@ -418,6 +471,7 @@ export default function Home() {
                     accept="image/*"
                     hidden
                     onChange={(e: any) => handleAddThumbnail(e.target.files[0])}
+                    disabled={loading}
                   />
                 </label>
                 <div
@@ -428,27 +482,46 @@ export default function Home() {
                   } -translate-x-1/2 duration-[1500ms] transition-all `}
                 />
                 <div
-                  className={`flex fixed md:absolute top-[10rem] md:top-[14rem] md:bottom-0 -translate-x-1/2	translate-y-1/2 left-1/2 gap-3 justify-center items-center h-max md:h-44 bg-white md:bg-transparent transition duration-1000 ${
+                  className={`flex fixed md:absolute top-[7rem] pb-5 md:top-[14rem] md:bottom-0 -translate-x-1/2 translate-y-1/2 left-1/2 gap-3 justify-center items-center h-max md:h-44 bg-white md:bg-transparent transition duration-1000 ${
                     clicked ? "w-full opacity-100" : "w-0 opacity-0"
                   }`}
                 >
-                  <input
-                    type="date"
-                    className={`${
-                      clicked
-                        ? "h-16 text-base w-max border-2"
-                        : "h-0 text-[0px] border-0 w-0"
-                    } px-5 rounded-full transition-all duration-1000 border-zinc-100`}
-                    onChange={(e) => handleSeperateDate(e.target.value)}
-                    required
-                  />
+                  <div className="flex md:flex-row flex-col gap-1 md:gap-3	px-3 md:px-0">
+                    <input
+                      type="text"
+                      className={`${
+                        clicked
+                          ? "h-16 text-base w-full md:w-48 border-2"
+                          : "h-0 text-[0px] border-0 w-0"
+                      }
+											 rounded-full p-5 text-lg text-ellipsis transition-all duration-1000 border-zinc-100`}
+                      disabled={loading}
+                      value={newJourney.description}
+                      placeholder="Journey description.."
+                      onChange={(e: any) =>
+                        handleSetDescription(e.target.value)
+                      }
+                    />
 
+                    <input
+                      type="date"
+                      className={`${
+                        clicked
+                          ? "h-16 text-base w-full md:w-max border-2"
+                          : "h-0 text-[0px] border-0 w-0"
+                      } px-5 rounded-full transition-all duration-1000 border-zinc-100`}
+                      onChange={(e) => handleSeperateDate(e.target.value)}
+                      required
+                      disabled={loading}
+                    />
+                  </div>
                   <button
                     className={`${
                       clicked
                         ? "w-32 h-16 border-2 opacity-100 text-base"
                         : "w-0 h-0 border-0 opacity-0 text-[0px]"
-                    } rounded-full md:hover:w-36 md:hover:h-36 transition-all hover:duration-300  duration-1000 object-cover self-center justify-self-center flex justify-center items-center bg-blue-500 cursor-pointer active:bg-blue-600 hover:bg-blue-600 text-white border-white`}
+                    } rounded-full md:hover:w-36 md:hover:h-36 transition-all hover:duration-300  duration-1000 object-cover self-center justify-self-center flex justify-center items-center bg-blue-500 cursor-pointer active:bg-blue-600 hover:bg-blue-600 text-white border-white mr-3 md:mr-0`}
+                    disabled={loading}
                   >
                     Create
                   </button>
@@ -476,7 +549,7 @@ export default function Home() {
       <div className="w-screen h-full flex justify-center items-center flex-col relative ">
         <img
           src={topBG.src}
-          className="absolute w-full h-[100vh] top-0 object-cover pointer-events-none "
+          className="absolute w-full h-[100vh] top-0 object-cover pointer-events-none"
         />
         {renderImages()}
       </div>
