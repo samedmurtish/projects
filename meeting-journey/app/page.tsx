@@ -87,7 +87,7 @@ export default function Home() {
               {isAdmin && (
                 <button
                   className="bg-red-400 hover:bg-red-500 active:bg-red-600 font-semibold text-white text-xl p-3 px-5 rounded-lg w-[7rem]"
-                  onClick={() => handlDeleteJourney(index)}
+                  onClick={() => handlDeleteJourney(index, journey.id)}
                 >
                   Delete
                 </button>
@@ -105,20 +105,30 @@ export default function Home() {
     ));
   };
 
-  const handlDeleteJourney = async (id: number) => {
+  const handlDeleteJourney = async (indexId: number, id: number) => {
     const deleteJourneyImages = async () => {
-      for (let i = 0; i < journeys[id].images.length; i++) {
-        // const fileName = `images/thumbnail_${journeys.length}_${now}`;
-        // const fileName = `images/journey_${journeys.length}_${i + 1}_${now}`;
-        const prefix: any = `images/journey_${id}_${i + 1}_${journeys[id].now}`;
-
-        console.log(prefix, journeys[id]);
+      const deleteJourneyThumbnail = async () => {
+        const prefix: any = `images/thumbnail_${journeys[indexId].now}`;
         const { data, error } = await supabase.storage
-          .from("journey-images")
-          .remove(prefix + journeys[id].images[i]);
+          .from("journey.images")
+          .remove(prefix);
+        if (error) {
+          return console.log(error);
+        } else {
+          console.log(data);
+        }
+      };
+      await deleteJourneyThumbnail();
+      for (let i = 0; i < journeys[indexId].images.length; i++) {
+        const prefix: any = `images/journey_${i + 1}_${journeys[indexId].now}`;
+
+        console.log(prefix, journeys[indexId]);
+        const { data, error } = await supabase.storage
+          .from("journey.images")
+          .remove(prefix);
 
         if (error) {
-          console.log(error);
+          return console.log(error);
         } else {
           console.log(data);
         }
@@ -131,10 +141,9 @@ export default function Home() {
       .delete()
       .eq("id", id);
     if (error) {
-      console.log(error);
-    } else {
-      getJourneys();
+      return console.log(error);
     }
+    getJourneys();
   };
 
   const handleAddButton = (e: any) => {
@@ -176,6 +185,8 @@ export default function Home() {
           let list = JSON.parse(data.journey);
           list.images = data.images;
           list.thumbnail = data.thumbnail;
+          list.now = data.now;
+          list.id = data.id;
           return [...prev, list];
         });
       });
@@ -204,7 +215,7 @@ export default function Home() {
     let thumbnailURL: any = "";
     const uploadImages = async () => {
       setLoading(true);
-      const fileName = `images/thumbnail_${journeys.length}_${now}`;
+      const fileName = `images/thumbnail_${now}`;
       const { data, error } = await supabase.storage
         .from("journey.images")
         .upload(fileName, thumbnail, {
@@ -229,7 +240,7 @@ export default function Home() {
       for (let i = 0; i < newJourneyRawImages.length; i++) {
         const image = newJourneyRawImages[i];
         if (image) {
-          const fileName = `images/journey_${journeys.length}_${i + 1}_${now}`;
+          const fileName = `images/journey_${i + 1}_${now}`;
           const { data, error } = await supabase.storage
             .from("journey.images")
             .upload(fileName, image, {
