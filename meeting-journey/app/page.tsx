@@ -44,7 +44,7 @@ export default function Home() {
     return journeys.map((journey: any, index: number) => (
       <div
         className={`flex flex-col w-full h-full z-50 justify-center items-center ${
-          index == 0 ? "mt-[20rem]" : "mt-0"
+          index == 0 ? "mt-[20rem]" : "mt-0 "
         }`}
         key={index}
       >
