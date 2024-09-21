@@ -40,53 +40,90 @@ export default function Home() {
 
   const [now, setNow] = useState(Date.now());
 
+  const [editedDescription, setEditedDescription] = useState("");
   const renderImages = () => {
     return journeys.map((journey: any, index: number) => (
       <div
-        className={`flex flex-col w-full h-full z-50 justify-center items-center ${
-          index == 0 ? "mt-[20rem]" : "mt-0 "
+        className={`z-50 flex h-full w-full flex-col items-center justify-center ${
+          index == 0 ? "mt-[20rem]" : "mt-0"
         }`}
         key={index}
       >
-        <div className="text-7xl font-extrabold text-white p-3 flex flex-col justify-center items-center mb-5">
+        <div className="mb-5 flex flex-col items-center justify-center p-3 text-7xl font-extrabold text-white">
           <h2>{journey.date.year}</h2>
           <h2 className="text-4xl text-slate-400">{journey.date.month}</h2>
           <h2 className="text-3xl text-slate-500">{journey.date.day}</h2>
           {journey.description && (
-            <p
-              className="text-slate-500 font-semibold text-5xl mt-3"
-              id="handwrite"
-            >
-              <span className="text-slate-600 mr-3">"</span>
-              {journey.description}
-              <span className="text-slate-600 ml-2">"</span>
+            <p className="mt-3 text-5xl font-semibold text-slate-500">
+              <span className="mr-3 text-slate-600">"</span>
+              {journey.editMode ? (
+                <input
+                  className="p-3 px-5 text-lg"
+                  type="text"
+                  placeholder={journey.description}
+                  value={editedDescription}
+                  onChange={(e: any) => setEditedDescription(e.target.value)}
+                />
+              ) : (
+                <span id="handwrite">{journey.description}</span>
+              )}
+              <span className="ml-2 text-slate-600">"</span>
             </p>
           )}
+          {journey.editMode && (
+            <button
+              className="mt-3 bg-green-500 p-3 px-5 text-lg hover:bg-green-600 active:bg-green-700"
+              onClick={() => handleEditJourney(index, journey.id)}
+            >
+              Apply Changes
+            </button>
+          )}
         </div>
-        <div className="bg-slate-100 w-screen md:w-1/2 md:h-full h-max text-white p-5 md:min-w-[450px] rounded-3xl">
+        <div className="h-max w-screen rounded-3xl bg-slate-100 p-5 text-white md:h-full md:w-1/2 md:min-w-[450px]">
           <div className="relative flex flex-col">
-            <div className="flex gap-2 justify-center flex-wrap ">
+            <div className="flex flex-wrap justify-center gap-2">
               {journey.images.map((image: any, index: number) => (
-                <img
-                  className="w-32 h-32 bg-white rounded-3xl transition-all ease-in-out duration-300 object-cover hover:flex-grow-[1]"
-                  src={image}
-                  key={index}
-                ></img>
+                <>
+                  {journey.editMode && (
+                    <label
+                      className={`flex h-32 w-32 cursor-pointer items-center justify-center rounded-lg border-2 border-transparent bg-blue-500 text-4xl text-white opacity-100 transition-all duration-1000 hover:border-white hover:border-opacity-40 hover:duration-300`}
+                    >
+                      +
+                      <input
+                        type="file"
+                        accept="image/*"
+                        name="images"
+                        hidden
+                        //onChange={(e: any) => addImage(e.target.files)}
+                        multiple
+                        disabled={loading}
+                      />
+                    </label>
+                  )}
+                  <img
+                    className="h-32 w-32 rounded-3xl bg-white object-cover transition-all duration-300 ease-in-out hover:flex-grow-[1]"
+                    src={image}
+                    key={index}
+                  ></img>
+                </>
               ))}
             </div>
-            <div className="absolute self-center flex justify-center items-center gap-2 bottom-[-5rem]">
+            <div className="absolute bottom-[-5rem] flex items-center justify-center gap-2 self-center">
               {isAdmin && (
-                <button className="bg-blue-400 hover:bg-blue-500 active:bg-blue-600 font-semibold text-white text-xl p-3 px-5 rounded-lg w-[7rem]">
+                <button
+                  className="w-[7rem] rounded-lg bg-blue-400 p-3 px-5 text-xl font-semibold text-white hover:bg-blue-500 active:bg-blue-600"
+                  onClick={() => handleJourneyEditButton(index)}
+                >
                   Edit
                 </button>
               )}
               <img
-                className="w-32 h-32 rounded-full self-center bg-black border-2 hover:w-36 hover:h-36 transition-all object-cover"
+                className="h-32 w-32 self-center rounded-full border-2 bg-black object-cover transition-all hover:scale-110"
                 src={journey.thumbnail}
               />
               {isAdmin && (
                 <button
-                  className="bg-red-400 hover:bg-red-500 active:bg-red-600 font-semibold text-white text-xl p-3 px-5 rounded-lg w-[7rem]"
+                  className="w-[7rem] rounded-lg bg-red-400 p-3 px-5 text-xl font-semibold text-white hover:bg-red-500 active:bg-red-600"
                   onClick={() => handlDeleteJourney(index, journey.id)}
                 >
                   Delete
@@ -98,13 +135,47 @@ export default function Home() {
         {index != journeys.length - 1 ? (
           <img
             src={arrowColored.src}
-            className="w-48 h-48 mt-24 mb-32 md:mb-12"
+            className="mb-32 mt-24 h-48 w-48 md:mb-12"
           />
         ) : null}
       </div>
     ));
   };
 
+  const handleEditJourney = async (journeyID: number, actualID: number) => {
+    setJourneys((prev: any) => {
+      const list = [...prev];
+      list[journeyID].description = editedDescription;
+      list[journeyID].editMode = false;
+      return list;
+    });
+
+    const { data, error } = await supabase
+      .from("journeys")
+      .update({ journey: journeys[journeyID] })
+      .eq("id", actualID);
+
+    if (error) console.log(error);
+    console.log(data);
+  };
+
+  const handleJourneyEditButton = (journeyID: number) => {
+    journeys.map((journey: any) => {
+      if (journey.editMode) {
+        journey.editMode = false;
+      }
+    });
+
+    setEditedDescription("");
+
+    return setJourneys((prev: any) => {
+      const list = [...prev];
+      console.log(list[journeyID]);
+      list[journeyID].editMode = !list[journeyID].editMode;
+      console.log(journeyID, list[journeyID].editMode);
+      return list;
+    });
+  };
   const handlDeleteJourney = async (indexId: number, id: number) => {
     const deleteJourneyImages = async () => {
       const deleteJourneyThumbnail = async () => {
@@ -173,6 +244,7 @@ export default function Home() {
   }, []);
 
   const getJourneys = async () => {
+    setJourneys([]);
     const { data, error } = await supabase
       .from("journeys")
       .select("*")
@@ -182,11 +254,13 @@ export default function Home() {
     } else {
       data.map((data: any) => {
         setJourneys((prev: any) => {
-          let list = JSON.parse(data.journey);
+          let list = data.journey;
           list.images = data.images;
           list.thumbnail = data.thumbnail;
           list.now = data.now;
           list.id = data.id;
+          list.editMode = false;
+          console.log(list);
           return [...prev, list];
         });
       });
@@ -199,7 +273,7 @@ export default function Home() {
 
     const uploadJourney = async (images: any, thumbnail: any) => {
       const { data, error } = await supabase.from("journeys").insert({
-        journey: JSON.stringify(newJourney),
+        journey: newJourney,
         now,
         images,
         thumbnail,
@@ -233,7 +307,7 @@ export default function Home() {
         thumbnailURL = imageURL.data.publicUrl;
         console.log(
           "Thumbnail uploaded successfully:",
-          imageURL.data.publicUrl
+          imageURL.data.publicUrl,
         );
       }
 
@@ -258,7 +332,7 @@ export default function Home() {
             uploadedImageURLs.push(imageURL.data.publicUrl);
             console.log(
               `Image ${i + 1} uploaded successfully:`,
-              imageURL.data.publicUrl
+              imageURL.data.publicUrl,
             );
           }
         }
@@ -340,16 +414,16 @@ export default function Home() {
   };
 
   return (
-    <main className="flex h-full flex-col items-center justify-center select-none">
+    <main className="flex h-full select-none flex-col items-center justify-center">
       <div className="h-[100vh] w-screen">
         <img
           src={bottomBG.src}
-          className="relative w-full h-full object-cover pointer-events-none"
+          className="pointer-events-none relative h-full w-full object-cover"
         />
-        <div className="text-slate-500 font-semibold z-[100] text-5xl absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 text-center w-full flex justify-center items-center flex-col gap-5 lg:gap-10 lg:flex-row">
+        <div className="absolute left-1/2 top-[40%] z-[100] flex w-full -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center gap-5 text-center text-5xl font-semibold text-slate-500 lg:flex-row lg:gap-10">
           {isAdmin && (
             <form
-              className="flex justify-center items-center gap-5"
+              className="flex items-center justify-center gap-5"
               onSubmit={(e) => {
                 e.preventDefault();
 
@@ -369,33 +443,33 @@ export default function Home() {
               }}
             >
               <div
-                className={`text-white  ${
-                  clicked ? "opacity-0" : "opacity-100 left-1/2"
-                } transition-all duration-150 ease-in-out z-[200] flex`}
+                className={`text-white ${
+                  clicked ? "opacity-0" : "left-1/2 opacity-100"
+                } z-[200] flex transition-all duration-150 ease-in-out`}
                 onClick={(e) => handleAddButton(e)}
               >
-                <button className="bg-green-400 hover:bg-green-500 active:bg-green-600 font-semibold text-white text-xl p-3 px-5 rounded-lg">
+                <button className="rounded-lg bg-green-400 p-3 px-5 text-xl font-semibold text-white hover:bg-green-500 active:bg-green-600">
                   Add Memory
                 </button>
               </div>
               {loading && (
-                <div className="w-full h-full absolute loader z-[100]"></div>
+                <div className="loader absolute z-[100] h-full w-full"></div>
               )}
-              <div className="fixed lg:relative sm:bottom-5 md:bottom-12 bottom-48 top-0 left-0 right-0 -translate-y-1/2 lg:-translate-y-0">
+              <div className="fixed bottom-48 left-0 right-0 top-0 -translate-y-1/2 sm:bottom-5 md:bottom-12 lg:relative lg:-translate-y-0">
                 <div
                   className={`relative ${
                     clicked
-                      ? "min-w-screen lg:min-w-[36rem]  max-w-screen lg:max-w-[45rem] h-screen lg:h-[25rem] bg-white lg:bg-[rgba(255,255,255,0.3)]"
-                      : "w-0 h-0 bg-[rgba(255,255,255,0.0)] overflow-hidden overflow-y-hidden"
-                  } transition-all duration-700 rounded-xl flex flex-wrap p-3 overflow-y-auto `}
+                      ? "min-w-screen max-w-screen h-screen bg-white lg:h-[25rem] lg:min-w-[36rem] lg:max-w-[45rem] lg:bg-[rgba(255,255,255,0.3)]"
+                      : "h-0 w-0 overflow-hidden overflow-y-hidden bg-[rgba(255,255,255,0.0)]"
+                  } flex flex-wrap overflow-y-auto rounded-xl p-3 transition-all duration-700`}
                 >
-                  <div className="w-full md:w-max h-max flex flex-wrap overflow-y-auto items-start justify-start gap-2">
+                  <div className="flex h-max w-full flex-wrap items-start justify-start gap-2 overflow-y-auto md:w-max">
                     <label
                       className={`${
                         clicked
-                          ? "w-full md:w-32 h-32 text-4xl opacity-100"
-                          : "w-0 h-0 text-[0px] opacity-0"
-                      } mt-[21rem] md:mt-0 flex justify-center items-center bg-blue-500 transition-all text-white rounded-lg cursor-pointer border-2 border-transparent hover:border-white hover:border-opacity-40 duration-1000 hover:duration-300`}
+                          ? "h-32 w-full text-4xl opacity-100 md:w-32"
+                          : "h-0 w-0 text-[0px] opacity-0"
+                      } mt-[21rem] flex cursor-pointer items-center justify-center rounded-lg border-2 border-transparent bg-blue-500 text-white transition-all duration-1000 hover:border-white hover:border-opacity-40 hover:duration-300 md:mt-0`}
                     >
                       +
                       <input
@@ -411,8 +485,8 @@ export default function Home() {
                     {newJourney.images.map((image: any, index: any) => (
                       <img
                         className={`${
-                          clicked ? "w-32 h-32" : "w-0 h-0"
-                        } flex justify-center items-center bg-blue-500 transition-all text-white rounded-lg cursor-pointer border-2 border-transparent hover:border-white hover:border-opacity-40 duration-300 hover:duration-300 bg-transparent hover:bg-[rgba(255,255,255,0.2)] object-cover`}
+                          clicked ? "h-32 w-32" : "h-0 w-0"
+                        } flex cursor-pointer items-center justify-center rounded-lg border-2 border-transparent bg-blue-500 bg-transparent object-cover text-white transition-all duration-300 hover:border-white hover:border-opacity-40 hover:bg-[rgba(255,255,255,0.2)] hover:duration-300`}
                         src={image}
                         key={index}
                         onClick={() => {
@@ -423,25 +497,25 @@ export default function Home() {
                   </div>
                 </div>
                 <label
-                  className={`absolute hidden md:flex md:top-[0%] -translate-y-1/2 -translate-x-1/2 left-1/2 ${
+                  className={`absolute left-1/2 hidden -translate-x-1/2 -translate-y-1/2 md:top-[0%] md:flex ${
                     clicked
                       ? `${
-                          newJourney.thumbnail ? "w-36  h-36" : "w-32 h-16"
-                        } h-16 border-2 opacity-100 text-3xl`
-                      : "w-0 h-0 border-0 opacity-0 text-[0px]"
+                          newJourney.thumbnail ? "h-36 w-36" : "h-16 w-32"
+                        } h-16 border-2 text-3xl opacity-100`
+                      : "h-0 w-0 border-0 text-[0px] opacity-0"
                   } rounded-full ${
                     newJourney.thumbnail
-                      ? " hover:w-32 hover:h-32 "
-                      : " hover:w-36 hover:h-36 "
-                  } transition-all hover:duration-300  duration-1000 object-cover self-center justify-self-center flex justify-center items-center cursor-pointer text-white border-white bg-white`}
+                      ? "hover:h-32 hover:w-32"
+                      : "hover:h-36 hover:w-36"
+                  } flex cursor-pointer items-center justify-center self-center justify-self-center border-white bg-white object-cover text-white transition-all duration-1000 hover:duration-300`}
                 >
                   {newJourney.thumbnail ? (
                     <img
                       src={newJourney.thumbnail}
-                      className="w-full h-full object-cover rounded-full flex justify-center items-center"
+                      className="flex h-full w-full items-center justify-center rounded-full object-cover"
                     />
                   ) : (
-                    <div className="bg-green-500 w-full h-full flex justify-center items-center rounded-full">
+                    <div className="flex h-full w-full items-center justify-center rounded-full bg-green-500">
                       +
                     </div>
                   )}
@@ -455,25 +529,25 @@ export default function Home() {
                   />
                 </label>
                 <label
-                  className={`absolute top-[35%] md:hidden z-10 -translate-y-1/2 -translate-x-1/2 left-1/2 ${
+                  className={`absolute left-1/2 top-[35%] z-10 -translate-x-1/2 -translate-y-1/2 md:hidden ${
                     clicked
                       ? `${
-                          newJourney.thumbnail ? "w-36  h-36" : "w-32 h-32"
-                        } h-16 border-2 opacity-100 text-3xl`
-                      : "w-0 h-0 border-0 opacity-0 text-[0px]"
+                          newJourney.thumbnail ? "h-36 w-36" : "h-32 w-32"
+                        } h-16 border-2 text-3xl opacity-100`
+                      : "h-0 w-0 border-0 text-[0px] opacity-0"
                   } rounded-full ${
                     newJourney.thumbnail
-                      ? " hover:w-32 hover:h-32 "
-                      : " hover:w-36 hover:h-36 "
-                  } transition-all hover:duration-300  duration-1000 object-cover self-center justify-self-center flex justify-center items-center cursor-pointer text-white border-white`}
+                      ? "hover:h-32 hover:w-32"
+                      : "hover:h-36 hover:w-36"
+                  } flex cursor-pointer items-center justify-center self-center justify-self-center border-white object-cover text-white transition-all duration-1000 hover:duration-300`}
                 >
                   {newJourney.thumbnail ? (
                     <img
                       src={newJourney.thumbnail}
-                      className="w-full h-full object-cover rounded-full flex justify-center items-center"
+                      className="flex h-full w-full items-center justify-center rounded-full object-cover"
                     />
                   ) : (
-                    <div className="bg-green-500 w-full h-full flex justify-center items-center rounded-full">
+                    <div className="flex h-full w-full items-center justify-center rounded-full bg-green-500">
                       +
                     </div>
                   )}
@@ -488,24 +562,23 @@ export default function Home() {
                 <div
                   className={`${
                     clicked
-                      ? "h-full w-full left-1/2 absolute top-0 z-0 bg-white md:hidden"
-                      : "h-0 w-0 left-1/2"
-                  } -translate-x-1/2 duration-[1500ms] transition-all `}
+                      ? "absolute left-1/2 top-0 z-0 h-full w-full bg-white md:hidden"
+                      : "left-1/2 h-0 w-0"
+                  } -translate-x-1/2 transition-all duration-[1500ms]`}
                 />
                 <div
-                  className={`flex fixed md:absolute top-[7rem] pb-5 md:top-[14rem] md:bottom-0 -translate-x-1/2 translate-y-1/2 left-1/2 gap-3 justify-center items-center h-max md:h-44 bg-white md:bg-transparent transition duration-1000 ${
+                  className={`fixed left-1/2 top-[7rem] flex h-max -translate-x-1/2 translate-y-1/2 items-center justify-center gap-3 bg-white pb-5 transition duration-1000 md:absolute md:bottom-0 md:top-[14rem] md:h-44 md:bg-transparent ${
                     clicked ? "w-full opacity-100" : "w-0 opacity-0"
                   }`}
                 >
-                  <div className="flex md:flex-row flex-col gap-1 md:gap-3	px-3 md:px-0">
+                  <div className="flex flex-col gap-1 px-3 md:flex-row md:gap-3 md:px-0">
                     <input
                       type="text"
                       className={`${
                         clicked
-                          ? "h-16 text-base w-full md:w-48 border-2"
-                          : "h-0 text-[0px] border-0 w-0"
-                      }
-											 rounded-full p-5 text-lg text-ellipsis transition-all duration-1000 border-zinc-100`}
+                          ? "h-16 w-full border-2 text-base md:w-48"
+                          : "h-0 w-0 border-0 text-[0px]"
+                      } text-ellipsis rounded-full border-zinc-100 p-5 text-lg transition-all duration-1000`}
                       disabled={loading}
                       value={newJourney.description}
                       placeholder="Journey description.."
@@ -518,9 +591,9 @@ export default function Home() {
                       type="date"
                       className={`${
                         clicked
-                          ? "h-16 text-base w-full md:w-max border-2"
-                          : "h-0 text-[0px] border-0 w-0"
-                      } px-5 rounded-full transition-all duration-1000 border-zinc-100`}
+                          ? "h-16 w-full border-2 text-base md:w-max"
+                          : "h-0 w-0 border-0 text-[0px]"
+                      } rounded-full border-zinc-100 px-5 transition-all duration-1000`}
                       onChange={(e) => handleSeperateDate(e.target.value)}
                       required
                       disabled={loading}
@@ -529,9 +602,9 @@ export default function Home() {
                   <button
                     className={`${
                       clicked
-                        ? "w-32 h-16 border-2 opacity-100 text-base"
-                        : "w-0 h-0 border-0 opacity-0 text-[0px]"
-                    } rounded-full md:hover:w-36 md:hover:h-36 transition-all hover:duration-300  duration-1000 object-cover self-center justify-self-center flex justify-center items-center bg-blue-500 cursor-pointer active:bg-blue-600 hover:bg-blue-600 text-white border-white mr-3 md:mr-0`}
+                        ? "h-16 w-32 border-2 text-base opacity-100"
+                        : "h-0 w-0 border-0 text-[0px] opacity-0"
+                    } mr-3 flex cursor-pointer items-center justify-center self-center justify-self-center rounded-full border-white bg-blue-500 object-cover text-white transition-all duration-1000 hover:bg-blue-600 hover:duration-300 active:bg-blue-600 md:mr-0 md:hover:h-36 md:hover:w-36`}
                     disabled={loading}
                   >
                     Create
@@ -540,27 +613,27 @@ export default function Home() {
               </div>
             </form>
           )}
-          {isAdmin && <span className="text-white text-base">OR</span>}
+          {isAdmin && <span className="text-base text-white">OR</span>}
 
           <div
-            className={`flex flex-col items-center justify-center w-full ${
+            className={`flex w-full flex-col items-center justify-center ${
               isAdmin ? "md:w-[40rem]" : "w-full"
             }`}
           >
-            <p className="px-5 w-full">
+            <p className="w-full px-5">
               Scroll down to begin the journey of our memories!
             </p>
             <img
               src={arrowColored.src}
-              className="w-48 h-48 mt-5 md:mt-12 self-center justify-self-center"
+              className="mt-5 h-48 w-48 self-center justify-self-center md:mt-12"
             />
           </div>
         </div>
       </div>
-      <div className="w-screen h-full flex justify-center items-center flex-col relative ">
+      <div className="relative flex h-full w-screen flex-col items-center justify-center">
         <img
           src={topBG.src}
-          className="absolute w-full h-[100vh] top-0 object-cover pointer-events-none"
+          className="pointer-events-none absolute top-0 h-[100vh] w-full object-cover"
         />
         {renderImages()}
       </div>
