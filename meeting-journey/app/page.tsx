@@ -1,7 +1,6 @@
 "use client";
 
 import arrowColored from "../icons/arrowcolored.png";
-
 import bottomBG from "../backgroundImages/bottom.svg";
 import topBG from "../backgroundImages/top.svg";
 
@@ -41,8 +40,6 @@ export default function Home() {
   const [now, setNow] = useState(Date.now());
 
   const [editedDescription, setEditedDescription] = useState("");
-
-  const [mouseOver, setMouseOver] = useState(false);
 
   const renderImages = () => {
     return journeys.map((journey: any, index: number) => (
@@ -102,7 +99,7 @@ export default function Home() {
             <div className="flex flex-wrap justify-center gap-2">
               {journey.editMode && (
                 <label
-                  className={`flex h-32 w-32 cursor-pointer items-center justify-center rounded-lg border-2 border-transparent bg-blue-500 text-4xl text-white opacity-100 transition-all duration-1000 hover:border-white hover:border-opacity-40 hover:duration-300`}
+                  className={`flex h-32 w-32 cursor-pointer items-center justify-center rounded-3xl border-2 border-transparent bg-blue-500 text-4xl text-white opacity-100 transition-all duration-1000 hover:border-white hover:border-opacity-40 hover:duration-300`}
                 >
                   +
                   <input
@@ -110,7 +107,9 @@ export default function Home() {
                     accept="image/*"
                     name="images"
                     hidden
-                    //onChange={(e: any) => addImage(e.target.files)}
+                    onChange={(e: any) =>
+                      handleAddToTempImages(e.target.files, index)
+                    }
                     multiple
                     disabled={loading}
                   />
@@ -128,36 +127,16 @@ export default function Home() {
                     />
                     {journey.editMode && (
                       <div
-                        onMouseEnter={() => setMouseOver(true)}
-                        onMouseLeave={() => setMouseOver(false)}
-                        className={`absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center gap-2 rounded-3xl hover:bg-black/50`}
+                        className={`group absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center gap-2 rounded-3xl transition-all hover:bg-black/50`}
                       >
-                        {mouseOver && (
-                          <>
-                            <label className="cursor-pointer rounded-xl bg-blue-500 p-2 px-4 hover:bg-blue-600 active:bg-blue-700">
-                              Change
-                              <input
-                                type="file"
-                                accept="image/*"
-                                hidden
-                                // onChange={(e: any) =>
-                                //   handleAddThumbnail(e.target.files[0])
-                                // }
-                                name="image"
-                                disabled={loading}
-                              />
-                            </label>
-                            <button
-                              className="rounded-xl bg-red-500 p-2 px-4 hover:bg-red-600 active:bg-red-700"
-                              onClick={() => {
-                                setMouseOver(false);
-                                handleRemoveImageFromJourney(index, imageIndex);
-                              }}
-                            >
-                              Remove
-                            </button>
-                          </>
-                        )}
+                        <button
+                          className={`rounded-xl bg-red-500 p-2 px-4 opacity-0 transition-all hover:bg-red-600 active:bg-red-700 group-hover:opacity-100`}
+                          onClick={() => {
+                            handleRemoveImageFromJourney(index, imageIndex);
+                          }}
+                        >
+                          Remove
+                        </button>
                       </div>
                     )}
                   </div>
@@ -199,6 +178,23 @@ export default function Home() {
       </div>
     ));
   };
+
+  const handleAddToTempImages = (images: any, journeyID: number) => {
+    setJourneys((prev: any) => {
+      const list = [...prev];
+      list.map((journey: any, index: number) => {
+        list[index].rawImages = [];
+        if (index == journeyID) {
+          Array.from(images).map((image: any) => {
+            list[index].rawImages.push(image);
+            list[index].images.push(URL.createObjectURL(image));
+          });
+        }
+      });
+      return list;
+    });
+  };
+
   const handleRemoveImageFromJourney = (journeyID: number, imageID: number) => {
     setJourneys((prev: any) => {
       const list = [...prev];
@@ -229,6 +225,67 @@ export default function Home() {
 
     if (error) console.log(error);
     console.log(data);
+
+    let uploadedImageURLs: any = [];
+
+    for (let i = 0; i < journeys[journeyID].rawImages.length; i++) {
+      const image = journeys[journeyID].rawImages[i];
+      if (image) {
+        const fileName = `images/journey_${i + 1}_${now}`;
+        const { data, error } = await supabase.storage
+          .from("journey.images")
+          .upload(fileName, image, {
+            cacheControl: "3600",
+            upsert: false,
+          });
+
+        if (error) {
+          console.log(`Error uploading image ${i + 1}:`, error);
+          return setLoading(false);
+        } else {
+          const imageURL = supabase.storage
+            .from("journey.images")
+            .getPublicUrl(fileName);
+          uploadedImageURLs.push(imageURL.data.publicUrl);
+          console.log(
+            `Image ${i + 1} uploaded successfully:`,
+            imageURL.data.publicUrl,
+          );
+        }
+      }
+    }
+
+    setJourneys((prev: any) => {
+      const list = [...prev];
+      list[journeyID].images = list[journeyID].images.concat(uploadedImageURLs);
+
+      const updateJourney = async () => {
+        const { data, error } = await supabase
+          .from("journeys")
+          .update({
+            journey: list[journeyID],
+          })
+          .eq("id", actualID);
+        if (error) console.log(error);
+        console.log(data);
+      };
+
+      const updateImages = async () => {
+        const { data, error } = await supabase
+          .from("journeys")
+          .update({
+            images: list[journeyID].images,
+          })
+          .eq("id", actualID);
+        if (error) console.log(error);
+        console.log(data);
+      };
+
+      updateJourney();
+      updateImages();
+
+      return list;
+    });
   };
 
   const handleJourneyEditButton = (journeyID: number) => {
@@ -248,6 +305,7 @@ export default function Home() {
       return list;
     });
   };
+
   const handlDeleteJourney = async (indexId: number, id: number) => {
     const deleteJourneyImages = async () => {
       const deleteJourneyThumbnail = async () => {
@@ -359,6 +417,7 @@ export default function Home() {
 
     let uploadedImageURLs: any = [];
     let thumbnailURL: any = "";
+
     const uploadImages = async () => {
       setLoading(true);
       const fileName = `images/thumbnail_${now}`;
