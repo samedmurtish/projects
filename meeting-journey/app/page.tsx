@@ -41,6 +41,9 @@ export default function Home() {
   const [now, setNow] = useState(Date.now());
 
   const [editedDescription, setEditedDescription] = useState("");
+
+  const [mouseOver, setMouseOver] = useState(false);
+
   const renderImages = () => {
     return journeys.map((journey: any, index: number) => (
       <div
@@ -53,9 +56,10 @@ export default function Home() {
           <h2>{journey.date.year}</h2>
           <h2 className="text-4xl text-slate-400">{journey.date.month}</h2>
           <h2 className="text-3xl text-slate-500">{journey.date.day}</h2>
-          {journey.description && (
-            <p className="mt-3 text-5xl font-semibold text-slate-500">
-              <span className="mr-3 text-slate-600">"</span>
+
+          {journey.description ? (
+            <div className="mt-3 text-5xl font-semibold text-slate-500">
+              <span className="mr-2 text-slate-600">"</span>
               {journey.editMode ? (
                 <input
                   className="p-3 px-5 text-lg"
@@ -68,7 +72,21 @@ export default function Home() {
                 <span id="handwrite">{journey.description}</span>
               )}
               <span className="ml-2 text-slate-600">"</span>
-            </p>
+            </div>
+          ) : (
+            journey.editMode && (
+              <span className="mt-3 flex text-5xl">
+                <span className="mr-3 text-slate-600">"</span>
+                <input
+                  className="p-3 px-5 text-lg text-slate-500"
+                  type="text"
+                  placeholder={"New Description"}
+                  value={editedDescription}
+                  onChange={(e: any) => setEditedDescription(e.target.value)}
+                />
+                <span className="ml-2 text-slate-600">"</span>
+              </span>
+            )
           )}
           {journey.editMode && (
             <button
@@ -82,33 +100,73 @@ export default function Home() {
         <div className="h-max w-screen rounded-3xl bg-slate-100 p-5 text-white md:h-full md:w-1/2 md:min-w-[450px]">
           <div className="relative flex flex-col">
             <div className="flex flex-wrap justify-center gap-2">
-              {journey.images.map((image: any, index: number) => (
+              {journey.editMode && (
+                <label
+                  className={`flex h-32 w-32 cursor-pointer items-center justify-center rounded-lg border-2 border-transparent bg-blue-500 text-4xl text-white opacity-100 transition-all duration-1000 hover:border-white hover:border-opacity-40 hover:duration-300`}
+                >
+                  +
+                  <input
+                    type="file"
+                    accept="image/*"
+                    name="images"
+                    hidden
+                    //onChange={(e: any) => addImage(e.target.files)}
+                    multiple
+                    disabled={loading}
+                  />
+                </label>
+              )}
+              {journey.images.map((image: any, imageIndex: number) => (
                 <>
-                  {journey.editMode && (
-                    <label
-                      className={`flex h-32 w-32 cursor-pointer items-center justify-center rounded-lg border-2 border-transparent bg-blue-500 text-4xl text-white opacity-100 transition-all duration-1000 hover:border-white hover:border-opacity-40 hover:duration-300`}
-                    >
-                      +
-                      <input
-                        type="file"
-                        accept="image/*"
-                        name="images"
-                        hidden
-                        //onChange={(e: any) => addImage(e.target.files)}
-                        multiple
-                        disabled={loading}
-                      />
-                    </label>
-                  )}
-                  <img
-                    className="h-32 w-32 rounded-3xl bg-white object-cover transition-all duration-300 ease-in-out hover:flex-grow-[1]"
-                    src={image}
-                    key={index}
-                  ></img>
+                  <div
+                    className={`relative h-32 w-32 rounded-3xl bg-white object-cover transition-all duration-300 ease-in-out ${!journey.editMode ? "hover:flex-grow-[1]" : ""} `}
+                  >
+                    <img
+                      className={`h-full w-full rounded-3xl bg-white object-cover transition-all duration-300 ease-in-out ${!journey.editMode ? "hover:flex-grow-[1]" : ""}`}
+                      src={image}
+                      key={imageIndex}
+                    />
+                    {journey.editMode && (
+                      <div
+                        onMouseEnter={() => setMouseOver(true)}
+                        onMouseLeave={() => setMouseOver(false)}
+                        className={`absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center gap-2 rounded-3xl hover:bg-black/50`}
+                      >
+                        {mouseOver && (
+                          <>
+                            <label className="cursor-pointer rounded-xl bg-blue-500 p-2 px-4 hover:bg-blue-600 active:bg-blue-700">
+                              Change
+                              <input
+                                type="file"
+                                accept="image/*"
+                                hidden
+                                // onChange={(e: any) =>
+                                //   handleAddThumbnail(e.target.files[0])
+                                // }
+                                name="image"
+                                disabled={loading}
+                              />
+                            </label>
+                            <button
+                              className="rounded-xl bg-red-500 p-2 px-4 hover:bg-red-600 active:bg-red-700"
+                              onClick={() => {
+                                setMouseOver(false);
+                                handleRemoveImageFromJourney(index, imageIndex);
+                              }}
+                            >
+                              Remove
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </>
               ))}
             </div>
-            <div className="absolute bottom-[-5rem] flex items-center justify-center gap-2 self-center">
+            <div
+              className={`absolute ${journey.editMode ? "-bottom-[10rem]" : "bottom-[-5rem]"} flex items-center justify-center gap-2 self-center transition-all`}
+            >
               {isAdmin && (
                 <button
                   className="w-[7rem] rounded-lg bg-blue-400 p-3 px-5 text-xl font-semibold text-white hover:bg-blue-500 active:bg-blue-600"
@@ -141,11 +199,25 @@ export default function Home() {
       </div>
     ));
   };
+  const handleRemoveImageFromJourney = (journeyID: number, imageID: number) => {
+    setJourneys((prev: any) => {
+      const list = [...prev];
+      list.forEach((journey: any, index: number) => {
+        if (index === journeyID) {
+          journey.images = journey.images.filter(
+            (image: any, imageIndex: number) => imageIndex !== imageID,
+          );
+        }
+      });
+      return list;
+    });
+  };
 
   const handleEditJourney = async (journeyID: number, actualID: number) => {
     setJourneys((prev: any) => {
       const list = [...prev];
-      list[journeyID].description = editedDescription;
+      if (editedDescription != "")
+        list[journeyID].description = editedDescription;
       list[journeyID].editMode = false;
       return list;
     });
