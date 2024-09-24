@@ -29,6 +29,7 @@ export default function Home() {
     },
     images: [],
     rawImages: [],
+    storageImageNames: [],
   });
 
   const [newJourneyRawImages, setNewJourneyRawImages] = useState<string[]>([]);
@@ -203,12 +204,28 @@ export default function Home() {
           journey.images = journey.images.filter(
             (image: any, imageIndex: number) => imageIndex !== imageID,
           );
+          journey.rawImages = journey.rawImages.filter(
+            (image: any, imageIndex: number) => imageIndex !== imageID,
+          );
+          const deleteImageFromDatabase = async () => {
+            const fileName: any = `images/journey_${imageID + 1}_${journey.now}`;
+            const { data, error } = await supabase.storage
+              .from("journey.images")
+              .remove(fileName);
+            if (error) {
+              console.log("Error deleting image: ", error);
+            }
+            console.log(data, fileName);
+          };
+          deleteImageFromDatabase();
         }
       });
       return list;
     });
   };
-
+  useEffect(() => {
+    console.log(journeys);
+  }, [journeys]);
   const handleEditJourney = async (journeyID: number, actualID: number) => {
     setJourneys((prev: any) => {
       const list = [...prev];
@@ -218,20 +235,13 @@ export default function Home() {
       return list;
     });
 
-    const { data, error } = await supabase
-      .from("journeys")
-      .update({ journey: journeys[journeyID] })
-      .eq("id", actualID);
-
-    if (error) console.log(error);
-    console.log(data);
-
     let uploadedImageURLs: any = [];
 
     for (let i = 0; i < journeys[journeyID].rawImages.length; i++) {
       const image = journeys[journeyID].rawImages[i];
+
       if (image) {
-        const fileName = `images/journey_${i + 1}_${now}`;
+        const fileName = `images/journey_${i + 1 + journeys[journeyID].images.length}_${journeys[journeyID].now}`;
         const { data, error } = await supabase.storage
           .from("journey.images")
           .upload(fileName, image, {
@@ -251,6 +261,12 @@ export default function Home() {
             `Image ${i + 1} uploaded successfully:`,
             imageURL.data.publicUrl,
           );
+          setJourneys((prev: any) => {
+            const list = [...prev];
+            list[journeyID].storageImageNames =
+              list[journeyID].storageImageNames.concat(fileName);
+            return list;
+          });
         }
       }
     }
@@ -264,6 +280,7 @@ export default function Home() {
           .from("journeys")
           .update({
             journey: list[journeyID],
+            storageImageNames: list[journeyID].storageImageNames,
           })
           .eq("id", actualID);
         if (error) console.log(error);
@@ -271,6 +288,10 @@ export default function Home() {
       };
 
       const updateImages = async () => {
+        list[journeyID].images = list[journeyID].images.filter(
+          (image: any) => !image.startsWith("blob:"),
+        );
+
         const { data, error } = await supabase
           .from("journeys")
           .update({
@@ -390,6 +411,8 @@ export default function Home() {
           list.now = data.now;
           list.id = data.id;
           list.editMode = false;
+          list.rawImages = [];
+          list.storageImageNames = data.storageImageNames;
           console.log(list);
           return [...prev, list];
         });
@@ -401,12 +424,17 @@ export default function Home() {
     setNow(Date.now());
     console.log("posting, ", newJourney);
 
-    const uploadJourney = async (images: any, thumbnail: any) => {
+    const uploadJourney = async (
+      images: any,
+      thumbnail: any,
+      storageImageNames: any,
+    ) => {
       const { data, error } = await supabase.from("journeys").insert({
         journey: newJourney,
         now,
         images,
         thumbnail,
+        storageImageNames,
       });
       if (error) {
         console.log(error);
@@ -416,6 +444,7 @@ export default function Home() {
     };
 
     let uploadedImageURLs: any = [];
+    let storageImageNames: any = [];
     let thumbnailURL: any = "";
 
     const uploadImages = async () => {
@@ -461,6 +490,7 @@ export default function Home() {
               .from("journey.images")
               .getPublicUrl(fileName);
             uploadedImageURLs.push(imageURL.data.publicUrl);
+            storageImageNames.push(fileName);
             console.log(
               `Image ${i + 1} uploaded successfully:`,
               imageURL.data.publicUrl,
@@ -469,7 +499,7 @@ export default function Home() {
         }
       }
 
-      await uploadJourney(uploadedImageURLs, thumbnailURL);
+      await uploadJourney(uploadedImageURLs, thumbnailURL, storageImageNames);
     };
     await uploadImages();
 
@@ -477,6 +507,7 @@ export default function Home() {
 
     setNewJourneyRawImages([]);
 
+    getJourneys();
     return setNewJourney({
       thumbnail: "",
       description: "",
@@ -492,9 +523,13 @@ export default function Home() {
       },
       images: [],
       rawImages: [],
+      storageImageNames: [],
     });
   };
 
+  useEffect(() => {
+    console.log(newJourney, "newJourney");
+  }, [newJourney]);
   const handleSeperateDate = (e: any) => {
     var date = new Date(e);
     const getDayName: any = () => {
