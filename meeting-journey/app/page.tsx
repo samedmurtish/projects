@@ -208,7 +208,7 @@ export default function Home() {
                   className={`relative h-32 w-32 rounded-3xl bg-white object-cover transition-all duration-300 ease-in-out ${!journey.editMode ? "hover:flex-grow-[1]" : ""} `}
                   key={imageIndex}
                 >
-                  <Image
+                  <img
                     className={`h-full w-full rounded-3xl bg-white object-cover transition-all duration-300 ease-in-out ${!journey.editMode ? "hover:flex-grow-[1]" : ""}`}
                     src={image}
                     key={imageIndex}
@@ -259,7 +259,7 @@ export default function Home() {
               <div
                 className={`group/thumbnail relative h-32 w-32 transition-all hover:scale-[1.03]`}
               >
-                <Image
+                <img
                   className={`h-full w-full self-center rounded-full border-2 bg-black object-cover transition-all hover:scale-110`}
                   src={
                     tempThumbnail
@@ -300,7 +300,7 @@ export default function Home() {
           </div>
         </div>
         {index != journeys.length - 1 ? (
-          <Image
+          <img
             src={arrowColored.src}
             className="mb-32 mt-24 h-48 w-48 md:mb-12"
             alt=""
@@ -769,19 +769,15 @@ export default function Home() {
             >
               <IoClose />
             </div>
-            <Image
-              src={maximizedImage}
-              className="z-[1000] h-max w-max"
-              alt=""
-            />
+            <img src={maximizedImage} className="z-[1000] h-max w-max" alt="" />
           </div>
         )}
-        <Image
+        <img
           src={bottomBG.src}
           className="pointer-events-none relative h-full w-full object-cover"
           alt=""
         />
-        {typeof window !== "undefined" && !localStorage.getItem("token") && (
+        {!localStorage.getItem("token") && (
           <Link
             className="absolute left-1/2 top-[3rem] flex -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-green-500 p-2 px-5 text-center text-white hover:bg-green-600 active:bg-green-700"
             href="/login"
@@ -852,7 +848,7 @@ export default function Home() {
                       />
                     </label>
                     {newJourney.images.map((image: any, index: any) => (
-                      <Image
+                      <img
                         className={`${
                           clicked ? "h-32 w-32" : "h-0 w-0"
                         } flex cursor-pointer items-center justify-center rounded-lg border-2 border-transparent bg-blue-500 bg-transparent object-cover text-white transition-all duration-300 hover:border-white hover:border-opacity-40 hover:bg-[rgba(255,255,255,0.2)] hover:duration-300`}
@@ -880,7 +876,7 @@ export default function Home() {
                   } flex cursor-pointer items-center justify-center self-center justify-self-center border-white bg-white object-cover text-white transition-all duration-1000 hover:duration-300`}
                 >
                   {newJourney.thumbnail ? (
-                    <Image
+                    <img
                       src={newJourney.thumbnail}
                       className="flex h-full w-full items-center justify-center rounded-full object-cover"
                       alt=""
@@ -913,7 +909,7 @@ export default function Home() {
                   } flex cursor-pointer items-center justify-center self-center justify-self-center border-white object-cover text-white transition-all duration-1000 hover:duration-300`}
                 >
                   {newJourney.thumbnail ? (
-                    <Image
+                    <img
                       src={newJourney.thumbnail}
                       className="flex h-full w-full items-center justify-center rounded-full object-cover"
                       alt=""
@@ -999,7 +995,7 @@ export default function Home() {
             <p className="w-full px-5">
               Scroll down to begin the journey of our memories!
             </p>
-            <Image
+            <img
               src={arrowColored.src}
               className="mt-5 h-48 w-48 self-center justify-self-center md:mt-12"
               alt=""
@@ -1008,7 +1004,7 @@ export default function Home() {
         </div>
       </div>
       <div className="relative flex h-full w-screen flex-col items-center justify-center">
-        <Image
+        <img
           src={topBG.src}
           className="pointer-events-none absolute top-0 h-[100vh] w-full object-cover"
           alt=""
