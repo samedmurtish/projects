@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import arrowColored from "../icons/arrowcolored.png";
 import bottomBG from "../backgroundImages/bottom.svg";
 import topBG from "../backgroundImages/top.svg";
@@ -11,9 +12,12 @@ import Link from "next/link";
 export default function Home() {
   const [clicked, setClicked] = useState(false);
 
-  const [isAdmin, setIsAdmin] = useState(localStorage.getItem("token"));
+  const [isAdmin, setIsAdmin] = useState(
+    typeof window !== "undefined" && localStorage.getItem("token"),
+  );
 
   const [loading, setLoading] = useState(false);
+
   const [tempThumbnail, setTempThumbnail] = useState<any>(null);
 
   const [newJourney, setNewJourney] = useState({
@@ -43,9 +47,11 @@ export default function Home() {
   const [now, setNow] = useState(Date.now());
 
   const [editedDescription, setEditedDescription] = useState("");
+
   const [maximizedImage, setMaximizedImage] = useState<any>(null);
 
-  const [date, setDate] = useState<string>("");
+  const [editJourneyDate, setEditJourneyDate] = useState<string>("");
+  const [newJourneyDate, setNewJourneyDate] = useState<string>("");
 
   const handleSeperateDateOnEdit = (e: any) => {
     var date = new Date(e);
@@ -98,8 +104,6 @@ export default function Home() {
     });
   };
   const renderImages = () => {
-    const [deletionLoading, setDeletionLoading] = useState(false);
-
     return journeys.map((journey: any, index: number) => (
       <div
         className={`z-50 flex h-full w-full flex-col items-center justify-center ${
@@ -115,14 +119,14 @@ export default function Home() {
                   type="date"
                   className={`h-16 w-full rounded-full border-2 border-zinc-100 px-5 text-base text-slate-500 transition-all duration-1000 md:w-max`}
                   value={
-                    date == ""
+                    editJourneyDate == ""
                       ? `${journey.dateNumber.year}-${journey.dateNumber.month < 10 ? "0" : ""}${journey.dateNumber.month}-${journey.dateNumber.day < 10 ? "0" : ""}${journey.dateNumber.day}`
-                      : date
+                      : editJourneyDate
                   }
                   onChange={(e: any) => {
                     handleSeperateDateOnEdit(e.target.value);
 
-                    setDate(e.target.value);
+                    setEditJourneyDate(e.target.value);
                   }}
                   required
                   disabled={loading}
@@ -140,7 +144,7 @@ export default function Home() {
           </div>
           {journey.description ? (
             <div className="mt-3 text-5xl font-semibold text-slate-500">
-              <span className="mr-2 text-slate-600">"</span>
+              <span className="mr-2 text-slate-600">&quot;</span>
               {journey.editMode ? (
                 <input
                   className="p-3 px-5 text-lg"
@@ -152,33 +156,33 @@ export default function Home() {
               ) : (
                 <span id="handwrite">{journey.description}</span>
               )}
-              <span className="ml-2 text-slate-600">"</span>
+              <span className="ml-2 text-slate-600">&quot;</span>
             </div>
           ) : (
             journey.editMode && (
               <span className="mt-3 flex text-5xl">
-                <span className="mr-3 text-slate-600">"</span>
+                <span className="mr-3 text-slate-600">&quot;</span>
                 <input
-                  className="p-3 px-5 text-lg text-slate-500"
+                  className="rounded-full p-3 px-5 text-lg text-slate-500"
                   type="text"
                   placeholder={"New Description"}
                   value={editedDescription}
                   onChange={(e: any) => setEditedDescription(e.target.value)}
                 />
-                <span className="ml-2 text-slate-600">"</span>
+                <span className="ml-2 text-slate-600">&quot;</span>
               </span>
             )
           )}
           {journey.editMode && (
             <button
-              className="mt-3 bg-green-500 p-3 px-5 text-lg hover:bg-green-600 active:bg-green-700"
+              className="mt-3 rounded-full bg-green-500 p-3 px-5 text-lg transition-all hover:bg-green-600 active:bg-green-700"
               onClick={() => handleEditJourney(index, journey.id)}
             >
               Apply Changes
             </button>
           )}
         </div>
-        <div className="h-max w-screen rounded-3xl bg-slate-100 p-5 text-white md:h-full md:w-1/2 md:min-w-[450px]">
+        <div className="group h-max w-screen rounded-3xl bg-slate-100 p-5 text-white md:h-full md:w-1/2 md:min-w-[450px]">
           <div className="relative flex flex-col">
             <div className="flex flex-wrap justify-center gap-2">
               {journey.editMode && (
@@ -204,18 +208,19 @@ export default function Home() {
                   className={`relative h-32 w-32 rounded-3xl bg-white object-cover transition-all duration-300 ease-in-out ${!journey.editMode ? "hover:flex-grow-[1]" : ""} `}
                   key={imageIndex}
                 >
-                  <img
+                  <Image
                     className={`h-full w-full rounded-3xl bg-white object-cover transition-all duration-300 ease-in-out ${!journey.editMode ? "hover:flex-grow-[1]" : ""}`}
                     src={image}
                     key={imageIndex}
+                    alt=""
                   />
 
                   {!journey.editMode ? (
                     <div
-                      className={`group absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center gap-2 rounded-3xl transition-all hover:bg-black/50`}
+                      className={`group/image absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center gap-2 rounded-3xl transition-all hover:bg-black/50`}
                     >
                       <button
-                        className={`rounded-xl bg-blue-500 p-2 px-4 opacity-0 transition-all hover:bg-blue-600 active:bg-blue-700 group-hover:opacity-100`}
+                        className={`rounded-xl bg-blue-500 p-2 px-4 opacity-0 transition-all hover:bg-blue-600 active:bg-blue-700 group-hover/image:opacity-100`}
                         onClick={() => {
                           maximizeImage(image);
                         }}
@@ -225,10 +230,10 @@ export default function Home() {
                     </div>
                   ) : (
                     <div
-                      className={`group absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center gap-2 rounded-3xl transition-all hover:bg-black/50`}
+                      className={`group/image absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center gap-2 rounded-3xl transition-all hover:bg-black/50`}
                     >
                       <button
-                        className={`rounded-xl bg-red-500 p-2 px-4 opacity-0 transition-all hover:bg-red-600 active:bg-red-700 group-hover:opacity-100`}
+                        className={`rounded-xl bg-red-500 p-2 px-4 opacity-0 transition-all hover:bg-red-600 active:bg-red-700 group-hover/image:opacity-100`}
                         onClick={() => {
                           handleRemoveImageFromJourney(index, imageIndex);
                         }}
@@ -241,7 +246,7 @@ export default function Home() {
               ))}
             </div>
             <div
-              className={`absolute ${journey.editMode ? "-bottom-[10rem]" : "bottom-[-5rem]"} flex items-center justify-center gap-2 self-center transition-all`}
+              className={`absolute group-hover:-bottom-[10rem] ${journey.editMode ? "-bottom-[10rem]" : "bottom-[-5rem]"} flex items-center justify-center gap-2 self-center transition-all`}
             >
               {isAdmin && (
                 <button
@@ -252,20 +257,21 @@ export default function Home() {
                 </button>
               )}
               <div
-                className={`group relative h-32 w-32 transition-all hover:scale-[1.03]`}
+                className={`group/thumbnail relative h-32 w-32 transition-all hover:scale-[1.03]`}
               >
-                <img
+                <Image
                   className={`h-full w-full self-center rounded-full border-2 bg-black object-cover transition-all hover:scale-110`}
                   src={
                     tempThumbnail
                       ? URL.createObjectURL(tempThumbnail)
                       : journey.thumbnail + "?" + new Date().getTime()
                   }
+                  alt=""
                 />
 
                 {journey.editMode && (
-                  <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center bg-black/50 opacity-0 transition-all group-hover:opacity-100">
-                    <label className="cursor-pointer rounded-xl bg-blue-500 p-2 px-4 opacity-0 transition-all hover:bg-blue-600 active:bg-blue-700 group-hover:opacity-100">
+                  <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center bg-black/50 opacity-0 transition-all group-hover/thumbnail:opacity-100">
+                    <label className="cursor-pointer rounded-xl bg-blue-500 p-2 px-4 opacity-0 transition-all hover:bg-blue-600 active:bg-blue-700 group-hover/thumbnail:opacity-100">
                       Change
                       <input
                         type="file"
@@ -294,9 +300,10 @@ export default function Home() {
           </div>
         </div>
         {index != journeys.length - 1 ? (
-          <img
+          <Image
             src={arrowColored.src}
             className="mb-32 mt-24 h-48 w-48 md:mb-12"
+            alt=""
           />
         ) : null}
       </div>
@@ -676,6 +683,9 @@ export default function Home() {
     setNewJourneyRawImages([]);
 
     getJourneys();
+
+    setNewJourneyDate("");
+
     return setNewJourney({
       thumbnail: "",
       description: "",
@@ -754,19 +764,24 @@ export default function Home() {
               onClick={() => closeMaximizedImage()}
             />
             <div
-              className="text-yellow absolute right-8 top-5 z-[1111] cursor-pointer text-5xl font-extrabold text-white"
+              className="text-yellow absolute right-8 top-5 z-[1111] cursor-pointer rounded-full bg-black/50 p-2 text-5xl font-extrabold text-white hover:bg-black/60 active:bg-black/70"
               onClick={() => closeMaximizedImage()}
             >
               <IoClose />
             </div>
-            <img src={maximizedImage} className="z-[1000] h-max w-max" />
+            <Image
+              src={maximizedImage}
+              className="z-[1000] h-max w-max"
+              alt=""
+            />
           </div>
         )}
-        <img
+        <Image
           src={bottomBG.src}
           className="pointer-events-none relative h-full w-full object-cover"
+          alt=""
         />
-        {!localStorage.getItem("token") && (
+        {typeof window !== "undefined" && !localStorage.getItem("token") && (
           <Link
             className="absolute left-1/2 top-[3rem] flex -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-green-500 p-2 px-5 text-center text-white hover:bg-green-600 active:bg-green-700"
             href="/login"
@@ -837,7 +852,7 @@ export default function Home() {
                       />
                     </label>
                     {newJourney.images.map((image: any, index: any) => (
-                      <img
+                      <Image
                         className={`${
                           clicked ? "h-32 w-32" : "h-0 w-0"
                         } flex cursor-pointer items-center justify-center rounded-lg border-2 border-transparent bg-blue-500 bg-transparent object-cover text-white transition-all duration-300 hover:border-white hover:border-opacity-40 hover:bg-[rgba(255,255,255,0.2)] hover:duration-300`}
@@ -846,6 +861,7 @@ export default function Home() {
                         onClick={() => {
                           !loading && handleRemoveImage(index);
                         }}
+                        alt=""
                       />
                     ))}
                   </div>
@@ -864,9 +880,10 @@ export default function Home() {
                   } flex cursor-pointer items-center justify-center self-center justify-self-center border-white bg-white object-cover text-white transition-all duration-1000 hover:duration-300`}
                 >
                   {newJourney.thumbnail ? (
-                    <img
+                    <Image
                       src={newJourney.thumbnail}
                       className="flex h-full w-full items-center justify-center rounded-full object-cover"
+                      alt=""
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center rounded-full bg-green-500">
@@ -896,9 +913,10 @@ export default function Home() {
                   } flex cursor-pointer items-center justify-center self-center justify-self-center border-white object-cover text-white transition-all duration-1000 hover:duration-300`}
                 >
                   {newJourney.thumbnail ? (
-                    <img
+                    <Image
                       src={newJourney.thumbnail}
                       className="flex h-full w-full items-center justify-center rounded-full object-cover"
+                      alt=""
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center rounded-full bg-green-500">
@@ -948,7 +966,11 @@ export default function Home() {
                           ? "h-16 w-full border-2 text-base md:w-max"
                           : "h-0 w-0 border-0 text-[0px]"
                       } rounded-full border-zinc-100 px-5 transition-all duration-1000`}
-                      onChange={(e) => handleSeperateDate(e.target.value)}
+                      value={newJourneyDate}
+                      onChange={(e) => {
+                        handleSeperateDate(e.target.value);
+                        setNewJourneyDate(e.target.value);
+                      }}
                       required
                       disabled={loading}
                     />
@@ -977,17 +999,19 @@ export default function Home() {
             <p className="w-full px-5">
               Scroll down to begin the journey of our memories!
             </p>
-            <img
+            <Image
               src={arrowColored.src}
               className="mt-5 h-48 w-48 self-center justify-self-center md:mt-12"
+              alt=""
             />
           </div>
         </div>
       </div>
       <div className="relative flex h-full w-screen flex-col items-center justify-center">
-        <img
+        <Image
           src={topBG.src}
           className="pointer-events-none absolute top-0 h-[100vh] w-full object-cover"
+          alt=""
         />
         {renderImages()}
       </div>

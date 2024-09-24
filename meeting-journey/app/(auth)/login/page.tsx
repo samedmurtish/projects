@@ -5,6 +5,7 @@ import SignUpCover from "../../../backgroundImages/login.svg";
 import loginUpsideDown from "../../../backgroundImages/loginUpsideDown.svg";
 import { supabase } from "@/app/lib/supabase";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function SignIn() {
   const router = useRouter();
@@ -14,8 +15,10 @@ export default function SignIn() {
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    if (localStorage.getItem("token")) router.push("/");
-  }, []);
+    if (typeof window !== "undefined") {
+      if (localStorage.getItem("token")) router.push("/");
+    }
+  }, [router]);
 
   async function signIn(email: string, password: string) {
     try {
@@ -28,7 +31,9 @@ export default function SignIn() {
         return;
       }
       router.push("/");
-      localStorage.setItem("token", JSON.stringify(data));
+      if (typeof window !== "undefined") {
+        localStorage.setItem("token", JSON.stringify(data));
+      }
     } catch (error) {
       console.log(error);
     }
@@ -42,9 +47,10 @@ export default function SignIn() {
       }}
     >
       <div className="relative h-[200px] overflow-hidden rounded-t-lg">
-        <img
+        <Image
           src={loginUpsideDown.src}
           className="absolute w-full rotate-180 overflow-hidden"
+          alt=""
         />
       </div>
       <div className="flex flex-col gap-10 p-10 px-16 pt-0">
