@@ -7,10 +7,11 @@ import topBG from "../backgroundImages/top.svg";
 import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
 import { IoClose } from "react-icons/io5";
+import Link from "next/link";
 export default function Home() {
   const [clicked, setClicked] = useState(false);
 
-  const [isAdmin, setIsAdmin] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(localStorage.getItem("token"));
 
   const [loading, setLoading] = useState(false);
   const [tempThumbnail, setTempThumbnail] = useState<any>(null);
@@ -97,6 +98,8 @@ export default function Home() {
     });
   };
   const renderImages = () => {
+    const [deletionLoading, setDeletionLoading] = useState(false);
+
     return journeys.map((journey: any, index: number) => (
       <div
         className={`z-50 flex h-full w-full flex-col items-center justify-center ${
@@ -759,11 +762,18 @@ export default function Home() {
             <img src={maximizedImage} className="z-[1000] h-max w-max" />
           </div>
         )}
-
         <img
           src={bottomBG.src}
           className="pointer-events-none relative h-full w-full object-cover"
         />
+        {!localStorage.getItem("token") && (
+          <Link
+            className="absolute left-1/2 top-[3rem] flex -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-green-500 p-2 px-5 text-center text-white hover:bg-green-600 active:bg-green-700"
+            href="/login"
+          >
+            Login
+          </Link>
+        )}
         <div className="absolute left-1/2 top-[40%] z-[100] flex w-full -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center gap-5 text-center text-5xl font-semibold text-slate-500 lg:flex-row lg:gap-10">
           {isAdmin && (
             <form
