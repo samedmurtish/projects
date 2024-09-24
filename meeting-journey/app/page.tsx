@@ -6,13 +6,14 @@ import topBG from "../backgroundImages/top.svg";
 
 import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
-
+import { IoClose } from "react-icons/io5";
 export default function Home() {
   const [clicked, setClicked] = useState(false);
 
   const [isAdmin, setIsAdmin] = useState(true);
 
   const [loading, setLoading] = useState(false);
+  const [tempThumbnail, setTempThumbnail] = useState<any>(null);
 
   const [newJourney, setNewJourney] = useState({
     thumbnail: "",
@@ -41,7 +42,60 @@ export default function Home() {
   const [now, setNow] = useState(Date.now());
 
   const [editedDescription, setEditedDescription] = useState("");
+  const [maximizedImage, setMaximizedImage] = useState<any>(null);
 
+  const [date, setDate] = useState<string>("");
+
+  const handleSeperateDateOnEdit = (e: any) => {
+    var date = new Date(e);
+    const getDayName: any = () => {
+      return date.toLocaleDateString("en-EN", { weekday: "long" });
+    };
+    const getMonthName: any = () => {
+      return date.toLocaleDateString("en-EN", { month: "long" });
+    };
+
+    let dayName: any = getDayName();
+    let monthName: any = getMonthName();
+
+    let year = Number(e.toString().substring(0, 4));
+    let month = Number(e.toString().substring(5, 7));
+    let day = Number(e.toString().substring(8, 10));
+
+    setJourneys((prev: any) => {
+      let list = [...prev];
+      list.map((journey: any, index: number) => {
+        if (journey.editMode) {
+          list[index] = {
+            ...list[index],
+            date: {
+              day: dayName,
+              month: monthName,
+              year: year,
+            },
+            dateNumber: {
+              day,
+              month,
+              year,
+            },
+          };
+          const updateJourney = async () => {
+            const { data, error } = await supabase
+              .from("journeys")
+              .update({
+                journey: journey,
+              })
+              .eq("id", journey.id);
+            if (error) console.log(error);
+            console.log(data);
+          };
+
+          updateJourney();
+        }
+      });
+      return list;
+    });
+  };
   const renderImages = () => {
     return journeys.map((journey: any, index: number) => (
       <div
@@ -51,10 +105,36 @@ export default function Home() {
         key={index}
       >
         <div className="mb-5 flex flex-col items-center justify-center p-3 text-7xl font-extrabold text-white">
-          <h2>{journey.date.year}</h2>
-          <h2 className="text-4xl text-slate-400">{journey.date.month}</h2>
-          <h2 className="text-3xl text-slate-500">{journey.date.day}</h2>
+          <div className="flex items-center justify-center gap-5 text-base">
+            {journey.editMode ? (
+              <div>
+                <input
+                  type="date"
+                  className={`h-16 w-full rounded-full border-2 border-zinc-100 px-5 text-base text-slate-500 transition-all duration-1000 md:w-max`}
+                  value={
+                    date == ""
+                      ? `${journey.dateNumber.year}-${journey.dateNumber.month < 10 ? "0" : ""}${journey.dateNumber.month}-${journey.dateNumber.day < 10 ? "0" : ""}${journey.dateNumber.day}`
+                      : date
+                  }
+                  onChange={(e: any) => {
+                    handleSeperateDateOnEdit(e.target.value);
 
+                    setDate(e.target.value);
+                  }}
+                  required
+                  disabled={loading}
+                />
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center">
+                <h2 className="text-5xl text-white">{journey.date.year}</h2>
+                <h2 className="text-4xl text-slate-400">
+                  {journey.date.month}
+                </h2>
+                <h2 className="text-3xl text-slate-500">{journey.date.day}</h2>
+              </div>
+            )}
+          </div>
           {journey.description ? (
             <div className="mt-3 text-5xl font-semibold text-slate-500">
               <span className="mr-2 text-slate-600">"</span>
@@ -117,31 +197,44 @@ export default function Home() {
                 </label>
               )}
               {journey.images.map((image: any, imageIndex: number) => (
-                <>
-                  <div
-                    className={`relative h-32 w-32 rounded-3xl bg-white object-cover transition-all duration-300 ease-in-out ${!journey.editMode ? "hover:flex-grow-[1]" : ""} `}
-                  >
-                    <img
-                      className={`h-full w-full rounded-3xl bg-white object-cover transition-all duration-300 ease-in-out ${!journey.editMode ? "hover:flex-grow-[1]" : ""}`}
-                      src={image}
-                      key={imageIndex}
-                    />
-                    {journey.editMode && (
-                      <div
-                        className={`group absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center gap-2 rounded-3xl transition-all hover:bg-black/50`}
+                <div
+                  className={`relative h-32 w-32 rounded-3xl bg-white object-cover transition-all duration-300 ease-in-out ${!journey.editMode ? "hover:flex-grow-[1]" : ""} `}
+                  key={imageIndex}
+                >
+                  <img
+                    className={`h-full w-full rounded-3xl bg-white object-cover transition-all duration-300 ease-in-out ${!journey.editMode ? "hover:flex-grow-[1]" : ""}`}
+                    src={image}
+                    key={imageIndex}
+                  />
+
+                  {!journey.editMode ? (
+                    <div
+                      className={`group absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center gap-2 rounded-3xl transition-all hover:bg-black/50`}
+                    >
+                      <button
+                        className={`rounded-xl bg-blue-500 p-2 px-4 opacity-0 transition-all hover:bg-blue-600 active:bg-blue-700 group-hover:opacity-100`}
+                        onClick={() => {
+                          maximizeImage(image);
+                        }}
                       >
-                        <button
-                          className={`rounded-xl bg-red-500 p-2 px-4 opacity-0 transition-all hover:bg-red-600 active:bg-red-700 group-hover:opacity-100`}
-                          onClick={() => {
-                            handleRemoveImageFromJourney(index, imageIndex);
-                          }}
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </>
+                        Maximize
+                      </button>
+                    </div>
+                  ) : (
+                    <div
+                      className={`group absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center gap-2 rounded-3xl transition-all hover:bg-black/50`}
+                    >
+                      <button
+                        className={`rounded-xl bg-red-500 p-2 px-4 opacity-0 transition-all hover:bg-red-600 active:bg-red-700 group-hover:opacity-100`}
+                        onClick={() => {
+                          handleRemoveImageFromJourney(index, imageIndex);
+                        }}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  )}
+                </div>
               ))}
             </div>
             <div
@@ -155,10 +248,37 @@ export default function Home() {
                   Edit
                 </button>
               )}
-              <img
-                className="h-32 w-32 self-center rounded-full border-2 bg-black object-cover transition-all hover:scale-110"
-                src={journey.thumbnail}
-              />
+              <div
+                className={`group relative h-32 w-32 transition-all hover:scale-[1.03]`}
+              >
+                <img
+                  className={`h-full w-full self-center rounded-full border-2 bg-black object-cover transition-all hover:scale-110`}
+                  src={
+                    tempThumbnail
+                      ? URL.createObjectURL(tempThumbnail)
+                      : journey.thumbnail + "?" + new Date().getTime()
+                  }
+                />
+
+                {journey.editMode && (
+                  <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center bg-black/50 opacity-0 transition-all group-hover:opacity-100">
+                    <label className="cursor-pointer rounded-xl bg-blue-500 p-2 px-4 opacity-0 transition-all hover:bg-blue-600 active:bg-blue-700 group-hover:opacity-100">
+                      Change
+                      <input
+                        type="file"
+                        accept="image/*"
+                        name="images"
+                        hidden
+                        onChange={(e: any) =>
+                          handleJourneyEditThumbnail(e.target.files[0])
+                        }
+                        disabled={loading}
+                      ></input>
+                    </label>
+                  </div>
+                )}
+              </div>
+
               {isAdmin && (
                 <button
                   className="w-[7rem] rounded-lg bg-red-400 p-3 px-5 text-xl font-semibold text-white hover:bg-red-500 active:bg-red-600"
@@ -178,6 +298,16 @@ export default function Home() {
         ) : null}
       </div>
     ));
+  };
+  const handleJourneyEditThumbnail = (image: any) => {
+    setTempThumbnail(image);
+  };
+
+  const maximizeImage = (image: any) => {
+    setMaximizedImage(image);
+  };
+  const closeMaximizedImage = () => {
+    setMaximizedImage(null);
   };
 
   const handleAddToTempImages = (images: any, journeyID: number) => {
@@ -208,7 +338,7 @@ export default function Home() {
             (image: any, imageIndex: number) => imageIndex !== imageID,
           );
           const deleteImageFromDatabase = async () => {
-            const fileName: any = `images/journey_${imageID + 1}_${journey.now}`;
+            const fileName: any = journey.storageImageNames[imageID];
             const { data, error } = await supabase.storage
               .from("journey.images")
               .remove(fileName);
@@ -218,6 +348,22 @@ export default function Home() {
             console.log(data, fileName);
           };
           deleteImageFromDatabase();
+          journey.storageImageNames.splice(imageID, 1);
+
+          const updateJourney = async () => {
+            const { data, error } = await supabase
+              .from("journeys")
+              .update({
+                journey: journey,
+                images: journey.images,
+                storageImageNames: journey.storageImageNames,
+              })
+              .eq("id", journey.id);
+            if (error) console.log(error);
+            console.log(data);
+          };
+
+          updateJourney();
         }
       });
       return list;
@@ -226,6 +372,7 @@ export default function Home() {
   useEffect(() => {
     console.log(journeys);
   }, [journeys]);
+
   const handleEditJourney = async (journeyID: number, actualID: number) => {
     setJourneys((prev: any) => {
       const list = [...prev];
@@ -234,6 +381,25 @@ export default function Home() {
       list[journeyID].editMode = false;
       return list;
     });
+
+    if (tempThumbnail) {
+      const handleUpdateThumbnail = async () => {
+        const fileName = `images/thumbnail_${journeys[journeyID].now}`;
+        const { data, error } = await supabase.storage
+          .from("journey.images")
+          .update(fileName, tempThumbnail, {
+            cacheControl: "3600",
+            upsert: false,
+          });
+        if (error) {
+          console.log(error);
+        }
+        console.log(data);
+      };
+      await handleUpdateThumbnail();
+
+      setTempThumbnail(null);
+    }
 
     let uploadedImageURLs: any = [];
 
@@ -341,10 +507,9 @@ export default function Home() {
         }
       };
       await deleteJourneyThumbnail();
-      for (let i = 0; i < journeys[indexId].images.length; i++) {
-        const prefix: any = `images/journey_${i + 1}_${journeys[indexId].now}`;
+      for (let i = 0; i < journeys[indexId].storageImageNames.length; i++) {
+        const prefix: any = journeys[indexId].storageImageNames[i];
 
-        console.log(prefix, journeys[indexId]);
         const { data, error } = await supabase.storage
           .from("journey.images")
           .remove(prefix);
@@ -527,9 +692,6 @@ export default function Home() {
     });
   };
 
-  useEffect(() => {
-    console.log(newJourney, "newJourney");
-  }, [newJourney]);
   const handleSeperateDate = (e: any) => {
     var date = new Date(e);
     const getDayName: any = () => {
@@ -581,7 +743,23 @@ export default function Home() {
 
   return (
     <main className="flex h-full select-none flex-col items-center justify-center">
-      <div className="h-[100vh] w-screen">
+      <div className="relative h-[100vh] w-screen">
+        {maximizedImage && (
+          <div className="fixed z-[1000] flex h-screen w-screen items-center justify-center">
+            <div
+              className="fixed z-[999] h-full w-full bg-black/80"
+              onClick={() => closeMaximizedImage()}
+            />
+            <div
+              className="text-yellow absolute right-8 top-5 z-[1111] cursor-pointer text-5xl font-extrabold text-white"
+              onClick={() => closeMaximizedImage()}
+            >
+              <IoClose />
+            </div>
+            <img src={maximizedImage} className="z-[1000] h-max w-max" />
+          </div>
+        )}
+
         <img
           src={bottomBG.src}
           className="pointer-events-none relative h-full w-full object-cover"
