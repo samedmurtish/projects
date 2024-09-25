@@ -108,7 +108,7 @@ export default function Home() {
     return journeys.map((journey: any, index: number) => (
       <div
         className={`z-50 flex h-full w-full flex-col items-center justify-center ${
-          index == 0 ? "mt-[20rem]" : "mt-0"
+          index == 0 ? "mt-[70rem] md:mt-[50rem]" : "mt-0"
         }`}
         key={index}
       >
@@ -143,7 +143,7 @@ export default function Home() {
             )}
           </div>
           {journey.description ? (
-            <div className="mt-3 text-5xl font-semibold text-slate-500">
+            <div className="mt-3 flex text-5xl font-semibold text-slate-500">
               <span className="mr-2 text-slate-600">&quot;</span>
               {journey.editMode ? (
                 <input
@@ -154,7 +154,12 @@ export default function Home() {
                   onChange={(e: any) => setEditedDescription(e.target.value)}
                 />
               ) : (
-                <span id="handwrite">{journey.description}</span>
+                <span
+                  id="handwrite"
+                  className="flex items-center justify-center text-center"
+                >
+                  {journey.description}
+                </span>
               )}
               <span className="ml-2 text-slate-600">&quot;</span>
             </div>
