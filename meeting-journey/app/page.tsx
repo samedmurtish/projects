@@ -797,7 +797,7 @@ export default function Home() {
           layout="fill"
           alt=""
         />
-        {!localStorage.getItem("token") && (
+        {typeof window !== "undefined" && !localStorage.getItem("token") && (
           <Link
             className="absolute left-1/2 top-[3rem] flex -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-green-500 p-2 px-5 text-center text-white hover:bg-green-600 active:bg-green-700"
             href="/login"
