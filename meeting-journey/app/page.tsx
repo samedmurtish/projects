@@ -103,6 +103,7 @@ export default function Home() {
       return list;
     });
   };
+
   const renderImages = () => {
     return journeys.map((journey: any, index: number) => (
       <div
@@ -125,7 +126,6 @@ export default function Home() {
                   }
                   onChange={(e: any) => {
                     handleSeperateDateOnEdit(e.target.value);
-
                     setEditJourneyDate(e.target.value);
                   }}
                   required
@@ -205,16 +205,17 @@ export default function Home() {
               )}
               {journey.images.map((image: any, imageIndex: number) => (
                 <div
-                  className={`relative h-32 w-32 rounded-3xl bg-white object-cover transition-all duration-300 ease-in-out ${!journey.editMode ? "hover:flex-grow-[1]" : ""} `}
+                  className={`relative h-32 w-32 rounded-3xl bg-white object-cover transition-all duration-300 ease-in-out ${!journey.editMode ? "hover:flex-grow-[1]" : ""}`}
                   key={imageIndex}
                 >
-                  <img
-                    className={`h-full w-full rounded-3xl bg-white object-cover transition-all duration-300 ease-in-out ${!journey.editMode ? "hover:flex-grow-[1]" : ""}`}
+                  <Image
+                    className={`h-full w-full rounded-3xl object-cover transition-all duration-300 ease-in-out ${!journey.editMode ? "hover:flex-grow-[1]" : ""}`}
                     src={image}
+                    width={128}
+                    height={128}
+                    alt={`Journey Image ${imageIndex}`}
                     key={imageIndex}
-                    alt=""
                   />
-
                   {!journey.editMode ? (
                     <div
                       className={`group/image absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center gap-2 rounded-3xl transition-all hover:bg-black/50`}
@@ -259,16 +260,17 @@ export default function Home() {
               <div
                 className={`group/thumbnail relative h-32 w-32 transition-all hover:scale-[1.03]`}
               >
-                <img
+                <Image
                   className={`h-full w-full self-center rounded-full border-2 bg-black object-cover transition-all hover:scale-110`}
                   src={
                     tempThumbnail
                       ? URL.createObjectURL(tempThumbnail)
-                      : journey.thumbnail + "?" + new Date().getTime()
+                      : journey.thumbnail + "?" + Date.now()
                   }
-                  alt=""
+                  width={128}
+                  height={128}
+                  alt={`Journey Thumbnail ${index}`}
                 />
-
                 {journey.editMode && (
                   <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center bg-black/50 opacity-0 transition-all group-hover/thumbnail:opacity-100">
                     <label className="cursor-pointer rounded-xl bg-blue-500 p-2 px-4 opacity-0 transition-all hover:bg-blue-600 active:bg-blue-700 group-hover/thumbnail:opacity-100">
@@ -287,7 +289,6 @@ export default function Home() {
                   </div>
                 )}
               </div>
-
               {isAdmin && (
                 <button
                   className="w-[7rem] rounded-lg bg-red-400 p-3 px-5 text-xl font-semibold text-white hover:bg-red-500 active:bg-red-600"
@@ -300,15 +301,18 @@ export default function Home() {
           </div>
         </div>
         {index != journeys.length - 1 ? (
-          <img
-            src={arrowColored.src}
+          <Image
+            src={arrowColored}
             className="mb-32 mt-24 h-48 w-48 md:mb-12"
-            alt=""
+            width={192}
+            height={192}
+            alt="Arrow Image"
           />
         ) : null}
       </div>
     ));
   };
+
   const handleJourneyEditThumbnail = (image: any) => {
     setTempThumbnail(image);
   };
@@ -754,6 +758,10 @@ export default function Home() {
     }));
   };
 
+  useEffect(() => {
+    console.log(window.outerWidth, window.outerHeight);
+  }, []);
+
   return (
     <main className="flex h-full select-none flex-col items-center justify-center">
       <div className="relative h-[100vh] w-screen">
@@ -769,12 +777,24 @@ export default function Home() {
             >
               <IoClose />
             </div>
-            <img src={maximizedImage} className="z-[1000] h-max w-max" alt="" />
+            <Image
+              src={maximizedImage}
+              className="z-[1000]"
+              height={window.innerHeight}
+              width={window.innerHeight}
+              alt=""
+              style={{
+                maxHeight: "100%",
+                maxWidth: "100%",
+                objectFit: "cover",
+              }}
+            />
           </div>
         )}
-        <img
-          src={bottomBG.src}
-          className="pointer-events-none relative h-full w-full object-cover"
+        <Image
+          src={bottomBG}
+          className="pointer-events-none relative object-cover"
+          layout="fill"
           alt=""
         />
         {!localStorage.getItem("token") && (
@@ -848,7 +868,7 @@ export default function Home() {
                       />
                     </label>
                     {newJourney.images.map((image: any, index: any) => (
-                      <img
+                      <Image
                         className={`${
                           clicked ? "h-32 w-32" : "h-0 w-0"
                         } flex cursor-pointer items-center justify-center rounded-lg border-2 border-transparent bg-blue-500 bg-transparent object-cover text-white transition-all duration-300 hover:border-white hover:border-opacity-40 hover:bg-[rgba(255,255,255,0.2)] hover:duration-300`}
@@ -858,6 +878,9 @@ export default function Home() {
                           !loading && handleRemoveImage(index);
                         }}
                         alt=""
+                        height={128} // h-32
+                        width={128} // w-32
+                        objectFit="cover"
                       />
                     ))}
                   </div>
@@ -876,10 +899,13 @@ export default function Home() {
                   } flex cursor-pointer items-center justify-center self-center justify-self-center border-white bg-white object-cover text-white transition-all duration-1000 hover:duration-300`}
                 >
                   {newJourney.thumbnail ? (
-                    <img
+                    <Image
                       src={newJourney.thumbnail}
                       className="flex h-full w-full items-center justify-center rounded-full object-cover"
                       alt=""
+                      height={144} // h-36
+                      width={144} // w-36
+                      objectFit="cover"
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center rounded-full bg-green-500">
@@ -909,10 +935,13 @@ export default function Home() {
                   } flex cursor-pointer items-center justify-center self-center justify-self-center border-white object-cover text-white transition-all duration-1000 hover:duration-300`}
                 >
                   {newJourney.thumbnail ? (
-                    <img
+                    <Image
                       src={newJourney.thumbnail}
                       className="flex h-full w-full items-center justify-center rounded-full object-cover"
                       alt=""
+                      height={144} // h-36
+                      width={144} // w-36
+                      objectFit="cover"
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center rounded-full bg-green-500">
@@ -995,18 +1024,21 @@ export default function Home() {
             <p className="w-full px-5">
               Scroll down to begin the journey of our memories!
             </p>
-            <img
-              src={arrowColored.src}
-              className="mt-5 h-48 w-48 self-center justify-self-center md:mt-12"
+            <Image
+              src={arrowColored}
+              className="mt-5"
+              height={192} // h-48
+              width={192} // w-48
               alt=""
             />
           </div>
         </div>
       </div>
       <div className="relative flex h-full w-screen flex-col items-center justify-center">
-        <img
-          src={topBG.src}
-          className="pointer-events-none absolute top-0 h-[100vh] w-full object-cover"
+        <Image
+          src={topBG}
+          className="pointer-events-none relative object-cover"
+          layout="fill"
           alt=""
         />
         {renderImages()}
