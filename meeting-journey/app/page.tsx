@@ -94,7 +94,6 @@ export default function Home() {
               })
               .eq("id", journey.id);
             if (error) console.log(error);
-            console.log(data);
           };
 
           updateJourney();
@@ -379,7 +378,6 @@ export default function Home() {
               })
               .eq("id", journey.id);
             if (error) console.log(error);
-            console.log(data);
           };
 
           updateJourney();
@@ -388,9 +386,6 @@ export default function Home() {
       return list;
     });
   };
-  useEffect(() => {
-    console.log(journeys);
-  }, [journeys]);
 
   const handleEditJourney = async (journeyID: number, actualID: number) => {
     setJourneys((prev: any) => {
@@ -413,7 +408,6 @@ export default function Home() {
         if (error) {
           console.log(error);
         }
-        console.log(data);
       };
       await handleUpdateThumbnail();
 
@@ -442,10 +436,6 @@ export default function Home() {
             .from("journey.images")
             .getPublicUrl(fileName);
           uploadedImageURLs.push(imageURL.data.publicUrl);
-          console.log(
-            `Image ${i + 1} uploaded successfully:`,
-            imageURL.data.publicUrl,
-          );
           setJourneys((prev: any) => {
             const list = [...prev];
             list[journeyID].storageImageNames =
@@ -469,7 +459,6 @@ export default function Home() {
           })
           .eq("id", actualID);
         if (error) console.log(error);
-        console.log(data);
       };
 
       const updateImages = async () => {
@@ -484,7 +473,6 @@ export default function Home() {
           })
           .eq("id", actualID);
         if (error) console.log(error);
-        console.log(data);
       };
 
       updateJourney();
@@ -505,9 +493,7 @@ export default function Home() {
 
     return setJourneys((prev: any) => {
       const list = [...prev];
-      console.log(list[journeyID]);
       list[journeyID].editMode = !list[journeyID].editMode;
-      console.log(journeyID, list[journeyID].editMode);
       return list;
     });
   };
@@ -522,7 +508,6 @@ export default function Home() {
         if (error) {
           return console.log(error);
         } else {
-          console.log(data);
         }
       };
       await deleteJourneyThumbnail();
@@ -536,7 +521,6 @@ export default function Home() {
         if (error) {
           return console.log(error);
         } else {
-          console.log(data);
         }
       }
     };
@@ -597,7 +581,6 @@ export default function Home() {
           list.editMode = false;
           list.rawImages = [];
           list.storageImageNames = data.storageImageNames;
-          console.log(list);
           return [...prev, list];
         });
       });
@@ -606,7 +589,6 @@ export default function Home() {
 
   const handlePostJourney = async () => {
     setNow(Date.now());
-    console.log("posting, ", newJourney);
 
     const uploadJourney = async (
       images: any,
@@ -649,10 +631,6 @@ export default function Home() {
           .from("journey.images")
           .getPublicUrl(fileName);
         thumbnailURL = imageURL.data.publicUrl;
-        console.log(
-          "Thumbnail uploaded successfully:",
-          imageURL.data.publicUrl,
-        );
       }
 
       for (let i = 0; i < newJourneyRawImages.length; i++) {
@@ -675,10 +653,6 @@ export default function Home() {
               .getPublicUrl(fileName);
             uploadedImageURLs.push(imageURL.data.publicUrl);
             storageImageNames.push(fileName);
-            console.log(
-              `Image ${i + 1} uploaded successfully:`,
-              imageURL.data.publicUrl,
-            );
           }
         }
       }
@@ -762,10 +736,6 @@ export default function Home() {
       description: e,
     }));
   };
-
-  useEffect(() => {
-    console.log(window.outerWidth, window.outerHeight);
-  }, []);
 
   return (
     <main className="flex h-full select-none flex-col items-center justify-center">
