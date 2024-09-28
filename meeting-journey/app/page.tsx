@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import arrowColored from "../icons/arrowcolored.png";
-import bottomBG from "../backgroundImages/bottom.svg";
+import bottomBG from "../backgroundImages/bottom1.svg";
 import topBG from "../backgroundImages/top.svg";
 
 import { useEffect, useState } from "react";
@@ -107,7 +107,7 @@ export default function Home() {
     return journeys.map((journey: any, index: number) => (
       <div
         className={`z-50 flex h-full w-full flex-col items-center justify-center ${
-          index == 0 ? "mt-[70rem] md:mt-[50rem]" : "mt-0"
+          index == 0 ? "mt-[25rem] md:mt-[25rem]" : "mt-0"
         }`}
         key={index}
       >
@@ -736,7 +736,11 @@ export default function Home() {
       description: e,
     }));
   };
+  const [isMounted, setIsMounted] = useState(false);
 
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
   return (
     <main className="flex h-full select-none flex-col items-center justify-center">
       <div className="relative h-[100vh] w-screen">
@@ -768,7 +772,7 @@ export default function Home() {
         )}
         <Image
           src={bottomBG}
-          className="pointer-events-none relative object-cover"
+          className="pointer-events-none relative mt-[35rem] object-cover md:mt-[30rem]"
           layout="fill"
           alt=""
         />
@@ -781,7 +785,7 @@ export default function Home() {
           </Link>
         )}
         <div className="absolute left-1/2 top-[40%] z-[100] flex w-full -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center gap-5 text-center text-5xl font-semibold text-slate-500 lg:flex-row lg:gap-10">
-          {isAdmin && (
+          {isMounted && isAdmin && (
             <form
               className="flex items-center justify-center gap-5"
               onSubmit={(e) => {
@@ -815,7 +819,7 @@ export default function Home() {
               {loading && (
                 <div className="loader absolute z-[100] h-full w-full"></div>
               )}
-              <div className="fixed bottom-48 left-0 right-0 top-0 -translate-y-1/2 sm:bottom-5 md:bottom-12 lg:relative lg:-translate-y-0">
+              <div className="fixed bottom-[13.5rem] left-0 right-0 top-0 -translate-y-1/2 sm:bottom-5 md:bottom-12 lg:relative lg:-translate-y-0">
                 <div
                   className={`relative ${
                     clicked
@@ -989,11 +993,13 @@ export default function Home() {
               </div>
             </form>
           )}
-          {isAdmin && <span className="text-base text-white">OR</span>}
+          {isMounted && isAdmin && (
+            <span className="text-base text-white">OR</span>
+          )}
 
           <div
-            className={`flex w-full flex-col items-center justify-center ${
-              isAdmin ? "md:w-[40rem]" : "w-full"
+            className={`flex w-full flex-col items-center justify-center md:w-1/2 ${
+              isAdmin ? "md:w-1/2" : "w-full"
             }`}
           >
             <p className="w-full px-5">
@@ -1010,12 +1016,6 @@ export default function Home() {
         </div>
       </div>
       <div className="relative flex h-full w-screen flex-col items-center justify-center">
-        <Image
-          src={topBG}
-          className="pointer-events-none relative object-cover"
-          layout="fill"
-          alt=""
-        />
         {renderImages()}
       </div>
     </main>
