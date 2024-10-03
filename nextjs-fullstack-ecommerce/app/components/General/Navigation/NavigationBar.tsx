@@ -63,7 +63,7 @@ export default function NavigationBar() {
               {category.is_public && (
                 <div
                   key={category.name + category.id + index}
-                  className={`hover:bg-sky-500 hover:text-white p-1 px-3 w-full cursor-pointer rounded-md transition text-nowrap ${
+                  className={`hover:bg-sky-500 hover:text-white p-1 px-3 w-full rounded-md transition cursor-alias text-nowrap ${
                     selectedCategory === category.id
                       ? "bg-sky-500 text-white"
                       : "bg-transparent text-black"
@@ -89,12 +89,13 @@ export default function NavigationBar() {
                       {subCategories.map((item: any) => {
                         if (item.name === subCategory && item.is_public) {
                           return (
-                            <button
+                            <Link
+                              href={`/categories/${category.name}/${subCategory}`}
                               key={subCategory + index}
                               className="bg-zinc-50 hover:bg-sky-500 hover:text-white p-1 px-3 max-w-[200px] h-max flex justify-start items-center rounded-md transition"
                             >
                               {subCategory}
-                            </button>
+                            </Link>
                           );
                         }
                       })}

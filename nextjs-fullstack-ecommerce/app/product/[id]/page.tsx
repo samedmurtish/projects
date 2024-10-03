@@ -11,6 +11,7 @@ import RenderStars from "@/app/components/General/Products/RenderStars";
 
 export default function ProductPage() {
   const [product, setProduct] = useState<any>();
+  const { id } = useParams();
 
   const getProduct = async () => {
     const { data, error } = await supabase
@@ -26,8 +27,6 @@ export default function ProductPage() {
   useEffect(() => {
     getProduct();
   }, []);
-
-  const { id } = useParams();
 
   window.scrollTo(0, 0);
 
@@ -172,23 +171,25 @@ export default function ProductPage() {
                     </div>
                     <div className="flex h-full w-max justify-center items-end">
                       <div className="flex">
-                        <Link
-                          href={"/cart"}
-                          className="h-max w-max bg-slate-600 hover:bg-slate-500 text-white p-3 rounded-lg cursor-pointer transition flex justify-center font-semibold mr-1"
-                          id="add-to-cart"
-                          onClick={() => {
-                            setShowBar({
-                              clicked: true,
-                              message: "Product added to cart successfully!",
-                            });
-                            // addToCart(product);
-                            // setCartLength(
-                            //   JSON.parse(localStorage.getItem("cart")).length
-                            // );
-                          }}
-                        >
-                          <p className="px-1">Buy Now</p>
-                        </Link>
+                        {product.quantity > 0 && (
+                          <Link
+                            href={"/cart"}
+                            className="h-max w-max bg-slate-600 hover:bg-slate-500 text-white p-3 rounded-lg cursor-pointer transition flex justify-center font-semibold mr-1"
+                            id="add-to-cart"
+                            onClick={() => {
+                              setShowBar({
+                                clicked: true,
+                                message: "Product added to cart successfully!",
+                              });
+                              // addToCart(product);
+                              // setCartLength(
+                              //   JSON.parse(localStorage.getItem("cart")).length
+                              // );
+                            }}
+                          >
+                            <p className="px-1">Buy Now</p>
+                          </Link>
+                        )}
                         <button
                           className="h-max w-max disabled:bg-rose-400 disabled:hover:bg-rose-500 bg-slate-600 hover:bg-slate-500 text-white p-3 rounded-lg cursor-pointer transition flex justify-center mr-3 font-semibold"
                           id="add-to-cart"
