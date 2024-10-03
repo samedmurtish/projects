@@ -17,6 +17,8 @@ export default function AddProduct({ setPage, getProducts, highestId }: any) {
   const [newSubCategories, setNewSubCategories] = useState<any>([]);
   const [subCategories, setSubCategories] = useState<any>([]);
   const [subCategoryName, setSubCategoryName] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [quantity, setQuantity] = useState<number>(0);
 
   const [thumbnail, setThumbnail] = useState<any>(null);
   const [images, setImages] = useState<any>([]);
@@ -57,6 +59,8 @@ export default function AddProduct({ setPage, getProducts, highestId }: any) {
         thumbnail: uploadedImages.thumbnail,
         images: uploadedImages.images,
         now,
+        description,
+        quantity: quantity ? quantity : 0,
       },
     ]);
 
@@ -367,6 +371,15 @@ export default function AddProduct({ setPage, getProducts, highestId }: any) {
               required
               onChange={(e: any) => setPrice(e.target.value)}
             />
+            <input
+              type="number"
+              name="quantity"
+              className="p-3 px-5 rounded-md"
+              min={0}
+              placeholder="Quantity"
+              required
+              onChange={(e: any) => setQuantity(e.target.value)}
+            />
             <div className="flex">
               <input
                 type="text"
@@ -397,6 +410,12 @@ export default function AddProduct({ setPage, getProducts, highestId }: any) {
                 {handleAddSubCategoryValues()}
               </select>
             </div>
+            <textarea
+              name="description"
+              className="p-3 px-5 rounded-md min-h-24 max-h-64"
+              placeholder="Description"
+              onChange={(e) => setDescription(e.target.value)}
+            />
             <select
               className="p-3 px-5 rounded-md text-black w-full"
               onChange={(e: any) => {

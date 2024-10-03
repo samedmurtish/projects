@@ -3,7 +3,6 @@
 import Image from "next/image";
 import arrowColored from "../icons/arrowcolored.png";
 import bottomBG from "../backgroundImages/bottom1.svg";
-import topBG from "../backgroundImages/top.svg";
 
 import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";

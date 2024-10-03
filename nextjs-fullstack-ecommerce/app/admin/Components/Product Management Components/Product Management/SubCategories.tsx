@@ -55,8 +55,8 @@ export default function SubCategories({ setPage, pageName }: any) {
 
   const handleRenderTable = () => {
     return (
-      <div className="table-container overflow-y-auto max-h-96">
-        <table className="bg-zinc-900">
+      <div className="table-container overflow-y-auto max-h-96 table-fixed">
+        <table className="bg-zinc-900 table-fixed">
           <thead>
             <tr className="border-b-2 border-b-zinc-700 bg-zinc-800">
               <th className="p-5 font-normal">Visibility</th>

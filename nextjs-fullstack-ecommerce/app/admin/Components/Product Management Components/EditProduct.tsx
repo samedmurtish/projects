@@ -16,6 +16,8 @@ export default function EditProduct({
   const [isPublic, setIsPublic] = useState(true);
   const [productName, setProductName] = useState(product.name);
   const [price, setPrice] = useState(product.price);
+  const [description, setDescription] = useState<string>(product.description);
+  const [quantity, setQuantity] = useState<number>(product.quantity);
 
   const [subCategories, setSubCategories] = useState(
     Array.isArray(product.sub_categories) ? [...product.sub_categories] : []
@@ -162,6 +164,8 @@ export default function EditProduct({
         is_public: isPublic,
         thumbnail: updatedThumbnail,
         images: updatedImages,
+        quantity,
+        description,
       })
       .eq("id", product.id);
 
@@ -329,6 +333,11 @@ export default function EditProduct({
     );
   };
 
+  const copyText = (text: string) => {
+    navigator.clipboard.writeText(text);
+    alert("Copied to clipboard.");
+  };
+
   return (
     <div className="flex flex-col gap-3">
       <div className="text-3xl text-white font-extrabold flex items-center gap-3">
@@ -426,6 +435,14 @@ export default function EditProduct({
             onChange={(e) => setPrice(e.target.value)}
             className="p-3 px-5 rounded-lg"
           />
+          <input
+            type="number"
+            name="quantity"
+            className="p-3 px-5 rounded-md"
+            min={0}
+            placeholder={product.quantity}
+            onChange={(e: any) => setQuantity(e.target.value)}
+          />
           <div className="flex justify-center items-center">
             <input
               type="text"
@@ -456,8 +473,29 @@ export default function EditProduct({
               {handleAddSubCategoryValues()}
             </select>
           </div>
+          <div className="flex gap-2">
+            <textarea
+              name="description"
+              className="p-3 px-5 rounded-md w-full min-h-24 max-h-64"
+              placeholder={
+                product.description ? product.description : "Description"
+              }
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            <div
+              className="w-max text-wrap h-full px-5 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 disabled:bg-zinc-700 rounded-md transition text-white flex justify-center items-center cursor-pointer text-center"
+              onClick={() => copyText(product.description)}
+            >
+              Copy
+              <br />
+              Original
+              <br />
+              Text
+            </div>
+          </div>
           <select
             className="p-3 px-5 rounded-lg"
+            value={product.is_public ? "Public" : "Private"}
             onChange={(e) =>
               setIsPublic(e.target.value == "Public" ? true : false)
             }

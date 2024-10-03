@@ -222,7 +222,7 @@ export default function BannerManagement() {
       <div className="w-full h-full justify-center items-center flex flex-col rounded-t-lg">
         <div className="flex justify-center items-center gap-5">
           <div className="flex gap-5">
-            <label className="w-52 h-16 bg-blue-500 text-white text-lg flex justify-center items-center cursor-pointer">
+            <label className="w-52 h-16 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white text-lg flex justify-center items-center cursor-pointer rounded-full">
               Choose File
               <input
                 type="file"

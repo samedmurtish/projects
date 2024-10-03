@@ -1,10 +1,30 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { BsList } from "react-icons/bs";
 import logo from "../../../../images/logo.png";
+import { supabase } from "@/app/lib/supabase";
+import Link from "next/link";
 
-export default function NavigationBar({ categories, subCategories }: any) {
+export default function NavigationBar() {
+  const [categories, setCategories] = useState<any>([]);
+  const [subCategories, setSubCategories] = useState<any>([]);
+  useEffect(() => {
+    getCategories();
+    getSubCategories();
+  }, []);
+
+  const getCategories = async () => {
+    const { data, error } = await supabase.from("categories").select("*");
+    if (error) return console.log(error);
+    setCategories(data);
+  };
+  const getSubCategories = async () => {
+    const { data, error } = await supabase.from("sub_categories").select("*");
+    if (error) return console.log(error);
+    setSubCategories(data);
+  };
+
   const [isCategoriesPopupVisible, setIsCategoriesPopupVisible] =
     useState(false);
   const [mouseOnPopup, setMouseOnPopup] = useState(false);
@@ -90,12 +110,13 @@ export default function NavigationBar({ categories, subCategories }: any) {
   };
 
   return (
-    <div>
-      <div className="w-full bg-white h-[7rem] select-none  z-50">
+    <div className="sticky top-0 z-[100]">
+      <div className="w-full bg-white h-[7rem] select-none border-b-2 border-b-slate-100 z-50">
         <div className="text-black flex items-center h-full w-3/4 mx-auto my-0">
           <div className="flex justify-between items-center w-full">
             <div className="flex items-center gap-10">
-              <button
+              <Link
+                href="/"
                 className="text-4xl font-extrabold my-5 text-zinc-700"
                 onMouseOver={() => {
                   setIsCategoriesPopupVisible(false);
@@ -103,7 +124,7 @@ export default function NavigationBar({ categories, subCategories }: any) {
                 }}
               >
                 <img src={logo.src} className="w-32" />
-              </button>
+              </Link>
               <div className="relative">
                 <button
                   className={`flex gap-2 justify-center items-center hover:text-white hover:bg-sky-500 p-2 px-4 rounded-lg border-b-2 border-b-transparent hover:border-b-sky-600 transition min-w-[150px] ${

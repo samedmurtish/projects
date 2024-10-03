@@ -85,7 +85,7 @@ export default function Products() {
   const handleRenderProducts = () => {
     return products.map((product: any) => (
       <div key={product.id} className="flex select-none w-[30rem]">
-        <div className="relative w-52 hover:w-64 h-64 bg-white rounded-lg text-white font-bold text-3xl overflow-hidden rounded-r-none select-none transition-width duration-300 ease-out">
+        <div className="relative min-w-52 w-52 hover:w-64 h-64 bg-white rounded-lg text-white font-bold text-3xl overflow-hidden rounded-r-none select-none transition-width duration-300 ease-out">
           <div className="relative z-10 flex justify-center items-center w-full h-full bg-opacity-50 hover:bg-opacity-30 bg-black flex-col transition duration-300 ease-out"></div>
           <div className="absolute inset-0 z-0">
             <img
