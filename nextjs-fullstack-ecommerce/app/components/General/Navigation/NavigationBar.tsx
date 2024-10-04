@@ -177,13 +177,14 @@ export default function NavigationBar() {
           setMouseOnPopup(false);
         }}
       >
-        <div className="flex flex-col border-r-2 pr-5 w-max gap-1">
-          {categories.map((category: any, index: any) => (
-            <div key={category.name + category.id + index}>
-              {category.is_public && (
-                <div
+        <div className="flex flex-col border-r-2 pr-5 gap-2 w-max">
+          {categories.map(
+            (category: any, index: any) =>
+              category.is_public && (
+                <Link
+                  href={`/categories/${category.name}`}
                   key={category.name + category.id + index}
-                  className={`hover:bg-sky-500 hover:text-white p-1 px-3 w-full rounded-md transition cursor-alias text-nowrap ${
+                  className={`p-1 px-3 rounded-md transition cursor-pointer text-nowrap ${
                     selectedCategory === category.id
                       ? "bg-sky-500 text-white"
                       : "bg-transparent text-black"
@@ -191,10 +192,9 @@ export default function NavigationBar() {
                   onMouseEnter={() => setSelectedCategory(category.id)}
                 >
                   {category.name}
-                </div>
-              )}
-            </div>
-          ))}
+                </Link>
+              )
+          )}
         </div>
         <div className="pl-5 flex-wrap w-full flex h-[300px]">
           {categories.map((category: any, index: any) => {

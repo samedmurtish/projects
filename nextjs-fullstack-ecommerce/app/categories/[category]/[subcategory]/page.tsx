@@ -167,8 +167,16 @@ export default function SubCategory({
 
       {category && subCategory && (
         <div className="w-3/4 mx-auto my-0">
-          {category && category.name} <span className="px-1">/</span>{" "}
-          <span className="font-bold">{subCategory && subCategory.name}</span>
+          <div className="pt-5 pb-10">
+            <Link
+              href={`/categories/${category.name}`}
+              className="hover:underline"
+            >
+              {category && category.name}
+            </Link>
+            <span className="px-1">/</span>
+            <span className="font-bold">{subCategory && subCategory.name}</span>
+          </div>
           {renderProducts()}
         </div>
       )}
