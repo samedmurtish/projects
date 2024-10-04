@@ -5,14 +5,14 @@ import Link from "next/link";
 import ImageShowcase from "./DetailedProductPage/ImageShowcase";
 import { FaHeart } from "react-icons/fa";
 import { FaCircleUser } from "react-icons/fa6";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/app/lib/supabase";
 import RenderStars from "@/app/components/General/Products/RenderStars";
 
 export default function ProductPage() {
   const [product, setProduct] = useState<any>();
   const { id } = useParams();
-
+  const router = useRouter();
   const getProduct = async () => {
     const { data, error } = await supabase
       .from("products")
@@ -27,6 +27,10 @@ export default function ProductPage() {
   useEffect(() => {
     getProduct();
   }, []);
+
+  useEffect(() => {
+    if (product) if (!product.is_public) router.push("/");
+  }, [product]);
 
   window.scrollTo(0, 0);
 
@@ -121,7 +125,7 @@ export default function ProductPage() {
     <div className="bg-white">
       {/* <SnackbarShow get={showBar} set={setShowBar} /> */}
 
-      {product && (
+      {product && product.is_public && (
         <>
           <div className="mx-auto my-0 w-11/12 max-w-[1000px] h-full flex justify-center py-10 overflow-y-auto">
             <div className="flex flex-col h-full w-max overflow-y-auto">

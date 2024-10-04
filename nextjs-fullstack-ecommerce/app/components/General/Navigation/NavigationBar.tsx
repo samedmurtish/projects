@@ -5,10 +5,53 @@ import { BsList } from "react-icons/bs";
 import logo from "../../../../images/logo.png";
 import { supabase } from "@/app/lib/supabase";
 import Link from "next/link";
+import { FaHeart, FaRegUser, FaUser } from "react-icons/fa";
+import { RiShoppingCart2Line, RiShoppingCart2Fill } from "react-icons/ri";
+import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
 
 export default function NavigationBar() {
   const [categories, setCategories] = useState<any>([]);
   const [subCategories, setSubCategories] = useState<any>([]);
+
+  const [loggedInUser, setLoggedInUser] = useState<any>(null);
+
+  const [isCategoriesPopupVisible, setIsCategoriesPopupVisible] =
+    useState(false);
+  const [isAuthPopupVisible, setIsAuthPopupVisible] = useState(false);
+  const [mouseOnPopup, setMouseOnPopup] = useState(false);
+  const [mouseOnAuthPopup, setMouseOnAuthPopup] = useState(false);
+  const [mouseOnCartPopup, setMouseOnCartPopup] = useState(false);
+  const [mouseOnWishlistPopup, setMouseOnWishlistPopup] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(0);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRefAuth = useRef<NodeJS.Timeout | null>(null);
+  const getUserInfo = async (id: string, username: string) => {
+    const { data: user } = await supabase
+      .from("user_data")
+      .select("*")
+      .eq("id", id);
+
+    setLoggedInUser((prev: any) => {
+      if (user == null) return;
+      const data = { ...user[0], username };
+      data.username = username;
+      console.log(data);
+      return data;
+    });
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token")
+      ? localStorage.getItem("token")
+      : null;
+    if (token) {
+      getUserInfo(
+        JSON.parse(token).user.id,
+        JSON.parse(token).user.user_metadata.username
+      );
+    }
+  }, []);
+
   useEffect(() => {
     getCategories();
     getSubCategories();
@@ -25,12 +68,6 @@ export default function NavigationBar() {
     setSubCategories(data);
   };
 
-  const [isCategoriesPopupVisible, setIsCategoriesPopupVisible] =
-    useState(false);
-  const [mouseOnPopup, setMouseOnPopup] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(0);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-
   const handleMouseEnter = () => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -41,13 +78,96 @@ export default function NavigationBar() {
   const handleMouseLeave = () => {
     timeoutRef.current = setTimeout(() => {
       setIsCategoriesPopupVisible(false);
-    }, 300);
+    }, 200);
+  };
+  const handleMouseEnterOnAuth = () => {
+    if (timeoutRefAuth.current) {
+      clearTimeout(timeoutRefAuth.current);
+    }
+    setIsAuthPopupVisible(true);
+  };
+
+  const handleMouseLeaveOnAuth = () => {
+    timeoutRefAuth.current = setTimeout(() => {
+      setIsAuthPopupVisible(false);
+    }, 100);
+  };
+
+  const renderAuthPopup = () => {
+    return (
+      <div
+        className="w-[500px] h-max bg-white p-5 flex rounded-b-xl shadow-md z-50 cursor-auto"
+        onMouseEnter={() => {
+          handleMouseEnterOnAuth();
+          setMouseOnAuthPopup(true);
+        }}
+        onMouseLeave={() => {
+          handleMouseLeaveOnAuth();
+          setMouseOnAuthPopup(false);
+        }}
+      >
+        <div
+          className={`flex flex-col w-full gap-1 text-slate-600 text-base text-nowrap`}
+        >
+          <div className={`mb-3 flex justify-center items-center`}>
+            <p className="mr-1">Welcome{loggedInUser && " back"},</p>
+            {loggedInUser ? (
+              <p className="self-center font-extrabold">
+                {loggedInUser.username}!
+              </p>
+            ) : (
+              <p className="self-center font-extrabold">Guest!</p>
+            )}
+          </div>
+          {!loggedInUser ? (
+            <>
+              <Link
+                href="/login"
+                className="bg-sky-500 hover:bg-sky-600 active:bg-sky-700 text-white p-1 px-3 w-full rounded-md transition cursor-pointer text-nowrap text-center"
+              >
+                Login
+              </Link>
+
+              <Link
+                href="/register"
+                className="bg-green-400 hover:bg-green-500 active:bg-green-600 text-white p-1 px-3 w-full rounded-md transition cursor-pointer text-nowrap text-center"
+              >
+                Register
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/profile"
+                className="bg-sky-500 hover:bg-sky-600 active:bg-sky-700 text-white p-1 px-3 w-full rounded-md transition cursor-pointer text-nowrap text-center"
+              >
+                Profile
+              </Link>
+              <button
+                className="bg-rose-500 hover:bg-rose-600 active:bg-rose-700 text-white p-1 px-3 w-full rounded-md transition cursor-pointer text-nowrap"
+                onClick={() => handleLogout()}
+              >
+                Logout
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) return console.log(error);
+
+    localStorage.removeItem("token");
+    location.reload();
   };
 
   const renderCategories = () => {
     return (
       <div
-        className="min-w-[500px] max-w-max min-h-[200px] max-h-[300px] bg-zinc-100 p-5 flex rounded-b-xl shadow-md z-50"
+        className="min-w-[500px] max-w-max min-h-[200px] max-h-[300px] bg-white p-5 flex rounded-b-xl shadow-md z-50"
         onMouseEnter={() => {
           handleMouseEnter();
           setMouseOnPopup(true);
@@ -155,23 +275,69 @@ export default function NavigationBar() {
                 className="w-full border-2 rounded-lg p-2 px-4 text-sm"
               />
             </div>
-            <div className="hover:[&_button]:bg-sky-500 [&_button]:p-2 [&_button]:px-4 [&_button]:rounded-lg [&_button]:border-b-2 [&_button]:border-b-transparent hover:[&_button]:border-b-sky-600 hover:[&_button]:text-white [&_button]:transition [&_button]:min-w-[150px] flex gap-3">
-              <button
+            <div className="flex gap-2">
+              <div
+                className="cursor-pointer flex justify-center items-center p-3 text-2xl rounded-full text-slate-700 hover:bg-rose-500 hover:text-white transition hover:border-b-rose-600 border-transparent border-b-2 relative duration-150"
+                onMouseEnter={() => setMouseOnWishlistPopup(true)}
+                onMouseLeave={() => setMouseOnWishlistPopup(false)}
+              >
+                {!mouseOnWishlistPopup ? <IoMdHeartEmpty /> : <IoMdHeart />}
+                {mouseOnWishlistPopup && (
+                  <div className="absolute z-[1000] top-[4rem] w-max p-1 px-3 justify-center items-center flex h-max bg-slate-500 text-white text-base rounded-lg shadow-xl transition-all">
+                    <div className="w-5 h-5 rotate-45 bg-slate-500 absolute -top-1 z-[-1] self-center -translate-x-1/2 left-1/2"></div>
+                    Wishlist
+                  </div>
+                )}
+              </div>
+              <div
+                className="cursor-pointer flex justify-center items-center p-3 text-2xl rounded-full text-slate-700 hover:bg-sky-500 hover:text-white transition hover:border-b-sky-600 border-transparent border-b-2 relative duration-150"
+                onMouseEnter={() => setMouseOnCartPopup(true)}
+                onMouseLeave={() => setMouseOnCartPopup(false)}
+              >
+                {!mouseOnCartPopup ? (
+                  <RiShoppingCart2Line />
+                ) : (
+                  <RiShoppingCart2Fill />
+                )}
+                {mouseOnCartPopup && (
+                  <div className="absolute z-[1000] top-[4rem] w-max p-1 px-3 justify-center items-center flex h-max bg-slate-500 text-white text-base rounded-lg shadow-xl transition-all">
+                    <div className="w-5 h-5 rotate-45 bg-slate-500 absolute -top-1 z-[-1] self-center -translate-x-1/2 left-1/2"></div>
+                    Cart
+                  </div>
+                )}
+              </div>
+              {loggedInUser && (
+                <div className="h-6 w-[2px] bg-slate-100 self-center mx-3 mr-6" />
+              )}
+              <div
+                className="flex gap-2 group/auth cursor-help"
                 onMouseEnter={() => {
                   setIsCategoriesPopupVisible(false);
                   setMouseOnPopup(false);
+                  handleMouseEnterOnAuth();
+                  setMouseOnAuthPopup(true);
+                }}
+                onMouseOver={() => {
+                  setMouseOnAuthPopup(true);
+                  handleMouseEnterOnAuth();
+                }}
+                onMouseLeave={() => {
+                  handleMouseLeaveOnAuth();
+                  setMouseOnAuthPopup(false);
                 }}
               >
-                Contact Us
-              </button>
-              <button
-                onMouseEnter={() => {
-                  setIsCategoriesPopupVisible(false);
-                  setMouseOnPopup(false);
-                }}
-              >
-                About Us
-              </button>
+                <span className="self-center">
+                  {loggedInUser && loggedInUser.username}
+                </span>
+                <div className="cursor-pointer flex justify-center items-center p-3 text-2xl rounded-full text-slate-700 group-hover/auth:bg-sky-500 group-hover/auth:text-white transition group-hover/auth:border-b-sky-600 border-transparent border-b-2 relative duration-150">
+                  {isAuthPopupVisible && (
+                    <div className="absolute top-[100px] w-full justify-center items-center flex h-full z-[100]">
+                      {renderAuthPopup()}
+                    </div>
+                  )}
+                  {!mouseOnAuthPopup ? <FaRegUser /> : <FaUser />}
+                </div>
+              </div>
             </div>
           </div>
         </div>

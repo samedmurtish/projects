@@ -6,6 +6,13 @@ import { FaHeart } from "react-icons/fa";
 
 export default function TrendingProducts() {
   const [trendingProducts, setTrendingProducts] = React.useState<any>([]);
+
+  const [userLoggedIn, setUserLoggedIn] = React.useState<any>(
+    typeof window !== "undefined" && localStorage.getItem("token")
+      ? true
+      : false
+  );
+
   const getTrendingProducts = async () => {
     const { data, error } = await supabase.from("products").select("*");
     if (error) return console.log(error);
@@ -72,7 +79,7 @@ export default function TrendingProducts() {
                     ? product.selectedImage
                     : product.thumbnail
                 }
-                className="w-full h-full object-contain"
+                className="w-full h-full object-contain group-hover/thumbnail:blur-sm transition-all"
               />
 
               <div className="flex gap-2 absolute inset-0 justify-center rounded-xl group-hover/thumbnail:bg-black/20 py-3 h-full transition-all">
@@ -92,15 +99,17 @@ export default function TrendingProducts() {
                   </div>
                 ))}
               </div>
-              <div
-                className="absolute bottom-0 right-0 text-white p-3 rounded-xl cursor-pointer  flex justify-center items-center group-hover/thumbnail:bg-black/30 hover:bg-black/50 active:text-rose-400 hover:text-rose-500 opacity-0 group-hover/thumbnail:opacity-100 transition duration-0 text-sm group-hover/thumbnail:text-4xl m-3"
-                onClick={(e: any) => stopPropagation(e)}
-              >
-                <FaHeart
-                  style={{ stroke: "black", strokeWidth: "20px" }}
-                  className="stroke-black w-8 h-8"
-                />
-              </div>
+              {userLoggedIn && (
+                <div
+                  className="absolute bottom-0 right-0 text-white p-3 rounded-xl cursor-pointer  flex justify-center items-center group-hover/thumbnail:bg-black/30 hover:bg-black/50 active:text-rose-400 hover:text-rose-500 opacity-0 group-hover/thumbnail:opacity-100 transition duration-0 text-sm group-hover/thumbnail:text-4xl m-3"
+                  onClick={(e: any) => stopPropagation(e)}
+                >
+                  <FaHeart
+                    style={{ stroke: "black", strokeWidth: "20px" }}
+                    className="stroke-black w-8 h-8"
+                  />
+                </div>
+              )}
             </div>
             <div className="py-2 text-xl">{product.name}</div>
             {/* <div className="px-2 pb-1 h-16 w-full flex mb-2 border-2 border-slate-100 rounded-2xl gap-1 justify-start items-center pt-2 overflow-x-auto flex-nowrap overflow-y-hidden">

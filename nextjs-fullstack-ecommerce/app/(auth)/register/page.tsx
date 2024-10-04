@@ -79,6 +79,7 @@ export default function SignUp() {
               setErrorText("");
             }}
             className="p-2 px-3 rounded-lg border-[1px]"
+            required
           />
           <input
             type="text"
@@ -88,6 +89,7 @@ export default function SignUp() {
               setErrorText("");
             }}
             className="p-2 px-3 rounded-lg border-[1px]"
+            required
           />
           <input
             type="password"
@@ -97,6 +99,7 @@ export default function SignUp() {
               setErrorText("");
             }}
             className="p-2 px-3 rounded-lg border-[1px]"
+            required
           />
           <input
             type="password"
@@ -106,6 +109,7 @@ export default function SignUp() {
               setErrorText("");
             }}
             className="p-2 px-3 rounded-lg border-[1px]"
+            required
           />
           <button
             className="bg-emerald-400 hover:bg-emerald-500 transition w-full h-14 mt-3 text-white rounded-lg text-md"
@@ -129,10 +133,10 @@ export default function SignUp() {
           </div>
         </div>
       </div>
-      <span className="w-full text-center flex justify-center items-center text-rose-400">
+      <span className="w-full text-center flex justify-center items-center text-rose-400 pb-5">
         {errorText}
       </span>
-      <span className="w-full text-center flex justify-center items-center text-emerald-400">
+      <span className="w-full text-center flex justify-center items-center text-emerald-400 pb-5">
         {warnText}
       </span>
     </form>

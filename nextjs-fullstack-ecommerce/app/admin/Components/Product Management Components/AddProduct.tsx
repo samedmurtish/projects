@@ -13,9 +13,13 @@ export default function AddProduct({ setPage, getProducts, highestId }: any) {
   const [productName, setProductName] = useState("");
   const [price, setPrice] = useState(0);
   const addSubCategoryText = "Add Sub Category";
+  const selectCategoryText = "Select Category";
   const [subCategoriesToSelect, setSubCategoriesToSelect] = useState<any>([]);
   const [newSubCategories, setNewSubCategories] = useState<any>([]);
   const [subCategories, setSubCategories] = useState<any>([]);
+  const [categoriesToSelect, setCategoriesToSelect] = useState<any>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+
   const [subCategoryName, setSubCategoryName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(0);
@@ -39,6 +43,13 @@ export default function AddProduct({ setPage, getProducts, highestId }: any) {
     const uniqueCategories = new Set(data.map((item: any) => item.name));
     setSubCategoriesToSelect(Array.from(uniqueCategories));
   };
+
+  const getCategories = async () => {
+    const { data, error } = await supabase.from("categories").select("*");
+    if (error) return console.log(error);
+    setCategoriesToSelect(data);
+  };
+
   const postSubCategory = async (name: any) => {
     const { data, error } = await supabase
       .from("sub_categories")
@@ -47,6 +58,26 @@ export default function AddProduct({ setPage, getProducts, highestId }: any) {
     if (error) return console.log(error);
     if (data) console.log(data);
   };
+
+  const handleChangeCategory = (e: any) => {
+    let category: any = null;
+
+    categoriesToSelect.map((loopCategory: any) => {
+      if (loopCategory.name == e) {
+        category = loopCategory;
+      }
+    });
+    const newList: any = [];
+    subCategories.map((subCategory: any) => {
+      category.sub_categories.map((category: any) => {
+        if (category == subCategory) {
+          newList.push(subCategory);
+        }
+      });
+    });
+    setSubCategories(newList);
+  };
+
   const postProduct = async () => {
     const uploadedImages = await postImages();
 
@@ -55,6 +86,7 @@ export default function AddProduct({ setPage, getProducts, highestId }: any) {
         name: productName,
         price,
         is_public: isPublic,
+        category: selectedCategory,
         sub_categories: subCategories,
         thumbnail: uploadedImages.thumbnail,
         images: uploadedImages.images,
@@ -74,7 +106,12 @@ export default function AddProduct({ setPage, getProducts, highestId }: any) {
     }
   };
   const handleAddSubCategoryValues = () => {
-    return subCategoriesToSelect.map((subCategory: any) => (
+    let category: any;
+    categoriesToSelect.map((loopCategory: any) => {
+      if (selectedCategory)
+        if (loopCategory.name == selectedCategory) category = loopCategory;
+    });
+    return category.sub_categories.map((subCategory: any) => (
       <option key={subCategory} value={subCategory}>
         {subCategory}
       </option>
@@ -125,6 +162,7 @@ export default function AddProduct({ setPage, getProducts, highestId }: any) {
   };
   useEffect(() => {
     getSubCategories();
+    getCategories();
   }, []);
 
   const checkBeforePost = () => {
@@ -275,6 +313,14 @@ export default function AddProduct({ setPage, getProducts, highestId }: any) {
     );
   };
 
+  const handleRenderCategories = () => {
+    return categoriesToSelect.map((category: any) => (
+      <option key={category.id} value={category.name}>
+        {category.name}
+      </option>
+    ));
+  };
+
   return (
     <div className="flex flex-col gap-3 text-black">
       <div className="text-3xl text-white font-extrabold flex items-center gap-3">
@@ -380,6 +426,18 @@ export default function AddProduct({ setPage, getProducts, highestId }: any) {
               required
               onChange={(e: any) => setQuantity(e.target.value)}
             />
+            <select
+              className="p-3 px-5 rounded-md text-black w-full"
+              onChange={(e: any) => {
+                if (e.target.value !== selectCategoryText) {
+                  setSelectedCategory(e.target.value);
+                  handleChangeCategory(e.target.value);
+                }
+              }}
+            >
+              <option>{selectCategoryText}</option>
+              {handleRenderCategories()}
+            </select>
             <div className="flex">
               <input
                 type="text"
@@ -394,6 +452,9 @@ export default function AddProduct({ setPage, getProducts, highestId }: any) {
                     handleAddSubCategory(subCategoryName);
                   }
                 }}
+                disabled={
+                  !selectedCategory || selectedCategory == selectCategoryText
+                }
               />
               <span className="text-white px-5 flex h-full justify-center items-center">
                 OR
@@ -405,9 +466,12 @@ export default function AddProduct({ setPage, getProducts, highestId }: any) {
                     handleAddSubCategory(e.target.value);
                   }
                 }}
+                disabled={
+                  !selectedCategory || selectedCategory == selectCategoryText
+                }
               >
                 <option>{addSubCategoryText}</option>
-                {handleAddSubCategoryValues()}
+                {selectedCategory && handleAddSubCategoryValues()}
               </select>
             </div>
             <textarea

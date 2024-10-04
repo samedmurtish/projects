@@ -4,6 +4,7 @@ import banner2 from "../../../../images/banner2.jpg";
 import banner3 from "../../../../images/banner3.jpg";
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 import { supabase } from "@/app/lib/supabase";
+import Link from "next/link";
 export default function Banners() {
   const [bannerTurn, setBannerTurn] = React.useState(0);
   const [bannerWidth, setBannerWidth] = React.useState(0);
@@ -25,6 +26,7 @@ export default function Banners() {
       if (banner.is_public) tempData.push(banner);
     });
     setBanners(tempData);
+    console.log(tempData);
   };
 
   useEffect(() => {
@@ -72,10 +74,12 @@ export default function Banners() {
       <div className="w-3/4 mx-auto my-0 pt-5 select-none">
         <div className="w-full overflow-hidden flex justify-center items-center">
           <div className="relative w-full">
-            <img
-              src={banners[bannerTurn]?.image}
-              className="w-full object-cover h-[500px] select-none"
-            />
+            <Link href={`/categories/`}>
+              <img
+                src={banners[bannerTurn]?.image}
+                className="w-full object-cover h-[500px] select-none"
+              />
+            </Link>
             {banners.length > 1 && (
               <>
                 <div

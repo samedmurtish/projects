@@ -14,9 +14,9 @@ export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // useEffect(() => {
-  //   if (localStorage.getItem("token")) redirect("/");
-  // }, []);
+  useEffect(() => {
+    if (localStorage.getItem("token")) redirect("/");
+  }, []);
 
   async function signIn(email: string, password: string) {
     try {
@@ -58,12 +58,14 @@ export default function SignIn() {
             placeholder="Email"
             onChange={(e) => setEmail(e.target.value)}
             className="p-2 px-3 rounded-lg border-[1px]"
+            required
           />
           <input
             type="password"
             placeholder="Password"
             onChange={(e) => setPassword(e.target.value)}
             className="p-2 px-3 rounded-lg border-[1px]"
+            required
           />
           <button className="bg-emerald-400 hover:bg-emerald-500 transition w-full h-14 mt-3 text-white rounded-lg text-md">
             Sign In
@@ -79,7 +81,7 @@ export default function SignIn() {
           </p>
         </div>
       </div>
-      <span className="w-full text-center flex justify-center items-center text-rose-400">
+      <span className="w-full text-center flex justify-center items-center text-rose-400 pb-5">
         {errorText}
       </span>
     </form>

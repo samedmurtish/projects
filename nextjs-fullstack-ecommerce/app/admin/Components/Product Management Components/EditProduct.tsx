@@ -1,19 +1,13 @@
 import { supabase } from "@/app/lib/supabase";
 import React, { useEffect, useState } from "react";
 import { IoMdArrowRoundBack, IoMdCloseCircle } from "react-icons/io";
-
-type UploadedImageURLs = {
-  thumbnail: string | undefined;
-  images: string[];
-};
-
 export default function EditProduct({
   product,
   setPage,
   getProducts,
   getValidSubCategories,
 }: any) {
-  const [isPublic, setIsPublic] = useState(true);
+  const [isPublic, setIsPublic] = useState(product.is_public);
   const [productName, setProductName] = useState(product.name);
   const [price, setPrice] = useState(product.price);
   const [description, setDescription] = useState<string>(product.description);
@@ -37,9 +31,21 @@ export default function EditProduct({
     product.images ? [...product.images] : []
   );
 
+  const selectCategoryText = "Select Category";
+  const [categoriesToSelect, setCategoriesToSelect] = useState<any>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>(
+    product.category
+  );
   useEffect(() => {
     getSubCategories();
+    getCategories();
   }, []);
+
+  const getCategories = async () => {
+    const { data, error } = await supabase.from("categories").select("*");
+    if (error) return console.log(error);
+    setCategoriesToSelect(data);
+  };
 
   const getSubCategories = async () => {
     const { data, error } = await supabase.from("sub_categories").select("*");
@@ -130,7 +136,13 @@ export default function EditProduct({
     getProducts();
     return { tempUpdatedImages };
   };
-
+  const handleRenderCategories = () => {
+    return categoriesToSelect.map((category: any) => (
+      <option key={category.id} value={category.name}>
+        {category.name}
+      </option>
+    ));
+  };
   const handleUpdateProduct = async () => {
     const { tempUpdatedImages } = await checkBeforePost();
 
@@ -161,6 +173,7 @@ export default function EditProduct({
         name: productName,
         price,
         sub_categories: subCategories,
+        category: selectedCategory,
         is_public: isPublic,
         thumbnail: updatedThumbnail,
         images: updatedImages,
@@ -223,11 +236,18 @@ export default function EditProduct({
     }
   };
   const handleAddSubCategoryValues = () => {
-    return subCategoriesToSelect.map((subCategory: any) => (
-      <option key={subCategory} value={subCategory}>
-        {subCategory}
-      </option>
-    ));
+    let category: any;
+    categoriesToSelect.map((loopCategory: any) => {
+      if (selectedCategory)
+        if (loopCategory.name == selectedCategory) category = loopCategory;
+    });
+
+    if (category)
+      return category.sub_categories.map((subCategory: any) => (
+        <option key={subCategory} value={subCategory}>
+          {subCategory}
+        </option>
+      ));
   };
   const preventFormSubmit = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
@@ -338,6 +358,25 @@ export default function EditProduct({
     alert("Copied to clipboard.");
   };
 
+  const handleChangeCategory = (e: any) => {
+    let category: any = null;
+
+    categoriesToSelect.map((loopCategory: any) => {
+      if (loopCategory.name == e) {
+        category = loopCategory;
+      }
+    });
+    const newList: any = [];
+    subCategories.map((subCategory: any) => {
+      category.sub_categories.map((category: any) => {
+        if (category == subCategory) {
+          newList.push(subCategory);
+        }
+      });
+    });
+    setSubCategories(newList);
+  };
+
   return (
     <div className="flex flex-col gap-3">
       <div className="text-3xl text-white font-extrabold flex items-center gap-3">
@@ -443,6 +482,19 @@ export default function EditProduct({
             placeholder={product.quantity}
             onChange={(e: any) => setQuantity(e.target.value)}
           />
+          <select
+            className="p-3 px-5 rounded-md text-black w-full"
+            onChange={(e: any) => {
+              if (e.target.value !== selectCategoryText) {
+                setSelectedCategory(e.target.value);
+                handleChangeCategory(e.target.value);
+              }
+            }}
+            value={selectedCategory}
+          >
+            <option>{selectCategoryText}</option>
+            {handleRenderCategories()}
+          </select>
           <div className="flex justify-center items-center">
             <input
               type="text"
@@ -457,6 +509,9 @@ export default function EditProduct({
                   handleAddSubCategory(subCategoryName);
                 }
               }}
+              disabled={
+                !selectedCategory || selectedCategory == selectCategoryText
+              }
             />
             <span className="text-white px-5 flex h-full justify-center items-center">
               OR
@@ -468,6 +523,9 @@ export default function EditProduct({
                   handleAddSubCategory(e.target.value);
                 }
               }}
+              disabled={
+                !selectedCategory || selectedCategory == selectCategoryText
+              }
             >
               <option>{addSubCategoryText}</option>
               {handleAddSubCategoryValues()}
@@ -495,7 +553,7 @@ export default function EditProduct({
           </div>
           <select
             className="p-3 px-5 rounded-lg"
-            value={product.is_public ? "Public" : "Private"}
+            value={isPublic ? "Public" : "Private"}
             onChange={(e) =>
               setIsPublic(e.target.value == "Public" ? true : false)
             }

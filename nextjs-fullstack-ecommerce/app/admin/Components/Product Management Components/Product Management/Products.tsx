@@ -110,7 +110,9 @@ export default function Products() {
               <div className="text-2xl flex flex-col gap-2">
                 <div className="w-52 text-ellipsis text-nowrap overflow-hidden">
                   <div className="w-full"></div>
-                  <span>{product.name}</span>
+                  <span>
+                    {product.name} #{product.id}
+                  </span>
                 </div>
                 <span className="p-1 px-3 bg-green-400 hover:bg-green-500 transition w-max rounded-full text-white text-base font-bold">
                   <span className="text-green-100">$</span> {product.price}
