@@ -134,7 +134,9 @@ export default function ProductPage() {
                   <ImageShowcase product={product} />
                   <div className="w-full p-10 py-7 pt-3 flex flex-col justify-between">
                     <div>
-                      <div className="flex py-2">{renderTags()}</div>
+                      <div className="flex flex-wrap py-2 gap-1">
+                        {renderTags()}
+                      </div>
                       <div className="text-2xl font-semibold pb-0 w-max ">
                         <p className="max-w-[700px] text-slate-600">
                           {product.name}

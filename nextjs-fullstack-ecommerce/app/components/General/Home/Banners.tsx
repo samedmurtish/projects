@@ -71,7 +71,7 @@ export default function Banners() {
 
   return (
     banners.length > 0 && (
-      <div className="w-3/4 mx-auto my-0 pt-5 select-none">
+      <div className="w-screen md:w-3/4 md:mx-auto md:my-0 pt-5 select-none md:mt-0 mt-[4.5rem]">
         <div className="w-full overflow-hidden flex justify-center items-center">
           <div className="relative w-full">
             <Link

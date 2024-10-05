@@ -277,21 +277,24 @@ export default function NavigationBar() {
               />
             </div>
             <div className="flex gap-2">
-              <div
-                className="cursor-pointer flex justify-center items-center p-3 text-2xl rounded-full text-slate-700 hover:bg-rose-500 hover:text-white transition hover:border-b-rose-600 border-transparent border-b-2 relative duration-150"
+              <Link
+                href="/wishlist"
+                className="cursor-pointer flex justify-center items-center p-3 text-2xl rounded-full text-slate-700 hover:bg-rose-500 hover:text-white transition hover:border-b-rose-600 active:bg-rose-500 border-transparent border-b-2 relative duration-150 group/wishlist"
                 onMouseEnter={() => setMouseOnWishlistPopup(true)}
                 onMouseLeave={() => setMouseOnWishlistPopup(false)}
               >
                 {!mouseOnWishlistPopup ? <IoMdHeartEmpty /> : <IoMdHeart />}
-                {mouseOnWishlistPopup && (
-                  <div className="absolute z-[1000] top-[4rem] w-max p-1 px-3 justify-center items-center flex h-max bg-slate-500 text-white text-base rounded-lg shadow-xl transition-all">
-                    <div className="w-5 h-5 rotate-45 bg-slate-500 absolute -top-1 z-[-1] self-center -translate-x-1/2 left-1/2"></div>
-                    Wishlist
-                  </div>
-                )}
-              </div>
-              <div
-                className="cursor-pointer flex justify-center items-center p-3 text-2xl rounded-full text-slate-700 hover:bg-sky-500 hover:text-white transition hover:border-b-sky-600 border-transparent border-b-2 relative duration-150"
+
+                <div className="absolute z-[1000] top-[4rem] p-1 px-3 justify-center items-center flex bg-transparent text-transparent text-base rounded-lg transition duration-150 pointer-events-none group-hover/wishlist:pointer-events-auto group-hover/wishlist:bg-slate-500 group-hover/wishlist:text-white">
+                  <div className="transition w-5 h-5 rotate-45 bg-transparent absolute -top-1 z-[-1] self-center -translate-x-1/2 left-1/2 pointer-events-none group-hover/wishlist:bg-slate-500 duration-200" />
+
+                  <span className="pointer-events-none">Wishlist</span>
+                </div>
+              </Link>
+
+              <Link
+                href="/cart"
+                className="cursor-pointer flex justify-center items-center p-3 text-2xl rounded-full text-slate-700 hover:bg-sky-500 hover:text-white transition hover:border-b-sky-600 active:bg-sky-500 border-transparent border-b-2 relative duration-150 group/cart"
                 onMouseEnter={() => setMouseOnCartPopup(true)}
                 onMouseLeave={() => setMouseOnCartPopup(false)}
               >
@@ -300,13 +303,14 @@ export default function NavigationBar() {
                 ) : (
                   <RiShoppingCart2Fill />
                 )}
-                {mouseOnCartPopup && (
-                  <div className="absolute z-[1000] top-[4rem] w-max p-1 px-3 justify-center items-center flex h-max bg-slate-500 text-white text-base rounded-lg shadow-xl transition-all">
-                    <div className="w-5 h-5 rotate-45 bg-slate-500 absolute -top-1 z-[-1] self-center -translate-x-1/2 left-1/2"></div>
-                    Cart
-                  </div>
-                )}
-              </div>
+
+                <div className="absolute z-[1000] top-[4rem] p-1 px-3 justify-center items-center flex bg-transparent text-transparent text-base rounded-lg transition duration-150 pointer-events-none group-hover/cart:pointer-events-auto group-hover/cart:bg-slate-500 group-hover/cart:text-white">
+                  <div className="transition w-5 h-5 rotate-45 bg-transparent absolute -top-1 z-[-1] self-center -translate-x-1/2 left-1/2 pointer-events-none group-hover/cart:bg-slate-500 duration-200" />
+
+                  <span className="pointer-events-none">Cart</span>
+                </div>
+              </Link>
+
               {loggedInUser && (
                 <div className="h-6 w-[2px] bg-slate-100 self-center mx-3 mr-6" />
               )}

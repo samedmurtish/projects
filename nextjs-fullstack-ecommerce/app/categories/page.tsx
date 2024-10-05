@@ -23,7 +23,7 @@ export default function page() {
       <div key={category} className="flex flex-col">
         <Link
           href={`/categories/${category.name}`}
-          className="hover:underline font-extrabold"
+          className="hover:underline font-extrabold w-max"
         >
           {category.name}
         </Link>
@@ -57,7 +57,7 @@ export default function page() {
       {categories && (
         <div className="w-3/4 mx-auto my-0 h-full">
           <div className="flex items-center flex-col mt-52 gap-5 bg-white p-10 rounded-lg">
-            <div className="font-extrabold text-2xl">Categories</div>
+            <div className="text-2xl">Categories</div>
             <div className="flex flex-wrap gap-20">
               {handleRenderCategories()}
             </div>
