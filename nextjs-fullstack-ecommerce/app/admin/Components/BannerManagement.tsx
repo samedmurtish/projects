@@ -154,12 +154,14 @@ export default function BannerManagement() {
       if (banners[bannerID].category == loopCategory.name)
         category = loopCategory;
     });
-    console.log(category);
-    return category.sub_categories.map((subCategory: any) => (
-      <option key={subCategory} value={subCategory}>
-        {subCategory}
-      </option>
-    ));
+    return (
+      category &&
+      category.sub_categories.map((subCategory: any) => (
+        <option key={subCategory} value={subCategory}>
+          {subCategory}
+        </option>
+      ))
+    );
   };
 
   const handleCategoryChange = async (e: any, index: number) => {
