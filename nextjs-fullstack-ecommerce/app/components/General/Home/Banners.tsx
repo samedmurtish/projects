@@ -75,7 +75,11 @@ export default function Banners() {
         <div className="w-full overflow-hidden flex justify-center items-center">
           <div className="relative w-full">
             <Link
-              href={`/categories/${banners[bannerTurn]?.category}/${banners[bannerTurn]?.subcategory}`}
+              href={`${
+                banners[bannerTurn]?.category
+                  ? `/categories/${banners[bannerTurn]?.category}/${banners[bannerTurn]?.subcategory}`
+                  : "/"
+              }`}
             >
               <img
                 src={banners[bannerTurn]?.image}
