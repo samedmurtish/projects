@@ -38,7 +38,7 @@ export default function Category({ params }: { params: { category: string } }) {
                     <Link
                       href={`/categories/${category.name}/${subCategory}`}
                       key={subCategory}
-                      className="underline"
+                      className="hover:underline"
                     >
                       {subCategory}{" "}
                     </Link>

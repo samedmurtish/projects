@@ -89,7 +89,7 @@ export default function ImageShowcase({ product }: any) {
       <div className="h-full w-[400px] flex justify-center items-center">
         {imagesLoaded ? (
           <img
-            src={showcaseImage}
+            src={product.images.length > 0 ? showcaseImage : product.thumbnail}
             alt={product.title}
             className="w-max h-full image"
           />

@@ -6,11 +6,17 @@ export default function BannerManagement() {
   const [now, setNow] = useState(Date.now());
   const [dragging, setDragging] = useState(false);
   const [categories, setCategories] = useState<any>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedSubCategory, setSelectedSubCategory] = useState<string>("");
 
   const getCategories = async () => {
     const { data, error } = await supabase.from("categories").select("*");
     if (error) return console.log(error);
-    setCategories(data);
+    setCategories((prev: any) => {
+      const newCategories = [...data];
+
+      return newCategories;
+    });
   };
 
   useEffect(() => {
@@ -29,7 +35,6 @@ export default function BannerManagement() {
     setBanners((prev: any) => {
       const newBanners = [...prev];
       newBanners[index].is_public = !banners[index].is_public;
-      console.log(newBanners[index]);
       return newBanners;
     });
   };
@@ -53,7 +58,8 @@ export default function BannerManagement() {
           .getPublicUrl(fileName);
 
         const upload = await supabase.from("banners").insert({
-          redirect_to: "/",
+          category: "",
+          subcategory: "",
           image: imageURL.data.publicUrl,
           now,
         });
@@ -120,13 +126,13 @@ export default function BannerManagement() {
       .order("orderIndex", { ascending: true });
     if (error) return console.log(error);
 
-    let tempBanners: any = [];
-
-    data.map((banner: any, index: number) => {
-      return tempBanners.push(banner);
+    setBanners((banner: any, index: number) => {
+      const newBanners = [...data];
+      newBanners.map((banner: any) => {
+        if (banner.category) banner.category = banner.category;
+      });
+      return newBanners;
     });
-
-    setBanners(tempBanners);
   };
 
   useEffect(() => {
@@ -141,10 +147,25 @@ export default function BannerManagement() {
     ));
   };
 
+  const renderSubCategoriesOptions = (bannerID: number) => {
+    if (banners[bannerID].category == "") return null;
+    let category: any;
+    categories.map((loopCategory: any) => {
+      if (banners[bannerID].category == loopCategory.name)
+        category = loopCategory;
+    });
+    console.log(category);
+    return category.sub_categories.map((subCategory: any) => (
+      <option key={subCategory} value={subCategory}>
+        {subCategory}
+      </option>
+    ));
+  };
+
   const handleCategoryChange = async (e: any, index: number) => {
     const { data, error } = await supabase
       .from("banners")
-      .update({ redirect_to: e })
+      .update({ category: e })
       .eq("id", banners[index].id);
 
     if (data) console.log(data);
@@ -152,8 +173,23 @@ export default function BannerManagement() {
 
     setBanners((prev: any) => {
       const newBanners = [...prev];
-      newBanners[index].redirect_to = e;
+      newBanners[index].category = e;
       console.log(newBanners[index]);
+      return newBanners;
+    });
+  };
+
+  const handleSubCategoryChange = async (e: any, index: number) => {
+    const { data, error } = await supabase
+      .from("banners")
+      .update({ subcategory: e })
+      .eq("id", banners[index].id);
+    if (error) return console.log(error);
+    if (data) console.log(data);
+
+    setBanners((prev: any) => {
+      const newBanners = [...prev];
+      newBanners[index].subcategory = e;
       return newBanners;
     });
   };
@@ -272,16 +308,28 @@ export default function BannerManagement() {
                   key={banner?.id + index + banner?.now}
                   className="w-full h-52 object-contain"
                 />
-                <div className="w-full h-full text-black flex justify-center items-center bg-slate-100 p-2 ">
+                <div className="w-full h-full text-black flex justify-center items-center bg-slate-100 p-2 flex-col gap-1">
+                  Redirect To
                   <select
-                    value={banner?.redirect_to}
+                    value={banner?.category}
                     className="w-full flex justify-center items-center h-8 px-1"
                     onChange={(e) =>
                       handleCategoryChange(e.target.value, index)
                     }
                   >
-                    <option value="/">Redirect To</option>
+                    <option value="">Category</option>
                     {renderCategoriesOptions()}
+                  </select>
+                  <select
+                    value={banner?.subcategory}
+                    className="w-full flex justify-center items-center h-8 px-1"
+                    onChange={(e) => {
+                      handleSubCategoryChange(e.target.value, index);
+                    }}
+                    disabled={!banner?.category && banner?.category == ""}
+                  >
+                    <option value="">Sub-Category</option>
+                    {renderSubCategoriesOptions(index)}
                   </select>
                 </div>
                 <div className="w-full h-full text-black flex justify-center items-center bg-slate-100 p-2 ">

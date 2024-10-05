@@ -74,7 +74,9 @@ export default function Banners() {
       <div className="w-3/4 mx-auto my-0 pt-5 select-none">
         <div className="w-full overflow-hidden flex justify-center items-center">
           <div className="relative w-full">
-            <Link href={`/categories/`}>
+            <Link
+              href={`/categories/${banners[bannerTurn]?.category}/${banners[bannerTurn]?.subcategory}`}
+            >
               <img
                 src={banners[bannerTurn]?.image}
                 className="w-full object-cover h-[500px] select-none"

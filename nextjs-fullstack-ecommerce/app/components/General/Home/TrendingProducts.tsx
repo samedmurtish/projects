@@ -79,7 +79,11 @@ export default function TrendingProducts() {
                     ? product.selectedImage
                     : product.thumbnail
                 }
-                className="w-full h-full object-contain group-hover/thumbnail:blur-sm transition-all"
+                className={`w-full h-full object-contain ${
+                  product.images.length > 0
+                    ? "group-hover/thumbnail:blur-sm"
+                    : ""
+                } transition-all`}
               />
 
               <div className="flex gap-2 absolute inset-0 justify-center rounded-xl group-hover/thumbnail:bg-black/20 py-3 h-full transition-all">

@@ -219,9 +219,9 @@ export default function Products() {
           style={{ gap: products.length == 0 ? "20px" : "12px" }}
         >
           <div>{renderAddProduct()}</div>
-          <div className="flex flex-wrap max-w-[1270px] overflow-hidden overflow-y-auto gap-3 bg-zinc-200 p-5 rounded-lg">
+          <div className="flex flex-wrap max-w-[65rem] max-h-[60vh] overflow-hidden overflow-y-auto gap-3 bg-zinc-200 p-5 rounded-lg">
             {products.length > 0 ? (
-              <>{handleRenderProducts()}</>
+              handleRenderProducts()
             ) : (
               <div className="w-full h-full flex justify-center items-center text-4xl p-20 text-slate-500 font-bold">
                 No products found.

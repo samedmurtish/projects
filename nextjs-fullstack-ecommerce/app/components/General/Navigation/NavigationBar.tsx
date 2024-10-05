@@ -247,7 +247,8 @@ export default function NavigationBar() {
                 <img src={logo.src} className="w-32" />
               </Link>
               <div className="relative">
-                <button
+                <Link
+                  href="/categories"
                   className={`flex gap-2 justify-center items-center hover:text-white hover:bg-sky-500 p-2 px-4 rounded-lg border-b-2 border-b-transparent hover:border-b-sky-600 transition min-w-[150px] ${
                     mouseOnPopup || isCategoriesPopupVisible
                       ? "bg-sky-500 border-sky-600 text-white"
@@ -260,7 +261,7 @@ export default function NavigationBar() {
                     <BsList />
                   </span>
                   Categories
-                </button>
+                </Link>
                 {isCategoriesPopupVisible && (
                   <div className="absolute left-[10rem] top-[202px] mt-1 w-full justify-center items-center categories-popup flex h-full z-[100]">
                     {renderCategories()}

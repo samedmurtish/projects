@@ -9,7 +9,7 @@ type UploadedImageURLs = {
 };
 
 export default function AddProduct({ setPage, getProducts, highestId }: any) {
-  const [isPublic, setIsPublic] = useState(false);
+  const [isPublic, setIsPublic] = useState(true);
   const [productName, setProductName] = useState("");
   const [price, setPrice] = useState(0);
   const addSubCategoryText = "Add Sub Category";
@@ -486,10 +486,12 @@ export default function AddProduct({ setPage, getProducts, highestId }: any) {
                 e.target.value === "Public"
                   ? setIsPublic(true)
                   : setIsPublic(false);
+                console.log(e.target.value);
               }}
+              value={isPublic ? "Public" : "Private"}
             >
-              <option>Public</option>
-              <option>Private</option>
+              <option value="Public">Public</option>
+              <option value="Private">Private</option>
             </select>
             <button
               className="text-white bg-green-500 p-3 w-full h-12 rounded-lg border-b-[3px] border-b-green-600 active:border-b-0 active:bg-green-700 hover:bg-green-600 hover:border-green-700 transition"

@@ -4,6 +4,7 @@ import NavigationBar from "@/app/components/General/Navigation/NavigationBar";
 import RenderStars from "@/app/components/General/Products/RenderStars";
 import { supabase } from "@/app/lib/supabase";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaHeart } from "react-icons/fa";
 
@@ -12,6 +13,8 @@ export default function SubCategory({
 }: {
   params: { category: string; subcategory: string };
 }) {
+  const router = useRouter();
+
   const [category, setCategory] = useState<any>(null);
   const [subCategory, setSubCategory] = useState<any>(null);
   const [userLoggedIn, setUserLoggedIn] = React.useState<any>();
@@ -55,6 +58,9 @@ export default function SubCategory({
     if (error) return console.log(error);
     setCategory(data[0]);
 
+    if (data[0] == undefined && error == null) {
+      router.push("/");
+    }
     await getSubCategories();
   };
 
@@ -66,6 +72,10 @@ export default function SubCategory({
     if (error) return console.log(error);
 
     setSubCategory(data[0]);
+    console.log(data[0], error);
+    if (data[0] == undefined && error == null) {
+      router.push("/");
+    }
   };
   const handleUpdateSelectedImage = (productId: any, image: any) => {
     setProducts((prev: any) => {
@@ -87,7 +97,7 @@ export default function SubCategory({
           <Link
             href={`/product/${product.id}`}
             key={product.id + product.name}
-            className="min-w-64 max-w-64 h-max bg-white flex justify-around items-center flex-col p-3 select-none rounded-xl"
+            className="min-w-52 w-52 max-w-64 grow h-max bg-white flex justify-around items-center flex-col p-3 select-none rounded-xl"
             onMouseLeave={() =>
               handleUpdateSelectedImage(product.id, product.thumbnail)
             }
@@ -99,7 +109,11 @@ export default function SubCategory({
                     ? product.selectedImage
                     : product.thumbnail
                 }
-                className="w-full h-full object-contain group-hover/thumbnail:blur-sm transition-all"
+                className={`w-full h-full object-contain ${
+                  product.images.length > 0
+                    ? "group-hover/thumbnail:blur-sm"
+                    : ""
+                } transition-all`}
               />
               <div className="flex gap-2 absolute inset-0 justify-center rounded-xl group-hover/thumbnail:bg-black/20 py-3 h-full transition-all">
                 {product.images.map((image: any, index: any) => (
@@ -162,11 +176,11 @@ export default function SubCategory({
   };
 
   return (
-    <div className="h-screen ">
+    <div className="h-full">
       <NavigationBar />
 
       {category && subCategory && (
-        <div className="w-3/4 mx-auto my-0">
+        <div className="w-3/4 mx-auto my-0 pb-10">
           <div className="pt-5 pb-10">
             <Link
               href={`/categories/${category.name}`}
@@ -177,7 +191,7 @@ export default function SubCategory({
             <span className="px-1">/</span>
             <span className="font-bold">{subCategory && subCategory.name}</span>
           </div>
-          {renderProducts()}
+          <div className="flex flex-wrap gap-5">{renderProducts()}</div>
         </div>
       )}
     </div>
