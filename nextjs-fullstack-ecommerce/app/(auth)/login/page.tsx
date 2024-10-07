@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import SignUpCover from "../../../images/login.jpeg";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { supabase } from "@/app/lib/supabase";
+import { supabase } from "@/app/(pages)/lib/supabase";
 import { useRouter } from "next/navigation";
 
 export default function SignIn() {
@@ -30,6 +30,17 @@ export default function SignIn() {
       }
       router.push("/");
       localStorage.setItem("token", JSON.stringify(data));
+      let { data: user } = await supabase
+        .from("user_data")
+        .select("*")
+        .eq("id", data.user.id);
+
+      if (user)
+        user[0] = { ...user[0], image: user[0].image ? user[0].image : null };
+
+      localStorage.setItem("user", JSON.stringify(user));
+
+      console.log(user);
     } catch (error) {
       console.log(error);
     }

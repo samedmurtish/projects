@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import SignUpCover from "../../../Images/register.jpg";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { supabase } from "@/app/lib/supabase";
+import { supabase } from "@/app/(pages)/lib/supabase";
 
 export default function SignUp() {
   const [errorText, setErrorText] = useState("");
