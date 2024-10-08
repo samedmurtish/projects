@@ -36,7 +36,11 @@ export default function SignIn() {
         .eq("id", data.user.id);
 
       if (user)
-        user[0] = { ...user[0], image: user[0].image ? user[0].image : null };
+        user[0] = {
+          ...user[0],
+          image: user[0].image ? user[0].image : null,
+          password,
+        };
 
       localStorage.setItem("user", JSON.stringify(user));
 

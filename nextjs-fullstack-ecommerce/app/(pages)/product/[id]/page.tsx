@@ -118,7 +118,7 @@ export default function ProductPage() {
   };
 
   return (
-    <div className="bg-white mt-[8rem]">
+    <div className="bg-white md:mt-0 mt-[8rem]">
       {/* <SnackbarShow get={showBar} set={setShowBar} /> */}
 
       {product && product.is_public && (

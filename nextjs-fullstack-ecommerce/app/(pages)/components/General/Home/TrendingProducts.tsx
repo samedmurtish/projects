@@ -95,7 +95,7 @@ export default function TrendingProducts() {
             <Link
               href={`/product/${product.id}`}
               key={product.id + product.name}
-              className="min-w-44 max-w-64 h-max bg-white flex justify-around items-center flex-col p-3 select-none rounded-xl"
+              className="min-w-44 w-64 max-w-64 h-max bg-white flex justify-around items-center flex-col p-3 select-none rounded-xl"
               onMouseLeave={() =>
                 handleUpdateSelectedImage(product.id, product.thumbnail)
               }

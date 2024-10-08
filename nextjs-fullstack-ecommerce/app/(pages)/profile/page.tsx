@@ -4,13 +4,13 @@ import { supabase } from "../lib/supabase";
 import { logout } from "../lib/logout";
 import { useRouter } from "next/navigation";
 import { FcAddImage } from "react-icons/fc";
-import Overview from "./components/Overview";
 import { FaUser } from "react-icons/fa";
 export default function UserProfile() {
   const [user, setUser] = useState<any>();
   const router = useRouter();
 
-  const [password, setPassword] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [username, setUsername] = useState("");
   const [pages, setPages] = useState<any>([
     {
@@ -44,7 +44,7 @@ export default function UserProfile() {
   }, [user]);
   const renderOverview = () => {
     return (
-      <div className="flex items-center text-slate-700 p-10 gap-10 h-max ">
+      <div className="flex items-center text-slate-700 p-10 gap-10 h-max	w-full flex-wrap">
         <div className="w-[10rem] h-full flex justify-center flex-col items-center gap-2">
           <div className="text-[7rem] w-max hover:text-[6rem] transition-all origin-center hover:ml-2 hover:mt-2 cursor-pointer rounded-full p-5 border-slate-400 bg-black/10 text-white">
             {user?.image ? (
@@ -58,11 +58,6 @@ export default function UserProfile() {
           {user?.image == null && <p>No Image.</p>}
         </div>
         <div className="text-slate-700 flex flex-col gap-2">
-          <div>
-            <h1 className="text-sm bg-slate-300 w-max px-3 py-1 rounded-lg text-white">
-              ID: {user?.id}
-            </h1>
-          </div>
           <div>
             <h1 className="text-sm bg-slate-500 w-max px-3 py-1 rounded-lg text-white">
               Username:
@@ -99,49 +94,70 @@ export default function UserProfile() {
         return { ...item, active: item.name === "Overview" };
       });
     });
-    if (password) {
-      const { data, error } = await supabase.auth.updateUser({
-        password,
+    console.log(
+      user.password == oldPassword,
+      user.password,
+      oldPassword,
+      newPassword
+    );
+    if (oldPassword == user.password && oldPassword != newPassword) {
+      if (newPassword) {
+        const { data, error } = await supabase.auth.updateUser({
+          password: newPassword,
+        });
+
+        if (error) {
+          return alert(error.message);
+        }
+
+        if (data) {
+          console.log(data);
+        }
+      }
+
+      if (username) {
+        const { data, error } = await supabase.auth.updateUser({
+          data: { username },
+        });
+
+        if (error) {
+          return alert(error.message);
+        }
+
+        if (data) {
+          console.log(data);
+        }
+      }
+      console.log(user);
+
+      setUser((prev: any) => {
+        const updatedUser = {
+          ...user,
+          username: username ? username : user.username,
+          password: newPassword ? newPassword : user.password,
+        };
+
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+        const updatedToken = JSON.parse(localStorage.getItem("token")!);
+        updatedToken.user.user_metadata.username = username
+          ? username
+          : user.username;
+        localStorage.setItem("token", JSON.stringify(updatedToken));
+
+        console.log(updatedUser, updatedToken);
+
+        return updatedUser;
       });
 
-      if (error) {
-        return alert(error.message);
-      }
-
-      if (data) {
-        console.log(data);
-      }
+      window.location.reload();
+    } else {
+      return alert("Old password is incorrect!");
     }
-
-    if (username) {
-      const { data, error } = await supabase.auth.updateUser({
-        data: { username },
-      });
-
-      if (error) {
-        return alert(error.message);
-      }
-
-      if (data) {
-        console.log(data);
-      }
-    }
-
-    setUser((prev: any) => {
-      const updatedUser = {
-        ...prev,
-        username: username ? username : prev.username,
-      };
-      localStorage.setItem("user", JSON.stringify(updatedUser));
-      return updatedUser;
-    });
-
-    window.location.reload();
   };
   const renderEditProfile = () => {
     return (
       <form
-        className="flex items-center text-slate-700 p-10 gap-10 h-max"
+        className="flex items-center text-slate-700 p-10 gap-10 h-max	w-full flex-wrap"
         onSubmit={(e: any) => updateProfile(e)}
       >
         <div className="w-[10rem] h-full flex justify-center flex-col items-center gap-2">
@@ -156,17 +172,11 @@ export default function UserProfile() {
           </div>
         </div>
         <div className="text-slate-700 flex flex-col gap-2">
-          <div>
-            <h1 className="text-sm bg-slate-300 w-max px-3 py-1 rounded-lg text-white">
-              ID: {user?.id}
-            </h1>
-          </div>
           <div className="flex flex-col gap-2">
             <h1 className="text-sm bg-slate-500 w-max px-3 py-1 rounded-lg text-white">
               Username:
             </h1>
             <input
-              type="text"
               className="px-5 p-2 border-2 rounded-xl ml-2"
               placeholder={user?.username}
               onChange={(e) => setUsername(e.target.value)}
@@ -174,13 +184,24 @@ export default function UserProfile() {
           </div>
           <div className="flex flex-col gap-2">
             <h1 className="text-sm bg-slate-500 w-max px-3 py-1 rounded-lg text-white">
-              Password:
+              Old Password:
             </h1>
             <input
               className="px-5 p-2 border-2 rounded-xl ml-2"
               type="password"
-              placeholder={"********"}
-              onChange={(e) => setPassword(e.target.value)}
+              placeholder={"•••••••"}
+              onChange={(e) => setOldPassword(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <h1 className="text-sm bg-slate-500 w-max px-3 py-1 rounded-lg text-white">
+              New Password:
+            </h1>
+            <input
+              className="px-5 p-2 border-2 rounded-xl ml-2"
+              type="password"
+              placeholder={"•••••••"}
+              onChange={(e) => setNewPassword(e.target.value)}
             />
           </div>
           <button className="p-2 px-5 w-max rounded-lg bg-green-500 flex justify-center items-center cursor-pointer hover:bg-green-600 transition active:bg-green-700 text-white">
@@ -229,12 +250,15 @@ export default function UserProfile() {
     const userData = localStorage.getItem("user")
       ? localStorage.getItem("user")
       : null;
+
     const token = localStorage.getItem("token")
       ? localStorage.getItem("token")
       : null;
     if (userData && token) {
       setUser({
-        ...JSON.parse(userData)[0],
+        ...(JSON.parse(userData)[0]
+          ? JSON.parse(userData)[0]
+          : JSON.parse(userData)),
         username: JSON.parse(token).user.user_metadata.username,
       });
     } else {
@@ -244,10 +268,11 @@ export default function UserProfile() {
 
   return (
     user && (
-      <div className="w-3/4 mx-auto my-0 flex h-full mt-10">
-        <div className="rounded-lg bg-white shadow-2xl w-full h-[70vh]">
-          <div className="flex h-full">
-            <div className="flex flex-col items-start h-full justify-between w-[15rem] border-r-2 border-slate-300">
+      <div className="w-3/4 mx-auto my-0 flex h-full md:mt-[2rem] justify-center items-center ">
+        <div className="rounded-lg bg-white shadow-2xl w-screen h-screen md:max-w-[50vw] md:pt-0 pt-[10rem] md:min-w-[32rem] md:h-[70vh]">
+          <div className="flex h-full w-full">
+            {/* flex-col */}
+            <div className="flex flex-col items-start h-full justify-between min-w-[10rem] w-[15rem] border-r-2 border-slate-300">
               <div className="w-full flex flex-col">{renderButtons()}</div>
               <div className="w-full flex flex-col justify-center items-center text-center">
                 <button
@@ -258,9 +283,11 @@ export default function UserProfile() {
                 </button>
               </div>
             </div>
-
             {pages.map((page: any, index: any) => (
-              <div key={page.name + index}>
+              <div
+                key={page.name + index}
+                className="md:w-full max-w-max flex-wrap"
+              >
                 {page.name === "Overview"
                   ? page.active && renderOverview()
                   : page.name === "Edit Profile"
