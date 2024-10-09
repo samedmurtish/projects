@@ -8,6 +8,8 @@ import UserManagement from "./Components/UserManagement";
 import Dashboard from "./Components/Dashboard";
 import ProductManagement from "./Components/Product Management Components/Product Management/ProductManagement";
 import BannerManagement from "./Components/BannerManagement";
+import Settings from "./Components/Settings";
+
 const Panel = () => {
   const router = useRouter();
   const [userID, setUserID] = useState<string>();
@@ -84,6 +86,8 @@ const Panel = () => {
             <UserManagement usersData={users} id={userID} getUsers={getUsers} />
           ) : category === "Banner Management" ? (
             <BannerManagement />
+          ) : category == "Settings" ? (
+            <Settings />
           ) : null}
         </div>
       )}

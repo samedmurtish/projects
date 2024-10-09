@@ -268,8 +268,8 @@ export default function UserProfile() {
 
   return (
     user && (
-      <div className="w-3/4 mx-auto my-0 flex h-full md:mt-[2rem] justify-center items-center ">
-        <div className="rounded-lg bg-white shadow-2xl w-screen h-screen md:max-w-[50vw] md:pt-0 pt-[10rem] md:min-w-[32rem] md:h-[70vh]">
+      <div className="w-3/4 mx-auto my-0 flex h-full md:mt-[2rem] justify-center items-center">
+        <div className="rounded-lg bg-white shadow-2xl w-screen h-screen md:w-[50rem] md:pt-0 pt-[10rem] md:min-w-[32rem] md:min-h-[30rem] md:max-h-max">
           <div className="flex h-full w-full">
             {/* flex-col */}
             <div className="flex flex-col items-start h-full justify-between min-w-[10rem] w-[15rem] border-r-2 border-slate-300">
@@ -284,10 +284,7 @@ export default function UserProfile() {
               </div>
             </div>
             {pages.map((page: any, index: any) => (
-              <div
-                key={page.name + index}
-                className="md:w-full max-w-max flex-wrap"
-              >
+              <div key={page.name + index} className="">
                 {page.name === "Overview"
                   ? page.active && renderOverview()
                   : page.name === "Edit Profile"
