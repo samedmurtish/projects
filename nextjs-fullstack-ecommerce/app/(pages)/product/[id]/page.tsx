@@ -13,6 +13,15 @@ export default function ProductPage() {
   const [product, setProduct] = useState<any>();
   const { id } = useParams();
   const router = useRouter();
+
+  const [currency, setCurrency] = useState("MKD");
+
+  useEffect(() => {
+    const currencyData = JSON.parse(localStorage.getItem("siteSettings")!);
+
+    setCurrency(currencyData.currency);
+  }, []);
+
   const getProduct = async () => {
     const { data, error } = await supabase
       .from("products")
@@ -167,7 +176,7 @@ export default function ProductPage() {
                         </p>{" "}
                       </div>
                       <p className="rounded-full bg-slate-500 hover:bg-slate-600 w-max h-max px-3 py-1 my-2 text-white font-semibold transition cursor-default">
-                        <span className="text-slate-300 pr-1">$</span>
+                        <span className="text-slate-300 pr-1">{currency}</span>
                         {product.price}
                       </p>
                     </div>

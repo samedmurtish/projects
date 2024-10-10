@@ -22,6 +22,14 @@ export default function SubCategory({
 
   const [products, setProducts] = useState<any>([]);
 
+  const [currency, setCurrency] = useState("MKD");
+
+  useEffect(() => {
+    const currencyData = JSON.parse(localStorage.getItem("siteSettings")!);
+
+    setCurrency(currencyData.currency);
+  }, []);
+
   const getProducts = async () => {
     const { data, error } = await supabase.from("products").select("*");
     if (error) return console.log(error);
@@ -162,7 +170,7 @@ export default function SubCategory({
                 <RenderStars stars={4} />
               </div>
               <div className="w-max">
-                <span className="text-sm">MKD</span>
+                <span className="text-sm">{currency}</span>
                 <span className="text-2xl font-extrabold">{product.price}</span>
               </div>
             </div>

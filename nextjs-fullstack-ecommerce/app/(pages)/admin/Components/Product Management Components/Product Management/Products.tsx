@@ -1,6 +1,5 @@
 import { supabase, supabaseAdmin } from "@/app/(pages)/lib/supabase";
 import React, { useEffect, useState } from "react";
-import image from "../../../../../images/register.jpg";
 import AddProduct from "../AddProduct";
 import EditProduct from "../EditProduct";
 
@@ -8,11 +7,15 @@ export default function Products() {
   const [products, setProducts] = useState<any>([]);
   const [page, setPage] = useState<string>("");
   const [selectedProduct, setSelectedProduct] = useState<any>({});
-
+  const [currency, setCurrency] = useState<string>("MKD");
   const [productIds, setProductIds] = useState<any>([]);
   const [highestId, setHighestId] = useState<any>(0);
 
   useEffect(() => {
+    const currencyData = JSON.parse(localStorage.getItem("siteSettings")!);
+
+    setCurrency(currencyData.currency);
+
     getValidSubCategories();
   }, []);
 
@@ -115,7 +118,8 @@ export default function Products() {
                   </span>
                 </div>
                 <span className="p-1 px-3 bg-green-400 hover:bg-green-500 transition w-max rounded-full text-white text-base font-bold">
-                  <span className="text-green-100">$</span> {product.price}
+                  <span className="text-green-100">{currency}</span>{" "}
+                  {product.price}
                 </span>
                 <div className="flex flex-wrap h-24 overflow-y-auto border-2 border-slate-200 rounded-lg bg-slate-100 justify-start items-center">
                   <div className="text-base sticky top-0 bg-slate-300 h-max w-full p-1 px-3 rounded-lg rounded-t-none text-slate-500 self-start">

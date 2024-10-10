@@ -16,7 +16,12 @@ export default function TrendingProducts() {
   const [productsPerPage, setProductsPerPage] = useState(5);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Function to determine products per page based on screen width
+  const [currency, setCurrency] = useState("MKD");
+  useEffect(() => {
+    const currencyData = JSON.parse(localStorage.getItem("siteSettings")!);
+
+    setCurrency(currencyData.currency);
+  }, []);
   const updateProductsPerPage = () => {
     const screenWidth = window.innerWidth;
     if (screenWidth < 920) setProductsPerPage(2);
@@ -145,7 +150,7 @@ export default function TrendingProducts() {
                   <RenderStars stars={4} />
                 </div>
                 <div className="w-max">
-                  <span className="text-sm">MKD</span>
+                  <span className="text-sm">{currency}</span>
                   <span className="text-2xl font-extrabold">
                     {product.price}
                   </span>

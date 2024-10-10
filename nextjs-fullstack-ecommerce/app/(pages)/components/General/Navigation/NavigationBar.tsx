@@ -93,6 +93,17 @@ export default function NavigationBar() {
       setIsAuthPopupVisible(false);
     }, 100);
   };
+  useEffect(() => {
+    getSettings();
+  }, []);
+  const getSettings = async () => {
+    const { data, error } = await supabase
+      .from("site_settings")
+      .select("*")
+      .eq("id", 0);
+    if (error) return console.log(error);
+    localStorage.setItem("siteSettings", JSON.stringify(data[0]));
+  };
 
   const renderAuthPopup = () => {
     return (
