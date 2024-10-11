@@ -19,8 +19,7 @@ export default function TrendingProducts() {
   const [currency, setCurrency] = useState("MKD");
   useEffect(() => {
     const currencyData = JSON.parse(localStorage.getItem("siteSettings")!);
-
-    setCurrency(currencyData.currency);
+    if (currencyData) setCurrency(currencyData.currency);
   }, []);
   const updateProductsPerPage = () => {
     const screenWidth = window.innerWidth;

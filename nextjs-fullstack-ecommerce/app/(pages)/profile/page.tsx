@@ -11,7 +11,9 @@ export default function UserProfile() {
 
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [profilePicture, setProfilePicture] = useState<any>(null);
   const [username, setUsername] = useState("");
+  const [changePassword, setChangePassword] = useState(false);
   const [pages, setPages] = useState<any>([
     {
       name: "Overview",
@@ -42,20 +44,175 @@ export default function UserProfile() {
   useEffect(() => {
     console.log(user);
   }, [user]);
+  const [now, setNow] = useState(Date.now());
+  const updateProfile = async (e: any) => {
+    e.preventDefault();
+    setPages((prev: any) => {
+      return prev.map((item: any) => {
+        return { ...item, active: item.name === "Overview" };
+      });
+    });
+    console.log(user);
+    if (profilePicture) {
+      if (user.profile_picture) {
+        const fileName = `images/profile_${user.now}`;
+        const { data, error } = await supabase.storage
+          .from("user.images")
+          .update(fileName, profilePicture, {
+            cacheControl: "3600",
+            upsert: false,
+          });
+
+        if (error) {
+          console.log("Error updating profile:", error);
+        }
+        if (data) {
+          console.log(data);
+        }
+      } else {
+        const fileName = `images/profile_${now}`;
+        const { data, error } = await supabase.storage
+          .from("user.images")
+          .upload(fileName, profilePicture, {
+            cacheControl: "3600",
+            upsert: false,
+          });
+
+        if (error) {
+          console.log("Error uploading profile:", error);
+        } else {
+          const imageURL = supabase.storage
+            .from("user.images")
+            .getPublicUrl(fileName);
+          const { data, error } = await supabase
+            .from("user_data")
+            .update({ profile_picture: imageURL.data.publicUrl, now })
+            .eq("id", user.id);
+
+          if (error) {
+            console.log("Error updating profile:", error);
+          }
+          if (data) {
+            console.log(data);
+          }
+
+          console.log(
+            "Profile Picture uploaded successfully:",
+            imageURL.data.publicUrl
+          );
+        }
+      }
+    }
+
+    if (changePassword) {
+      if (oldPassword == user.password && oldPassword != newPassword) {
+        if (newPassword) {
+          const { data, error } = await supabase.auth.updateUser({
+            password: newPassword,
+          });
+
+          if (error) {
+            return alert(error.message);
+          }
+
+          if (data) {
+            console.log(data);
+          }
+        }
+
+        if (username) {
+          const { data, error } = await supabase.auth.updateUser({
+            data: { username },
+          });
+
+          if (error) {
+            return alert(error.message);
+          }
+
+          if (data) {
+            console.log(data);
+          }
+        }
+        console.log(user);
+
+        setUser((prev: any) => {
+          const updatedUser = {
+            ...user,
+            username: username ? username : user.username,
+            password: newPassword ? newPassword : user.password,
+          };
+
+          localStorage.setItem("user", JSON.stringify(updatedUser));
+          const updatedToken = JSON.parse(localStorage.getItem("token")!);
+          updatedToken.user.user_metadata.username = username
+            ? username
+            : user.username;
+          localStorage.setItem("token", JSON.stringify(updatedToken));
+
+          console.log(updatedUser, updatedToken);
+
+          return updatedUser;
+        });
+
+        window.location.reload();
+      } else {
+        return alert("Old password is incorrect!");
+      }
+    } else {
+      if (oldPassword == user.password) {
+        if (username) {
+          const { data, error } = await supabase.auth.updateUser({
+            data: { username },
+          });
+
+          if (error) {
+            return alert(error.message);
+          }
+
+          if (data) {
+            console.log(data);
+          }
+        }
+
+        setUser((prev: any) => {
+          const updatedUser = {
+            ...user,
+            username: username ? username : user.username,
+          };
+
+          localStorage.setItem("user", JSON.stringify(updatedUser));
+          const updatedToken = JSON.parse(localStorage.getItem("token")!);
+          updatedToken.user.user_metadata.username = username
+            ? username
+            : user.username;
+          localStorage.setItem("token", JSON.stringify(updatedToken));
+
+          return updatedUser;
+        });
+
+        //window.location.reload();
+      } else {
+        return alert("Password is incorrect!");
+      }
+    }
+  };
   const renderOverview = () => {
     return (
       <div className="flex items-center text-slate-700 p-10 gap-10 h-max	w-full flex-wrap">
         <div className="w-[10rem] h-full flex justify-center flex-col items-center gap-2">
-          <div className="text-[7rem] w-max hover:text-[6rem] transition-all origin-center hover:ml-2 hover:mt-2 cursor-pointer rounded-full p-5 border-slate-400 bg-black/10 text-white">
-            {user?.image ? (
-              <img src={user?.image} />
+          <div className="text-[7rem] w-32 h-32 flex hover:text-[6rem] transition-all hover:mt-2 cursor-pointer rounded-full p-5 border-slate-400 bg-black/5 text-white overflow-hidden">
+            {user?.profile_picture ? (
+              <img
+                src={user?.profile_picture + "?t=" + Date.now()}
+                className="w-full object-cover h-full scale-[1.5]"
+              />
             ) : (
               <span className="">
                 <FaUser />
               </span>
             )}
           </div>
-          {user?.image == null && <p>No Image.</p>}
+          {user?.profile_picture == null && <p>No Image.</p>}
         </div>
         <div className="text-slate-700 flex flex-col gap-2">
           <div>
@@ -87,73 +244,6 @@ export default function UserProfile() {
     );
   };
 
-  const updateProfile = async (e: any) => {
-    e.preventDefault();
-    setPages((prev: any) => {
-      return prev.map((item: any) => {
-        return { ...item, active: item.name === "Overview" };
-      });
-    });
-    console.log(
-      user.password == oldPassword,
-      user.password,
-      oldPassword,
-      newPassword
-    );
-    if (oldPassword == user.password && oldPassword != newPassword) {
-      if (newPassword) {
-        const { data, error } = await supabase.auth.updateUser({
-          password: newPassword,
-        });
-
-        if (error) {
-          return alert(error.message);
-        }
-
-        if (data) {
-          console.log(data);
-        }
-      }
-
-      if (username) {
-        const { data, error } = await supabase.auth.updateUser({
-          data: { username },
-        });
-
-        if (error) {
-          return alert(error.message);
-        }
-
-        if (data) {
-          console.log(data);
-        }
-      }
-      console.log(user);
-
-      setUser((prev: any) => {
-        const updatedUser = {
-          ...user,
-          username: username ? username : user.username,
-          password: newPassword ? newPassword : user.password,
-        };
-
-        localStorage.setItem("user", JSON.stringify(updatedUser));
-        const updatedToken = JSON.parse(localStorage.getItem("token")!);
-        updatedToken.user.user_metadata.username = username
-          ? username
-          : user.username;
-        localStorage.setItem("token", JSON.stringify(updatedToken));
-
-        console.log(updatedUser, updatedToken);
-
-        return updatedUser;
-      });
-
-      window.location.reload();
-    } else {
-      return alert("Old password is incorrect!");
-    }
-  };
   const renderEditProfile = () => {
     return (
       <form
@@ -161,15 +251,28 @@ export default function UserProfile() {
         onSubmit={(e: any) => updateProfile(e)}
       >
         <div className="w-[10rem] h-full flex justify-center flex-col items-center gap-2">
-          <div className="text-[7rem] w-max hover:text-[6rem] transition-all origin-center hover:ml-2 hover:mt-2 cursor-pointer rounded-full p-5 border-slate-400 bg-black/5 text-white">
-            {user?.image ? (
-              <img src={user?.image} />
+          <label className="text-[7rem] object-cover w-32 h-32 flex hover:text-[6rem] transition-all hover:mt-2 cursor-pointer rounded-full p-5 border-slate-400 bg-black/5 text-white overflow-hidden">
+            <input
+              type="file"
+              onChange={(e: any) => setProfilePicture(e.target.files[0])}
+              className="hidden"
+              accept="image/*"
+              name="image"
+            />
+            {profilePicture ? (
+              <img
+                src={URL.createObjectURL(profilePicture)}
+                className="w-full object-cover h-full scale-[1.5]"
+              />
+            ) : user?.profile_picture ? (
+              <img
+                src={user?.profile_picture + "?t=" + Date.now()}
+                className="w-full object-cover h-full scale-[1.5]"
+              />
             ) : (
-              <span className="">
-                <FcAddImage />
-              </span>
+              <FcAddImage />
             )}
-          </div>
+          </label>
         </div>
         <div className="text-slate-700 flex flex-col gap-2">
           <div className="flex flex-col gap-2">
@@ -182,28 +285,56 @@ export default function UserProfile() {
               onChange={(e) => setUsername(e.target.value)}
             />
           </div>
-          <div className="flex flex-col gap-2">
-            <h1 className="text-sm bg-slate-500 w-max px-3 py-1 rounded-lg text-white">
-              Old Password:
-            </h1>
-            <input
-              className="px-5 p-2 border-2 rounded-xl ml-2"
-              type="password"
-              placeholder={"•••••••"}
-              onChange={(e) => setOldPassword(e.target.value)}
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <h1 className="text-sm bg-slate-500 w-max px-3 py-1 rounded-lg text-white">
-              New Password:
-            </h1>
-            <input
-              className="px-5 p-2 border-2 rounded-xl ml-2"
-              type="password"
-              placeholder={"•••••••"}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
-          </div>
+
+          {changePassword ? (
+            <>
+              <div className="flex flex-col gap-2">
+                <h1 className="text-sm bg-slate-500 w-max px-3 py-1 rounded-lg text-white">
+                  Old Password:
+                </h1>
+                <input
+                  className="px-5 p-2 border-2 rounded-xl ml-2"
+                  type="password"
+                  placeholder={"•••••••"}
+                  onChange={(e) => setOldPassword(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <h1 className="text-sm bg-slate-500 w-max px-3 py-1 rounded-lg text-white">
+                  New Password:
+                </h1>
+                <input
+                  className="px-5 p-2 border-2 rounded-xl ml-2"
+                  type="password"
+                  placeholder={"•••••••"}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <button
+                className="p-2 px-5 w-max rounded-lg bg-sky-500 flex justify-center items-center cursor-pointer hover:bg-sky-600 transition active:bg-sky-700 text-white"
+                onClick={(e: any) => {
+                  e.preventDefault();
+                  setChangePassword(true);
+                }}
+              >
+                Change Password
+              </button>
+              <div className="flex flex-col gap-2">
+                <h1 className="text-sm bg-slate-500 w-max px-3 py-1 rounded-lg text-white">
+                  Password:
+                </h1>
+                <input
+                  className="px-5 p-2 border-2 rounded-xl ml-2"
+                  type="password"
+                  placeholder={"•••••••"}
+                  onChange={(e) => setOldPassword(e.target.value)}
+                />
+              </div>
+            </>
+          )}
           <button className="p-2 px-5 w-max rounded-lg bg-green-500 flex justify-center items-center cursor-pointer hover:bg-green-600 transition active:bg-green-700 text-white">
             Apply Changes
           </button>
@@ -268,9 +399,9 @@ export default function UserProfile() {
 
   return (
     user && (
-      <div className="w-3/4 mx-auto my-0 flex h-full md:mt-[2rem] justify-center items-center">
-        <div className="rounded-lg bg-white shadow-2xl w-screen h-screen md:w-[50rem] md:pt-0 pt-[10rem] md:min-w-[32rem] md:min-h-[30rem] md:max-h-max">
-          <div className="flex h-full w-full">
+      <div className="w-3/4 mx-auto my-0 flex h-full md:mt-[2rem] justify-center items-center ">
+        <div className="rounded-lg bg-white shadow-2xl w-screen h-screen md:w-[50rem] md:pt-0 pt-[10rem] md:min-w-[32rem] md:h-[70vh] md:min-h-[30rem] md:max-h-max">
+          <div className="flex h-full w-full flex-row">
             {/* flex-col */}
             <div className="flex flex-col items-start h-full justify-between min-w-[10rem] w-[15rem] border-r-2 border-slate-300">
               <div className="w-full flex flex-col">{renderButtons()}</div>

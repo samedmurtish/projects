@@ -14,7 +14,7 @@ export default function Products() {
   useEffect(() => {
     const currencyData = JSON.parse(localStorage.getItem("siteSettings")!);
 
-    setCurrency(currencyData.currency);
+    if (currencyData) setCurrency(currencyData.currency);
 
     getValidSubCategories();
   }, []);

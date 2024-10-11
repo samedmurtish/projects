@@ -19,7 +19,7 @@ export default function ProductPage() {
   useEffect(() => {
     const currencyData = JSON.parse(localStorage.getItem("siteSettings")!);
 
-    setCurrency(currencyData.currency);
+    if (currencyData) setCurrency(currencyData.currency);
   }, []);
 
   const getProduct = async () => {
