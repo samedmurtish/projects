@@ -8,6 +8,8 @@ import CV from "./components/CvPage/CV.jsx";
 import Projects from "./components/ProjectsPage/Projects.jsx";
 import ProjectDetailedPage from "./components/ProjectDetailedPage/ProjectDetailedPage.jsx";
 import ErrorPage from "./components/Error/ErrorPage.jsx";
+import SignIn from "./components/Authentication/login/page.jsx";
+import AdminPage from "./components/Admin/page.jsx";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +35,16 @@ const router = createBrowserRouter([
   {
     path: "/project/:id",
     element: <ProjectDetailedPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/login",
+    element: <SignIn />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/admin",
+    element: <AdminPage />,
     errorElement: <ErrorPage />,
   },
 ]);
