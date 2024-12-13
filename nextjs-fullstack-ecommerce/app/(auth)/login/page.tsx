@@ -88,7 +88,7 @@ export default function SignIn() {
           <p className="flex justify-center items-center pt-5">
             Not a member?
             <Link
-              href={"/sign-up"}
+              href={"/register"}
               className="text-emerald-400 font-semibold pl-1 cursor-pointer"
             >
               Sign Up

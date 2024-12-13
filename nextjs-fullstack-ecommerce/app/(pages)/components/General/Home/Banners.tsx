@@ -47,7 +47,7 @@ export default function Banners() {
   const renderBannerLoading = () => {
     return banners.map((banner: any, index: number) => (
       <div
-        key={index + banner.id}
+        key={index}
         className="w-full h-2 cursor-pointer"
         style={{
           backgroundColor: index == bannerTurn ? "rgba(12,147,209,0.3)" : " ",

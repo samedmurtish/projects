@@ -124,7 +124,7 @@ export default function SignUp() {
             <p>Already have an account?</p>
             <div>
               <Link
-                href={"/sign-in"}
+                href={"/login"}
                 className="text-emerald-400 font-semibold pl-1 cursor-pointer"
               >
                 Sign In

@@ -3,8 +3,8 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import RenderStars from "../Products/RenderStars";
 import { FaHeart } from "react-icons/fa";
-
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
+
 export default function TrendingProducts() {
   const [trendingProducts, setTrendingProducts] = React.useState<any>([]);
   const [userLoggedIn, setUserLoggedIn] = React.useState<any>(
@@ -15,12 +15,21 @@ export default function TrendingProducts() {
 
   const [productsPerPage, setProductsPerPage] = useState(5);
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  const [wishlist, setWishlist] = useState<any>([]);
   const [currency, setCurrency] = useState("MKD");
+
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user")!);
+    if (user && Array.isArray(user.wishlist)) {
+      setWishlist(user.wishlist);
+    } else {
+      setWishlist([]);
+    }
+
     const currencyData = JSON.parse(localStorage.getItem("siteSettings")!);
     if (currencyData) setCurrency(currencyData.currency);
   }, []);
+
   const updateProductsPerPage = () => {
     const screenWidth = window.innerWidth;
     if (screenWidth < 920) setProductsPerPage(2);
@@ -90,6 +99,38 @@ export default function TrendingProducts() {
     }
   };
 
+  const handleAddToWishlist = async (productId: any) => {
+    if (userLoggedIn) {
+      const user = JSON.parse(localStorage.getItem("user")!);
+      const userId = user?.id;
+      if (!userId) {
+        console.error("Invalid user ID. Please log in again.");
+        return;
+      }
+      if (!wishlist.includes(productId)) {
+        const updatedWishlist = [...wishlist, productId];
+        setWishlist(updatedWishlist);
+        const { data, error } = await supabase
+          .from("user_data")
+          .update({ wishlist: updatedWishlist })
+          .eq("id", userId);
+        if (error) {
+          console.log(error);
+        } else {
+          console.log(data);
+          const { data: updatedUser } = await supabase
+            .from("user_data")
+            .select("*")
+            .eq("id", userId);
+          if (updatedUser) {
+            localStorage.setItem("user", JSON.stringify(updatedUser[0]));
+            setWishlist(updatedUser[0].wishlist);
+          }
+        }
+      }
+    }
+  };
+
   const renderTrendingProducts = () => {
     return trendingProducts
       .slice(currentIndex, currentIndex + productsPerPage)
@@ -136,8 +177,11 @@ export default function TrendingProducts() {
                 </div>
                 {userLoggedIn && (
                   <div
-                    className="absolute bottom-0 right-0 text-white p-3 rounded-xl cursor-pointer  flex justify-center items-center group-hover/thumbnail:bg-black/30 hover:bg-black/50 active:text-rose-400 hover:text-rose-500 opacity-0 group-hover/thumbnail:opacity-100 transition duration-0 text-sm group-hover/thumbnail:text-4xl m-3"
-                    onClick={(e: any) => stopPropagation(e)}
+                    className="absolute bottom-0 right-0 text-white p-3 rounded-xl cursor-pointer flex justify-center items-center group-hover/thumbnail:bg-black/30 hover:bg-black/50 active:text-rose-400 hover:text-rose-500 opacity-0 group-hover/thumbnail:opacity-100 transition duration-0 text-sm group-hover/thumbnail:text-4xl m-3"
+                    onClick={(e: any) => {
+                      stopPropagation(e);
+                      handleAddToWishlist(product.id);
+                    }}
                   >
                     <FaHeart className="stroke-black w-8 h-8" />
                   </div>

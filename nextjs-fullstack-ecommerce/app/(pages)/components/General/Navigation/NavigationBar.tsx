@@ -36,6 +36,7 @@ export default function NavigationBar() {
       if (user == null) return;
       const data = { ...user[0], username };
       data.username = username;
+      localStorage.setItem("user", JSON.stringify(data));
       console.log(data);
       return data;
     });
@@ -246,7 +247,7 @@ export default function NavigationBar() {
   return (
     <div className="sticky top-0 z-[100]">
       <div className="w-full bg-white h-[7rem] select-none border-b-2 border-b-slate-100 z-50">
-        <div className="text-black flex items-center h-full md:px-5 lg:w-3/4 mx-auto my-0">
+        <div className="text-black flex items-center h-full lg:w-3/4 mx-auto my-0">
           <div className="flex justify-between items-center w-full">
             <div className="flex items-center gap-10">
               <Link
