@@ -2,10 +2,13 @@ import React from "react";
 import { FiDivideCircle, FiMinus, FiPlus } from "react-icons/fi";
 
 export default function Edit({ project }) {
+  console.log(project);
+
   const renderDetails = () => {
+    if (!project.details) return null;
     return project.details.map((detail, detailIndex) => (
       <div
-        className="flex flex-col gap-5 w-64 justify-center items-center bg-[#1d1d1d] p-5 rounded-2xl"
+        className="flex flex-col gap-5 w-64 h-[27rem] justify-center items-center bg-[#1d1d1d] p-5 rounded-2xl"
         key={detailIndex}
       >
         <div className="relative w-52 h-52 group">
@@ -34,7 +37,7 @@ export default function Edit({ project }) {
           <h1>Description</h1>
           <textarea
             className="p-3 px-5 rounded-lg text-slate-700 w-full"
-            placeholder={project.description}
+            placeholder={detail.description}
           ></textarea>
 
           <button className="bg-rose-600 hover:bg-rose-700 active:bg-rose-800 p-3 w-full px-5 rounded-lg">
@@ -48,14 +51,16 @@ export default function Edit({ project }) {
   const renderAddDetailButton = () => {
     return (
       <button
-        className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 p-3 min-w-64 px-5 rounded-lg flex justify-center items-center flex-col"
+        className="min-w-64 p-5 group bg-[#1d1d1d] rounded-xl flex justify-center items-center flex-col"
         onClick={() => {
           project.details.push({ image: null, description: "" });
         }}
       >
-        <span className="text-6xl">
-          <FiPlus />
-        </span>
+        <div className="bg-blue-600/50 hover:bg-blue-700/50 active:bg-blue-800 w-full h-full flex justify-center items-center rounded-xl">
+          <span className="text-6xl bg-blue-600 group-hover:bg-blue-700 group-active:bg-blue-800 p-3 ">
+            <FiPlus />
+          </span>
+        </div>
       </button>
     );
   };
@@ -100,10 +105,10 @@ export default function Edit({ project }) {
                 />
               </div>
             </div>
-            <div className="flex flex-col bg-[#252525] rounded-lg">
-              <h1 className="text-2xl font-extrabold p-5">DETAILS</h1>
+            <div className="flex flex-col bg-[#252525] rounded-lg p-5">
+              <h1 className="text-2xl font-extrabold pb-5">DETAILS</h1>
               <div className="w-96">
-                <div className="flex gap-5 overflow-auto w-full p-5 pt-0">
+                <div className="flex gap-5 overflow-auto w-full p-5 pt-0 shadow-inner">
                   {renderDetails()}
                   {renderAddDetailButton()}
                 </div>
