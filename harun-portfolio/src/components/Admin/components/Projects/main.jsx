@@ -1,7 +1,7 @@
 import React from "react";
 import image from "../../../../assets/me.jpg";
 
-export default function Projects({ onEdit }) {
+export default function Projects({ onEdit, onNewProject, onNewCategory }) {
   const projectData = [
     {
       categoryName: "Logos",
@@ -30,16 +30,6 @@ export default function Projects({ onEdit }) {
           name: "Bin It",
           description: "Bin It Poster",
           image: image,
-          details: [
-            {
-              image: image,
-              description: "Bin It Poster",
-            },
-            {
-              image: null,
-              description: "Bin It Poster",
-            },
-          ],
         },
         {
           name: "Keep It",
@@ -57,10 +47,10 @@ export default function Projects({ onEdit }) {
 
   const renderProjects = () => {
     return projectData.map((category, categoryIndex) => (
-      <div key={categoryIndex} className="w-full p-3 transition flex">
+      <div key={categoryIndex} className="w-full pr-3 transition flex mb-5">
         <div className="flex gap-5 items-center w-full">
-          <div className="flex flex-col w-full">
-            <h1 className="text-2xl transition sticky top-[-1px] bg-violet-500 z-10 p-3 rounded-xl">
+          <div className="flex flex-col w-full ">
+            <h1 className="self-center text-2xl transition sticky top-[-1px] bg-gradient-to-bl from-[#8c0327] to-[#8c0327]/50 mb-3 z-10 w-64 p-3 rounded-xl text-center">
               {category.categoryName}
             </h1>
             <div>
@@ -105,14 +95,24 @@ export default function Projects({ onEdit }) {
   };
 
   return (
-    <div className="overflow-auto h-[30rem]">
-      <div>
-        <button className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 p-2 px-5 transition rounded-lg">
+    <div>
+      <div className="overflow-auto h-[30rem] gap-3 flex flex-col">
+        <div>{renderProjects()}</div>
+      </div>
+      <div className="gap-5 flex pt-5">
+        <button
+          className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 p-2 px-5 transition rounded-lg w-full"
+          onClick={onNewProject}
+        >
           New Project
         </button>
+        <button
+          className="bg-green-600 hover:bg-green-700 active:bg-green-800 p-2 px-5 transition rounded-lg w-full"
+          onClick={onNewCategory}
+        >
+          New Category
+        </button>
       </div>
-      {renderProjects()}
-      {renderProjects()}
     </div>
   );
 }
