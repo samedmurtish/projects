@@ -70,7 +70,7 @@ export default function AdminPage() {
       <div className="block md:hidden">
         <NavigationBarMobile />
       </div>
-      <div className="h-full w-3/4 mx-auto my-0 text-white font-semibold pt-32 flex align-center justify-center">
+      <div className="h-full w-3/4 mx-auto my-0 text-white font-semibold pt-28 flex align-center justify-center">
         <div className="flex flex-row h-full w-full">
           <div className="bg-[#AB012F] max-w-56 p-5 pt-0 w-full">
             <div className="flex justify-center items-center w-full gap-3 border-b-2 border-b-white p-5">

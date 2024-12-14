@@ -60,7 +60,7 @@ export default function Projects({ onEdit }) {
       <div key={categoryIndex} className="w-full p-3 transition flex">
         <div className="flex gap-5 items-center w-full">
           <div className="flex flex-col w-full">
-            <h1 className="text-2xl transition mb-5">
+            <h1 className="text-2xl transition sticky top-[-1px] bg-violet-500 z-10 p-3 rounded-xl">
               {category.categoryName}
             </h1>
             <div>
@@ -69,7 +69,7 @@ export default function Projects({ onEdit }) {
                   <div
                     key={projectIndex}
                     className={`w-full p-3 ${
-                      projectIndex % 2 == 0 ? "bg-[#1d1d1d]" : "bg-[#242424]"
+                      projectIndex % 2 === 0 ? "bg-[#1d1d1d]" : "bg-[#242424]"
                     } hover:bg-[#282828] first:rounded-t-lg last:rounded-b-lg cursor-pointer group transition flex justify-between`}
                   >
                     <div className="flex gap-5 items-center">
@@ -85,7 +85,7 @@ export default function Projects({ onEdit }) {
                     </div>
                     <div className="flex gap-3">
                       <button
-                        className="bg-violet-600 hover:bg-violet-700 active:bg-violet-800 p-2 px-5 transition rounded-lg"
+                        className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 p-2 px-5 transition rounded-lg"
                         onClick={() => onEdit(project)}
                       >
                         Edit
@@ -104,5 +104,15 @@ export default function Projects({ onEdit }) {
     ));
   };
 
-  return <div className="overflow-auto">{renderProjects()}</div>;
+  return (
+    <div className="overflow-auto h-[30rem]">
+      <div>
+        <button className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 p-2 px-5 transition rounded-lg">
+          New Project
+        </button>
+      </div>
+      {renderProjects()}
+      {renderProjects()}
+    </div>
+  );
 }
