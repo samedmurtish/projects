@@ -5,7 +5,7 @@ import SignInCover from "../login.jpeg";
 
 import { auth } from "../../../database/firebase";
 import { useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 
 export default function SignIn() {
   const navigate = useNavigate();
@@ -17,13 +17,19 @@ export default function SignIn() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    if (user) navigate("/");
-  }, [user]);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+        navigate("/");
+      }
+    });
+
+    return () => unsubscribe();
+  }, [navigate]);
 
   async function signIn(email, password) {
     try {
       const data = await signInWithEmailAndPassword(auth, email, password);
-
       if (data) setUser(auth.currentUser);
     } catch (error) {
       setErrorText(error.message);

@@ -35,12 +35,17 @@ export default function NavigationBar() {
   return (
     <>
       <SnackbarShow get={showBar} set={setShowBar} />
-      <div className="bg-[#AB012F] fixed w-full">
-        <div className="flex justify-between items-center text-white font-semibold py-5 text-xl mx-auto my-0 w-3/4 ">
-          <Link className="py-3" to="/">
-            Harun Spaho
+      <div className="bg-[#ab012e33] border-[#AB012F] border-b-2 fixed w-full backdrop-blur-lg">
+        <div className="flex justify-between items-center text-white font-semibold py-5 text-xl mx-auto my-0 w-3/4">
+          <Link
+            className="py-3 bg-[#AB012F] rounded-xl p-3 px-5 min-w-[5rem] mr-5 inline-flex justify-center items-center text-wrap"
+            to="/"
+          >
+            <span className="text-3xl font-extrabold text-center">
+              HARUN SPAHO
+            </span>
           </Link>
-          <div className="flex">{renderNav()}</div>
+          <div className="flex bg-[#AB012F] px-5 rounded-xl">{renderNav()}</div>
         </div>
       </div>
     </>

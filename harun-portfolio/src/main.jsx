@@ -9,7 +9,7 @@ import Projects from "./components/ProjectsPage/Projects.jsx";
 import ProjectDetailedPage from "./components/ProjectDetailedPage/ProjectDetailedPage.jsx";
 import ErrorPage from "./components/Error/ErrorPage.jsx";
 import SignIn from "./components/Authentication/login/page.jsx";
-import AdminPage from "./components/Admin/page.jsx";
+import AdminPage from "./components/Admin/AdminPage.jsx";
 
 const router = createBrowserRouter([
   {
