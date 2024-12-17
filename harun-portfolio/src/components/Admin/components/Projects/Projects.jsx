@@ -1,11 +1,18 @@
 "use client";
 import { useEffect, useState } from "react";
-import image from "../../../../assets/me.jpg";
-import Edit from "./Edit";
-import NewCategory from "./NewCategory";
+import Edit from "./EditProject";
+import NewCategory from "../Categories/NewCategory";
 import NewProject from "./NewProject";
+import { collection, deleteDoc, doc } from "firebase/firestore";
+import { database } from "../../../../database/firebase";
+import supabase from "../../../../database/supabase";
 
-export default function Projects({ projects, categories, setProjects }) {
+export default function Projects({
+  projects,
+  categories,
+  setProjects,
+  getProjects,
+}) {
   const [selectedProject, setSelectedProject] = useState(null);
   const [page, setPage] = useState("Projects");
 
@@ -13,13 +20,63 @@ export default function Projects({ projects, categories, setProjects }) {
     setPage("Edit");
     setSelectedProject(project);
   };
+
   useEffect(() => {
-    console.log("Projects State in Projects:", projects);
-  }, [projects]);
-  const handleDeleteProject = (projectIndex) => {
-    const updatedProjects = [...projects];
-    updatedProjects.splice(projectIndex, 1);
-    setProjects(updatedProjects);
+    getProjects();
+  }, []);
+
+  const handleDeleteProject = async (categoryId, projectId) => {
+    try {
+      const projectRef = doc(database, "projects", projectId);
+
+      const projectToDelete = projects.find(
+        (project) =>
+          project.categoryId === categoryId && project.id === projectId
+      );
+
+      if (!projectToDelete) {
+        console.error("Project not found.");
+        return;
+      }
+
+      const imagePaths = [];
+
+      if (projectToDelete.imagePath) {
+        imagePaths.push(`images/${projectToDelete.imagePath}`);
+      }
+
+      if (projectToDelete.details) {
+        projectToDelete.details.forEach((detail) => {
+          if (detail.imageName) {
+            imagePaths.push(`images/${detail.imageName}`);
+          }
+        });
+      }
+
+      if (imagePaths.length > 0) {
+        const { error: deleteError } = await supabase.storage
+          .from("project_images")
+          .remove(imagePaths);
+
+        if (deleteError) {
+          console.error(
+            "Error deleting images from Supabase:",
+            deleteError.message
+          );
+          return;
+        }
+      }
+
+      await deleteDoc(projectRef);
+
+      const updatedProjects = projects.filter(
+        (project) =>
+          !(project.categoryId === categoryId && project.id === projectId)
+      );
+      setProjects(updatedProjects);
+    } catch (error) {
+      console.error("Error deleting project:", error.message);
+    }
   };
 
   const renderProjects = () => {
@@ -45,14 +102,24 @@ export default function Projects({ projects, categories, setProjects }) {
                 >
                   {category.categoryName}
                 </h1>
-
                 <div className="h-full w-[2px] bg-white justify-self-start"></div>
               </div>
               <div className="w-full">
                 <div className="flex flex-col w-full">
+                  {filteredProjects.length === 0 && (
+                    <div className="w-full p-3 bg-[#242424] hover:bg-[#282828] first:rounded-t-lg last:rounded-b-lg cursor-pointer group transition flex justify-between">
+                      <div className="flex gap-5 items-center">
+                        <div className="flex flex-col">
+                          <h1 className="text-lg transition">
+                            No projects found.
+                          </h1>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                   {filteredProjects.map((project, projectIndex) => (
                     <div
-                      key={projectIndex}
+                      key={project.id}
                       className={`w-full p-3 ${
                         projectIndex % 2 === 0 ? "bg-[#1d1d1d]" : "bg-[#242424]"
                       } hover:bg-[#282828] first:rounded-t-lg last:rounded-b-lg cursor-pointer group transition flex justify-between`}
@@ -85,7 +152,9 @@ export default function Projects({ projects, categories, setProjects }) {
                         </button>
                         <button
                           className="bg-rose-600 hover:bg-rose-700 active:bg-rose-800 p-2 px-5 transition rounded-lg"
-                          onClick={() => handleDeleteProject(projectIndex)}
+                          onClick={() =>
+                            handleDeleteProject(category.id, project.id)
+                          }
                         >
                           Delete
                         </button>
@@ -103,21 +172,27 @@ export default function Projects({ projects, categories, setProjects }) {
 
   return page == "Projects" ? (
     <div>
-      <div className="overflow-auto h-[35rem] gap-3 flex flex-col">
-        <div>{renderProjects()}</div>
+      <div
+        className={`overflow-auto h-[35rem] gap-3 flex flex-col ${
+          categories.length > 0 ? "" : "justify-center items-center"
+        }`}
+      >
+        <div>
+          {categories.length > 0 ? (
+            renderProjects()
+          ) : (
+            <span className="text-center bg-[#242424] rounded-lg p-3 px-5 text-xl">
+              Couldn't find any category. Please create one.
+            </span>
+          )}
+        </div>
       </div>
       <div className="gap-5 flex pt-5">
         <button
-          className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 p-2 px-5 transition rounded-lg w-full"
+          className="bg-green-600 hover:bg-green-700 active:bg-green-800 p-2 px-5 transition rounded-lg w-full"
           onClick={() => setPage("New Project")}
         >
           New Project
-        </button>
-        <button
-          className="bg-green-600 hover:bg-green-700 active:bg-green-800 p-2 px-5 transition rounded-lg w-full"
-          onClick={() => setPage("New Category")}
-        >
-          New Category
         </button>
       </div>
     </div>
@@ -130,6 +205,7 @@ export default function Projects({ projects, categories, setProjects }) {
         setSelectedProject(null);
         setPage("Projects");
       }}
+      categories={categories}
     />
   ) : page == "New Project" ? (
     <NewProject
@@ -139,6 +215,7 @@ export default function Projects({ projects, categories, setProjects }) {
       categories={categories}
       projects={projects}
       setProjects={setProjects}
+      getProjects={getProjects}
     />
   ) : page == "New Category" ? (
     <NewCategory

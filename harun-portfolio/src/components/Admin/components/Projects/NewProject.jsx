@@ -1,14 +1,102 @@
 import React, { useState } from "react";
 import { FiPlus } from "react-icons/fi";
+import { database } from "../../../../database/firebase";
+import { addDoc, collection, doc } from "firebase/firestore";
+import supabase from "../../../../database/supabase";
 
-export default function NewProject({ onCancel, setProjects, categories }) {
+export default function NewProject({
+  onCancel,
+  setProjects,
+  categories,
+  getProjects,
+}) {
   const [newProject, setNewProject] = useState({
     name: "",
     description: "",
     image: null,
+    imagePath: null,
     categoryId: "",
     details: [],
   });
+
+  const [tempImage, setTempImage] = useState(null);
+
+  const projectsRef = collection(database, "projects");
+
+  const uploadDetailImages = async () => {
+    if (!newProject.details || newProject.details.length === 0) return [];
+
+    const promises = newProject.details.map(async (detail, index) => {
+      if (!detail.image) return { ...detail, imageUrl: null };
+
+      const date = Date.now();
+      const fileName = `${newProject.name}-detail-${index}-${date}`;
+
+      const { error } = await supabase.storage
+        .from("project_images")
+        .upload(`images/${fileName}`, detail.image);
+
+      if (error) {
+        console.error("Error uploading detail image:", error.message);
+        return { ...detail, imageUrl: null };
+      }
+
+      const imageUrl = `https://xjqscviwjivzzithxfel.supabase.co/storage/v1/object/public/project_images/images/${fileName}`;
+      const imageName = fileName;
+
+      return { description: detail.description, imageUrl, imageName };
+    });
+
+    const uploadedDetails = await Promise.all(promises);
+    return uploadedDetails;
+  };
+
+  const uploadImage = async () => {
+    if (!tempImage) return null;
+    const date = Date.now();
+    const { data, error } = await supabase.storage
+      .from("project_images")
+      .upload(`images/${newProject.name}-${date}`, tempImage);
+    if (error) {
+      console.log(error);
+      return null;
+    }
+    return `${newProject.name}-${date}`;
+  };
+  const handleSave = async (e) => {
+    e.preventDefault();
+
+    if (!newProject.name || !newProject.description || !newProject.categoryId) {
+      alert("Please fill out all required fields!");
+      return;
+    }
+
+    const imageName = await uploadImage();
+    const imageUrl = imageName
+      ? `https://xjqscviwjivzzithxfel.supabase.co/storage/v1/object/public/project_images/images/${imageName}`
+      : null;
+
+    const updatedDetails = await uploadDetailImages();
+
+    const finalProject = {
+      ...newProject,
+      image: imageUrl,
+      imagePath: imageName,
+      details: updatedDetails,
+    };
+
+    try {
+      const docRef = await addDoc(projectsRef, finalProject);
+
+      const projectWithId = { ...finalProject, id: docRef.id };
+
+      setProjects((prevProjects) => [...prevProjects, projectWithId]);
+
+      onCancel();
+    } catch (error) {
+      console.error("Error saving project:", error.message);
+    }
+  };
 
   const addDetail = () => {
     setNewProject((prevProject) => ({
@@ -22,18 +110,6 @@ export default function NewProject({ onCancel, setProjects, categories }) {
       ...prevProject,
       details: prevProject.details.filter((_, i) => i !== index),
     }));
-  };
-
-  const handleSave = (e) => {
-    e.preventDefault();
-
-    if (!newProject.categoryId) {
-      alert("Please select a category!");
-      return;
-    }
-
-    setProjects((prevProjects) => [...prevProjects, newProject]); // Use functional update
-    onCancel();
   };
 
   const handleInputChange = (field, value) => {
@@ -67,9 +143,7 @@ export default function NewProject({ onCancel, setProjects, categories }) {
                   onChange={(e) => {
                     if (!e.target.files[0]) return;
                     const updatedDetails = [...newProject.details];
-                    updatedDetails[index].image = URL.createObjectURL(
-                      e.target.files[0]
-                    );
+                    updatedDetails[index].image = e.target.files[0];
                     setNewProject((prev) => ({
                       ...prev,
                       details: updatedDetails,
@@ -91,7 +165,7 @@ export default function NewProject({ onCancel, setProjects, categories }) {
                 </button>
               </div>
               <img
-                src={detail.image}
+                src={URL.createObjectURL(detail.image)}
                 className="w-52 h-52 object-cover rounded-xl"
               />
             </div>
@@ -111,9 +185,7 @@ export default function NewProject({ onCancel, setProjects, categories }) {
                 onChange={(e) => {
                   if (!e.target.files[0]) return;
                   const updatedDetails = [...newProject.details];
-                  updatedDetails[index].image = URL.createObjectURL(
-                    e.target.files[0]
-                  );
+                  updatedDetails[index].image = e.target.files[0];
                   setNewProject((prev) => ({
                     ...prev,
                     details: updatedDetails,
@@ -143,10 +215,15 @@ export default function NewProject({ onCancel, setProjects, categories }) {
     ));
 
   return (
-    <div className="p-3 h-full">
-      <form className="flex flex-col w-full h-full" onSubmit={handleSave}>
+    <form
+      className="p-3 h-full"
+      onSubmit={(e) => {
+        handleSave(e);
+      }}
+    >
+      <div className="flex flex-col w-full h-full">
         <div className="flex flex-row gap-5 items-start h-full">
-          <div className="flex flex-col gap-3 h-full bg-[#252525] p-5 rounded-2xl">
+          <div className="flex flex-col gap-3 h-full bg-[#252525] p-5 rounded-2xl justify-center items-center">
             {/* IMAGE */}
             <h1 className="text-2xl font-extrabold text-center">IMAGE</h1>
             {newProject.image ? (
@@ -155,17 +232,41 @@ export default function NewProject({ onCancel, setProjects, categories }) {
                   src={newProject.image}
                   className="w-52 h-52 object-cover rounded-xl"
                 />
-                <button
-                  className="absolute top-0 right-0 bg-rose-500 p-2 rounded-full text-white"
-                  onClick={() => handleInputChange("image", null)}
-                >
-                  Remove
-                </button>
+
+                <div className="absolute cursor-pointer backdrop-blur-sm top-0 left-0 opacity-0 group-hover:opacity-100 transition w-full h-full rounded-xl flex justify-center items-center flex-col">
+                  <label
+                    htmlFor={`project-image`}
+                    className="cursor-pointer bg-blue-500/50 text-white text-xl uppercase font-extrabold hover:bg-blue-600/50 p-5 rounded-t-xl w-full h-full flex justify-center items-center"
+                  >
+                    Change
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    id={`project-image`}
+                    hidden
+                    onChange={(e) => {
+                      handleInputChange(
+                        "image",
+                        URL.createObjectURL(e.target.files[0])
+                      );
+                      setTempImage(e.target.files[0]);
+                    }}
+                  />
+                  <button
+                    onClick={() => {
+                      handleInputChange("image", null);
+                    }}
+                    className="bg-rose-500/50 text-white text-xl uppercase font-extrabold hover:bg-rose-600/50 p-5 rounded-b-xl w-full h-full flex justify-center items-center"
+                  >
+                    Remove
+                  </button>
+                </div>
               </div>
             ) : (
               <label
                 htmlFor="project-image"
-                className="w-52 h-52 bg-blue-600 hover:bg-blue-700 flex justify-center items-center cursor-pointer rounded-xl"
+                className="w-full h-52 bg-blue-600 hover:bg-blue-700 flex justify-center items-center cursor-pointer rounded-xl"
               >
                 <FiPlus className="text-6xl text-white" />
                 <input
@@ -173,12 +274,13 @@ export default function NewProject({ onCancel, setProjects, categories }) {
                   accept="image/*"
                   id="project-image"
                   hidden
-                  onChange={(e) =>
+                  onChange={(e) => {
                     handleInputChange(
                       "image",
                       URL.createObjectURL(e.target.files[0])
-                    )
-                  }
+                    );
+                    setTempImage(e.target.files[0]);
+                  }}
                 />
               </label>
             )}
@@ -187,26 +289,27 @@ export default function NewProject({ onCancel, setProjects, categories }) {
             <input
               type="text"
               placeholder="Enter project name"
-              className="p-3 px-5 rounded-lg text-slate-700 mt-3"
+              className="p-3 px-5 rounded-lg text-slate-700 mt-3 w-full"
               value={newProject.name}
               onChange={(e) => handleInputChange("name", e.target.value)}
+              required
             />
 
             {/* DESCRIPTION */}
             <textarea
               placeholder="Enter project description"
-              className="p-3 px-5 rounded-lg text-slate-700 mt-3"
+              className="p-3 px-5 rounded-lg text-slate-700 mt-3 w-full"
               value={newProject.description}
               onChange={(e) => handleInputChange("description", e.target.value)}
+              required
             />
 
             {/* CATEGORY */}
             <select
               className="p-3 px-5 rounded-lg text-slate-700 mt-3"
               value={newProject.categoryId}
-              onChange={(e) =>
-                handleInputChange("categoryId", parseInt(e.target.value))
-              }
+              onChange={(e) => handleInputChange("categoryId", e.target.value)}
+              required
             >
               <option value={0}>Select a category</option>
               {categories.map((category) => (
@@ -218,13 +321,15 @@ export default function NewProject({ onCancel, setProjects, categories }) {
           </div>
 
           {/* DETAILS */}
-          <div className="flex flex-col w-full bg-[#252525] rounded-lg p-5">
+          <div className="flex flex-col min-w-[20rem] max-w-[40rem] bg-[#252525] rounded-lg p-5">
             <h1 className="text-2xl font-extrabold pb-5">DETAILS</h1>
-            <div className="flex gap-5 overflow-auto p-5">
-              {renderDetails()}
-            </div>
+            {newProject.details.length > 0 && (
+              <div className="flex gap-5 overflow-auto p-5">
+                {renderDetails()}
+              </div>
+            )}
             <button
-              className="bg-blue-600 hover:bg-blue-700 p-3 w-full rounded-lg text-white"
+              className="bg-blue-600 hover:bg-blue-700 p-3 max-w-full rounded-lg text-white"
               onClick={addDetail}
               type="button"
             >
@@ -236,19 +341,20 @@ export default function NewProject({ onCancel, setProjects, categories }) {
         {/* BUTTONS */}
         <div className="flex justify-end gap-5 mt-5">
           <button
-            className="bg-green-600 p-3 rounded-lg text-white"
+            className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 p-3 rounded-lg text-white transition"
             type="submit"
           >
             Save Project
           </button>
           <button
-            className="bg-gray-600 p-3 rounded-lg text-white"
+            className="bg-gray-600 hover:bg-gray-700 active:bg-gray-800 p-3 rounded-lg text-white transition"
+            type="button"
             onClick={onCancel}
           >
             Cancel
           </button>
         </div>
-      </form>
-    </div>
+      </div>
+    </form>
   );
 }

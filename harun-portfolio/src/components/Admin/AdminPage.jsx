@@ -2,74 +2,72 @@ import React, { useState, useEffect, useMemo } from "react";
 import NavigationBar from "../NavigationBar/NavigationBar";
 import NavigationBarMobile from "../NavigationBar/NavigationBarMobile";
 import Projects from "./components/Projects/Projects";
-import Edit from "./components/Projects/Edit";
-import NewProject from "./components/Projects/NewProject";
-import NewCategory from "./components/Projects/NewCategory";
-import Settings from "./components/settings";
-import image from "../../assets/me.jpg";
-import { auth } from "../../database/firebase";
+import { auth, database } from "../../database/firebase";
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
+import Categories from "./components/Categories/Categories";
+import { collection, getDocs } from "firebase/firestore";
+import supabase from "../../database/supabase";
 
 export default function AdminPage() {
   const [selectedOption, setSelectedOption] = useState(null);
   const [user, setUser] = useState(null);
 
-  const navigate = useNavigate();
+  const [categories, setCategories] = useState([]);
+  const categoriesRef = collection(database, "categories");
 
-  const [categories] = useState([
-    { id: 1, categoryName: "Logos" },
-    { id: 2, categoryName: "Posters" },
-    { id: 3, categoryName: "Social Media Content" },
-  ]);
-  const [projects, setProjects] = useState([
-    {
-      id: 1,
-      name: "Econo Car",
-      description: "Econo Car Logo Design",
-      image: image,
-      categoryId: 1,
-      details: [
-        {
-          image: image,
-          description:
-            "The 'Econo Car' logo was assigned to me during my university studies. I was tasked with animating it using HTML, CSS, and JavaScript. Unfortunately, this is all I got of the logo.",
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: "My Piramit",
-      description: "My Piramit Logo Design",
-      image: null,
-      categoryId: 1,
-    },
-    {
-      id: 3,
-      name: "Bin It",
-      description: "Bin It Poster",
-      image: null,
-      categoryId: 2,
-      details: [
-        {
-          image: image,
-          description:
-            "The 'Econo Car' logo was assigned to me during my university studies. I was tasked with animating it using HTML, CSS, and JavaScript.",
-        },
-      ],
-    },
-    {
-      id: 4,
-      name: "Econo Car",
-      description: "Econo Car Banner",
-      image: image,
-      categoryId: 3,
-    },
-  ]);
+  const [projects, setProjects] = useState([]);
+  const projectsRef = collection(database, "projects");
+
+  const getImages = async () => {
+    const { data, error } = await supabase.storage
+      .from("project_images")
+      .list();
+    if (error) console.error(error);
+  };
 
   useEffect(() => {
-    console.log("Projects State in Admin:", projects);
-  }, [projects]);
+    getImages();
+  }, []);
+
+  // {
+  //   id: 1,
+  //   name: "Econo Car",
+  //   description: "Econo Car Logo Design",
+  //   image: image,
+  //   categoryId: 1,
+  //   details: [
+  //     {
+  //       image: image,
+  //       description:
+  //         "The 'Econo Car' logo was assigned to me during my university studies. I was tasked with animating it using HTML, CSS, and JavaScript. Unfortunately, this is all I got of the logo.",
+  //     },
+  //   ],
+  // },
+
+  const navigate = useNavigate();
+
+  const getProjects = async () => {
+    try {
+      const data = await getDocs(projectsRef);
+      setProjects(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const getCategories = async () => {
+    try {
+      const data = await getDocs(categoriesRef);
+      setCategories(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    getProjects();
+
+    getCategories();
+  }, []);
 
   const options = useMemo(
     () => [
@@ -159,9 +157,15 @@ export default function AdminPage() {
                     projects={projects}
                     categories={categories}
                     setProjects={setProjects}
+                    getProjects={getProjects}
                   />
                 ) : selectedOption?.name === "Categories" ? (
-                  <div>Categories</div>
+                  <Categories
+                    categories={categories}
+                    setCategories={setCategories}
+                    projects={projects}
+                    getCategories={getCategories}
+                  />
                 ) : (
                   selectedOption?.name === "Settings" && <div>Settings</div>
                 )}
