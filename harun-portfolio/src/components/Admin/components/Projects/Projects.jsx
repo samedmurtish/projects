@@ -174,15 +174,15 @@ export default function Projects({
     <div>
       <div
         className={`overflow-auto h-[35rem] gap-3 flex flex-col ${
-          categories.length > 0 ? "" : "justify-center items-center"
+          projects.length > 0 ? "" : "justify-center items-center"
         }`}
       >
         <div>
-          {categories.length > 0 ? (
+          {projects.length > 0 ? (
             renderProjects()
           ) : (
             <span className="text-center bg-[#242424] rounded-lg p-3 px-5 text-xl">
-              Couldn't find any category. Please create one.
+              Couldn't find any project. Please create one.
             </span>
           )}
         </div>

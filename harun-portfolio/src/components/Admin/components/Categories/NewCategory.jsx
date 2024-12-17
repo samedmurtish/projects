@@ -7,11 +7,11 @@ export default function NewCategory({ setCategories, setPage }) {
   const categoriesRef = collection(database, "categories");
 
   const handleAddCategory = async () => {
-    await addDoc(categoriesRef, { categoryName });
+    const docRef = await addDoc(categoriesRef, { categoryName });
 
     setCategories((prevCategories) => [
       ...prevCategories,
-      { id: Date.now(), categoryName }, // set correct id from database...
+      { id: docRef.id, categoryName },
     ]);
   };
 
@@ -45,11 +45,15 @@ export default function NewCategory({ setCategories, setPage }) {
         </div>
       </div>
       <div className="flex flex-row justify-center items-center gap-3">
-        <button className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 w-full p-2 px-5 transition rounded-lg">
+        <button
+          className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 w-full p-2 px-5 transition rounded-lg"
+          type="submit"
+        >
           Add
         </button>
         <button
           className="bg-gray-600 hover:bg-gray-700 active:bg-gray-800 w-full p-2 px-5 transition rounded-lg"
+          type="button"
           onClick={() => setPage("Categories")}
         >
           Cancel

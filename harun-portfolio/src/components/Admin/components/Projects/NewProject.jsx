@@ -344,7 +344,7 @@ export default function NewProject({
             className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 p-3 rounded-lg text-white transition"
             type="submit"
           >
-            Save Project
+            Add Project
           </button>
           <button
             className="bg-gray-600 hover:bg-gray-700 active:bg-gray-800 p-3 rounded-lg text-white transition"
