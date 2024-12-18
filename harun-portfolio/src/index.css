@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  background-color: #212121;
+  background-color: #181818;
 }
 
 #label-name:hover ~ #label-icon {

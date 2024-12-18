@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BsFillLightningFill } from "react-icons/bs";
-export default function Footer() {
+export default function Footer({ setBottom }) {
   const currentDate = new Date();
 
   const [date, setDate] = useState(currentDate.getFullYear());
@@ -11,7 +11,7 @@ export default function Footer() {
 
   document.title = "Harun Spaho`s Portfolio";
   return (
-    <div className="bg-[#AB012F] w-full h-[130px] py-1 md:h-[70px]">
+    <div className={`bg-[#AB012F] w-full h-[130px] py-1 md:h-[70px]`}>
       <div className="select-none  text-white flex flex-col md:flex-row p-2 text-center md:text-pretty justify-between items-center w-[60%] md:w-3/4 h-full mx-auto my-0">
         <div>
           <b className="font-extrabold"></b>©<b> Harun Spaho</b>'s Portfolio,{" "}

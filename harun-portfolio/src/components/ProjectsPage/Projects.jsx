@@ -1,32 +1,60 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NavigationBar from "../NavigationBar/NavigationBar";
 import { MdFavorite } from "react-icons/md";
 import { Link } from "react-router-dom";
-import {
-  projectData,
-  sortedCategories,
-  sortCategories,
-} from "../../scripts/data";
 import NavigationBarMobile from "../NavigationBar/NavigationBarMobile";
 import SnackbarShow from "../../MuiElements/SnackbarShow";
 import Footer from "../Footer/Footer";
+import { collection, getDocs } from "firebase/firestore";
+import { database } from "../../database/firebase";
 
 export default function Projects() {
   document.title = "Harun Spaho`s Portfolio";
+
+  const [projects, setProjects] = useState([]);
+  const projectsRef = collection(database, "projects");
+
+  const [categories, setCategories] = useState([]);
+  const categoriesRef = collection(database, "categories");
+
+  const getProjects = async () => {
+    try {
+      const data = await getDocs(projectsRef);
+      setProjects(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getCategories = async () => {
+    try {
+      const data = await getDocs(categoriesRef);
+      setCategories(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    getProjects();
+    getCategories();
+  }, []);
+
   const [showBar, setShowBar] = useState({
     clicked: false,
     message: "Product added to cart successfully!",
   });
 
   const renderProjects = (category) => {
-    return projectData.map((value, valueIndex) => (
-      <>
-        {value.category == category && (
+    return projects.map((value, valueIndex) => (
+      <span key={valueIndex}>
+        {value.categoryId == category && (
           <div>
             <Link to={`/project/${value.id}`} state={{ project: value }}>
               <div className="w-[320px] h-[400px] bg-[#1b1b1b] flex items-center flex-col p-5 pb-0 rounded-t-3xl justify-center">
                 <img
-                  src={value.thumbnail}
+                  src={value.image}
                   alt={value.name}
                   className="justify-self-center self-center rounded-xl w-full h-max overflow-hidden"
                 />
@@ -34,7 +62,12 @@ export default function Projects() {
             </Link>
             <p className=" bg-[#1b1b1b] py-5 text-2xl flex justify-center items-center w-full text-center flex-col h-max">
               {value.name} <br />
-              <span className="text-lg text-gray-300">{value.category}</span>
+              <span className="text-lg text-gray-300">
+                {
+                  categories.find((cat) => cat.id == value.categoryId)
+                    .categoryName
+                }
+              </span>
             </p>
             <div className="bg-rose-400 h-1 w-full"></div>
             <div className="flex w-full h-full">
@@ -65,8 +98,20 @@ export default function Projects() {
             </div>
           </div>
         )}
-      </>
+      </span>
     ));
+  };
+  const [sortedCategories, setSortedCategories] = useState([]);
+  const sortCategories = () => {
+    projects.map((value) => {
+      let matches = false;
+      sortedCategories.forEach((sortedValue) => {
+        if (sortedCategories.length > 0)
+          if (value.categoryId == sortedValue) matches = true;
+      });
+      if (!matches)
+        setSortedCategories([...sortedCategories, value.categoryId]);
+    });
   };
 
   const renderCategories = () => {
@@ -74,14 +119,16 @@ export default function Projects() {
 
     return sortedCategories.map((value, valueIndex) => (
       <div key={valueIndex} className="flex flex-col w-full mb-24">
-        <p className="text-5xl text-white font-thin">{value}</p>
+        <p className="text-5xl text-white font-thin">
+          {categories.find((cat) => cat.id == value).categoryName}
+        </p>
         <div className="flex">
           <div className="w-2/3 bg-rose-600 h-1 my-5" />
           <div className="w-[20%] bg-rose-500 h-1 my-5" />
           <div className="w-[10%] bg-rose-400 h-1 my-5" />
           <div className="w-[5%] bg-rose-300 h-1 my-5" />
         </div>
-        <div className="flex w-full h-full gap-5 justify-start items-start flex-wrap ">
+        <div className="flex w-full h-full gap-5 justify-start items-start flex-wrap">
           {renderProjects(value)}
         </div>
       </div>
@@ -89,7 +136,11 @@ export default function Projects() {
   };
 
   return (
-    <div className="flex justify-center items-start md:items-center flex-col">
+    <div
+      className={`flex justify-center items-start md:items-center flex-col ${
+        projects.length == 0 ? "h-screen" : ""
+      }`}
+    >
       <SnackbarShow get={showBar} set={setShowBar} />
       <div className="hidden sm:block md:self-start">
         <NavigationBar />

@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useMemo } from "react";
 import NavigationBar from "../NavigationBar/NavigationBar";
 import NavigationBarMobile from "../NavigationBar/NavigationBarMobile";
+import Categories from "./components/Categories/Categories";
 import Projects from "./components/Projects/Projects";
+import Settings from "./components/Settings/Settings";
 import { auth, database } from "../../database/firebase";
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
-import Categories from "./components/Categories/Categories";
 import { collection, getDocs } from "firebase/firestore";
 import supabase from "../../database/supabase";
 
@@ -19,6 +20,11 @@ export default function AdminPage() {
   const [projects, setProjects] = useState([]);
   const projectsRef = collection(database, "projects");
 
+  const [navigationBarColor, setNavigationBarColor] = useState("bg-white");
+
+  useEffect(() => {
+    console.log(navigationBarColor);
+  }, [navigationBarColor]);
   const getImages = async () => {
     const { data, error } = await supabase.storage
       .from("project_images")
@@ -109,7 +115,7 @@ export default function AdminPage() {
   return (
     <div>
       <div className="hidden md:block z-[]">
-        <NavigationBar />
+        <NavigationBar navigationBarColor={navigationBarColor} />
       </div>
       <div className="block md:hidden">
         <NavigationBarMobile />
@@ -171,7 +177,9 @@ export default function AdminPage() {
                     getCategories={getCategories}
                   />
                 ) : (
-                  selectedOption?.name === "Settings" && <div>Settings</div>
+                  selectedOption?.name === "Settings" && (
+                    <Settings setNavigationBarColor={setNavigationBarColor} />
+                  )
                 )}
               </div>
             </div>
