@@ -1,11 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import SnackbarShow from "../../MuiElements/SnackbarShow";
 import { collection, doc, getDoc, setDoc } from "firebase/firestore";
-import { database } from "../../database/firebase";
+import { auth, database } from "../../database/firebase";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 
 export default function NavigationBar({ siteSettings, from }) {
   const [loading, setLoading] = useState(false);
+
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
+    return () => unsubscribe();
+  }, []);
 
   const [settings, setSettings] = useState({
     borderColor: "#ab012e",
@@ -60,7 +70,6 @@ export default function NavigationBar({ siteSettings, from }) {
   const pages = [
     { link: "about", title: "About Me" },
     { link: "projects", title: "My Projects" },
-    { link: "cv", title: "CV" },
   ];
 
   const [categories, setCategories] = useState([]);
@@ -69,7 +78,6 @@ export default function NavigationBar({ siteSettings, from }) {
     clicked: false,
     message: "Redirecting!",
   });
-
   const getCategories = async () => {
     try {
       const data = await getDocs(categoriesRef);
@@ -153,14 +161,24 @@ export default function NavigationBar({ siteSettings, from }) {
               HARUN SPAHO
             </span>
           </Link>
-          <div
-            className="flex px-5 rounded-xl"
-            style={{
-              backgroundColor: settings.buttonsColor,
-              color: settings.buttonsTextColor,
-            }}
-          >
-            {renderNav()}
+          <div className="flex gap-5">
+            <div
+              className="flex px-5 rounded-xl"
+              style={{
+                backgroundColor: settings.buttonsColor,
+                color: settings.buttonsTextColor,
+              }}
+            >
+              {renderNav()}
+            </div>
+            {user && (
+              <button
+                onClick={() => signOut(auth)}
+                className="bg-[rgba(176,1,46,0.5)] hover:bg-[rgba(176,1,46,0.3)] active:bg-[rgba(176,1,46,0.1)] p-2 px-5 transition rounded-lg"
+              >
+                Log Out
+              </button>
+            )}
           </div>
         </div>
       </div>

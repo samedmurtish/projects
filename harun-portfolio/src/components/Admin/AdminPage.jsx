@@ -115,7 +115,7 @@ export default function AdminPage() {
 
       {user && (
         <div className="h-full w-screen md:w-3/4 mx-auto my-0 text-white font-semibold pt-[6rem] md:pt-28 flex align-center justify-center">
-          <div className="flex flex-col md:flex-row min-h-[40rem] w-full">
+          <div className="flex flex-col md:flex-row md:min-h-[40rem] w-full">
             <div className="bg-gradient-to-tl from-[#8c0327] to-[#8c0327]/50 w-screen h-full md:w-[21rem] p-5 pt-0 overflow-hidden">
               <div className="flex justify-center items-center w-full gap-3 border-b-2 border-b-white p-5">
                 <h1 className="text-2xl">Admin Panel</h1>

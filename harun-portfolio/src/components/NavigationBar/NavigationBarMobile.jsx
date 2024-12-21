@@ -2,12 +2,21 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { HiOutlineMenu } from "react-icons/hi";
 import { doc, getDoc } from "firebase/firestore";
-import { database } from "../../database/firebase";
+import { auth, database } from "../../database/firebase";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 export default function NavigationBarMobile() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
+    return () => unsubscribe();
+  }, []);
+
   const pages = [
     { link: "about", title: "About Me" },
     { link: "projects", title: "My Projects" },
-    { link: "cv", title: "CV" },
   ];
 
   const [menuOpened, setMenuOpened] = useState(false);
@@ -123,7 +132,20 @@ export default function NavigationBarMobile() {
               backgroundColor: settings.backgroundColor,
             }}
           >
-            <div className="font-semibold py-3">{renderNav()}</div>
+            <div className="font-semibold py-3">
+              {renderNav()}
+              {user && (
+                <button
+                  onClick={() => {
+                    signOut(auth);
+                    window.location.reload();
+                  }}
+                  className="bg-[rgba(176,1,46,0.5)] hover:bg-[rgba(176,1,46,0.3)] active:bg-[rgba(176,1,46,0.1)] p-2 px-5 transition rounded-lg text-center w-full"
+                >
+                  Log Out
+                </button>
+              )}
+            </div>
           </div>
         )}
       </div>
