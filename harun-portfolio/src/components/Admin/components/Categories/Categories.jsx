@@ -9,6 +9,8 @@ export default function Categories({
   categories,
   setCategories,
   getCategories,
+  loading,
+  setLoading,
 }) {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [page, setPage] = useState("Categories");
@@ -19,17 +21,24 @@ export default function Categories({
   }, []);
 
   const deleteCategory = (categoryIndex) => {
-    projects.map((prev) => {
-      if (prev.categoryId === categories[categoryIndex].id) {
-        deleteDoc(doc(database, "projects", prev.id));
-      }
-    });
+    setLoading(true);
+    try {
+      projects.map((prev) => {
+        if (prev.categoryId === categories[categoryIndex].id) {
+          deleteDoc(doc(database, "projects", prev.id));
+        }
+      });
 
-    deleteDoc(doc(categoriesRef, categories[categoryIndex].id));
+      deleteDoc(doc(categoriesRef, categories[categoryIndex].id));
 
-    setCategories((prevCategories) =>
-      prevCategories.filter((_, index) => index !== categoryIndex)
-    );
+      setCategories((prevCategories) =>
+        prevCategories.filter((_, index) => index !== categoryIndex)
+      );
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const renderCategories = () => {
@@ -88,13 +97,13 @@ export default function Categories({
             }`}
           >
             <div className="flex flex-col gap-3">
-              {categories.length > 0 ? (
-                renderCategories()
-              ) : (
-                <span className="text-center bg-[#242424] rounded-lg p-3 px-5 text-xl">
-                  Couldn't find any category. Please create one.
-                </span>
-              )}
+              {categories.length > 0
+                ? renderCategories()
+                : !loading && (
+                    <span className="text-center bg-[#242424] rounded-lg p-3 px-5 text-xl">
+                      Couldn't find any category. Please create one.
+                    </span>
+                  )}
             </div>
           </div>
           <div>

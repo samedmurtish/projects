@@ -5,11 +5,15 @@ import { FaPlus } from "react-icons/fa";
 import { FiPlus } from "react-icons/fi";
 import supabase from "../../../../database/supabase";
 
-export default function Settings({ setSiteSettings, siteSettings }) {
+export default function Settings({
+  setSiteSettings,
+  siteSettings,
+  loading,
+  setLoading,
+}) {
   const [opacity, setOpacity] = useState(33);
 
   const [tempImage, setTempImage] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [saveActive, setSaveActive] = useState(false);
 
   useEffect(() => {
@@ -17,6 +21,7 @@ export default function Settings({ setSiteSettings, siteSettings }) {
   }, [siteSettings]);
 
   const getSiteSettings = async () => {
+    setLoading(true);
     try {
       const docSnap = await getDoc(siteSettingsRef);
       if (docSnap.exists()) {
@@ -25,8 +30,11 @@ export default function Settings({ setSiteSettings, siteSettings }) {
       }
     } catch (error) {
       console.error("Error getting document: ", error);
+    } finally {
+      setLoading(false);
     }
   };
+
   useEffect(() => {
     getSiteSettings();
   }, []);
@@ -669,7 +677,7 @@ export default function Settings({ setSiteSettings, siteSettings }) {
                             <div className="absolute cursor-pointer backdrop-blur-sm top-0 left-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition w-full h-12 md:h-full rounded-xl flex justify-center items-center md:flex-col">
                               <label
                                 htmlFor="about-me-image"
-                                className="cursor-pointer bg-blue-500/50 text-white text-md md:text-xl uppercase font-extrabold hover:bg-blue-600/50 p-5 rounded-tl-xl w-full h-full flex justify-center items-center"
+                                className="cursor-pointer bg-blue-500/50 text-white text-md md:text-xl uppercase font-extrabold hover:bg-blue-600/50 p-5 md:rounded-t-xl rounded-tl-xl w-full h-full flex justify-center items-center"
                               >
                                 Change
                               </label>
@@ -692,7 +700,7 @@ export default function Settings({ setSiteSettings, siteSettings }) {
                                   }));
                                   setTempImage(null);
                                 }}
-                                className="bg-rose-500/50 text-white text-md md:text-xl uppercase font-extrabold hover:bg-rose-600/50 p-5 rounded-tr-xl w-full h-full flex justify-center items-center"
+                                className="bg-rose-500/50 text-white text-md md:text-xl uppercase font-extrabold hover:bg-rose-600/50 p-5 rounded-tr-xl md:rounded-t-none md:rounded-b-xl w-full h-full flex justify-center items-center"
                               >
                                 Remove
                               </button>
@@ -737,8 +745,6 @@ export default function Settings({ setSiteSettings, siteSettings }) {
           </div>
         </div>
       </div>
-      {/*
-       */}
 
       {saveActive && (
         <div>

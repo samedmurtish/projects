@@ -12,6 +12,8 @@ export default function Projects({
   categories,
   setProjects,
   getProjects,
+  loading,
+  setLoading,
 }) {
   const [selectedProject, setSelectedProject] = useState(null);
   const [page, setPage] = useState("Projects");
@@ -26,6 +28,7 @@ export default function Projects({
   }, []);
 
   const handleDeleteProject = async (categoryId, projectId) => {
+    setLoading(true);
     try {
       const projectRef = doc(database, "projects", projectId);
 
@@ -76,6 +79,8 @@ export default function Projects({
       setProjects(updatedProjects);
     } catch (error) {
       console.error("Error deleting project:", error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -189,13 +194,13 @@ export default function Projects({
               : "w-full h-full flex justify-center items-center"
           }`}
         >
-          {projects.length > 0 ? (
-            renderProjects()
-          ) : (
-            <span className="text-center bg-[#242424] rounded-lg p-3 px-5 text-xl">
-              Couldn't find any project. Please create one.
-            </span>
-          )}
+          {projects.length > 0
+            ? renderProjects()
+            : !loading && (
+                <span className="text-center bg-[#242424] rounded-lg p-3 px-5 text-xl">
+                  Couldn't find any project. Please create one.
+                </span>
+              )}
         </div>
       </div>
       <div className="gap-5 flex pt-5">

@@ -20,6 +20,8 @@ export default function AdminPage() {
   const [projects, setProjects] = useState([]);
   const projectsRef = collection(database, "projects");
 
+  const [loading, setLoading] = useState(false);
+
   const [SiteSettings, setSiteSettings] = useState({
     borderColor: "#ab012e",
     backgroundColor: "#ab012e",
@@ -46,19 +48,25 @@ export default function AdminPage() {
   const navigate = useNavigate();
 
   const getProjects = async () => {
+    setLoading(true);
     try {
       const data = await getDocs(projectsRef);
       setProjects(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
   const getCategories = async () => {
+    setLoading(true);
     try {
       const data = await getDocs(categoriesRef);
       setCategories(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -146,14 +154,22 @@ export default function AdminPage() {
                 </div>
               </div>
             </div>
-            <div className="bg-[#2d2d2d] h-full w-full p-5 pt-2">
+            <div className="bg-[#2d2d2d] h-full w-full p-5 pt-2 relative">
               <div className="h-full overflow-auto">
+                {loading && (
+                  <div className="absolute top-0 right-0 bg-black/50 w-full h-full flex justify-center items-center z-[1000000] flex-col gap-5">
+                    <div className="animate-spin rounded-full h-32 w-32 border-b-4 border-white"></div>
+                    Loading {selectedOption?.name}...
+                  </div>
+                )}
                 {selectedOption?.name === "Projects" ? (
                   <Projects
                     projects={projects}
                     categories={categories}
                     setProjects={setProjects}
                     getProjects={getProjects}
+                    loading={loading}
+                    setLoading={setLoading}
                   />
                 ) : selectedOption?.name === "Categories" ? (
                   <Categories
@@ -161,12 +177,16 @@ export default function AdminPage() {
                     setCategories={setCategories}
                     projects={projects}
                     getCategories={getCategories}
+                    loading={loading}
+                    setLoading={setLoading}
                   />
                 ) : (
                   selectedOption?.name === "Settings" && (
                     <Settings
                       setSiteSettings={setSiteSettings}
                       siteSettings={SiteSettings}
+                      loading={loading}
+                      setLoading={setLoading}
                     />
                   )
                 )}
