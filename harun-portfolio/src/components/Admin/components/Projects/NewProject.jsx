@@ -23,6 +23,8 @@ export default function NewProject({
 
   const projectsRef = collection(database, "projects");
 
+  const [loading, setLoading] = useState(false);
+
   const uploadDetailImages = async () => {
     if (!newProject.details || newProject.details.length === 0) return [];
 
@@ -65,6 +67,7 @@ export default function NewProject({
   };
   const handleSave = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     if (!newProject.name || !newProject.description || !newProject.categoryId) {
       alert("Please fill out all required fields!");
@@ -91,10 +94,11 @@ export default function NewProject({
       const projectWithId = { ...finalProject, id: docRef.id };
 
       setProjects((prevProjects) => [...prevProjects, projectWithId]);
-
-      onCancel();
     } catch (error) {
       console.error("Error saving project:", error.message);
+    } finally {
+      setLoading(false);
+      onCancel();
     }
   };
 
@@ -218,11 +222,16 @@ export default function NewProject({
 
   return (
     <form
-      className="p-3 h-full"
+      className="p-3 h-full relative"
       onSubmit={(e) => {
         handleSave(e);
       }}
     >
+      {loading && (
+        <div className="absolute top-0 right-0 bg-black/50 w-full h-full flex justify-center items-center z-[1000000]">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-4 border-white"></div>
+        </div>
+      )}
       <div className="flex flex-col w-full h-full">
         <div className="flex flex-col md:flex-row gap-5 items-start h-full">
           <div className="flex flex-col gap-3 w-full h-full bg-[#252525] p-5 rounded-2xl justify-center items-center">

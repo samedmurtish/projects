@@ -6,25 +6,39 @@ export default function EditCategory({ category, setCategories, setPage }) {
   const [categoryName, setCategoryName] = useState("");
   const categoriesRef = collection(database, "categories");
 
-  const handleSave = () => {
-    updateDoc(doc(categoriesRef, category.id), { categoryName });
+  const [loading, setLoading] = useState(false);
 
-    setCategories((prevCategories) =>
-      prevCategories.map((cat) =>
-        cat.id === category.id ? { ...cat, categoryName } : cat
-      )
-    );
+  const handleSave = () => {
+    setLoading(true);
+    try {
+      updateDoc(doc(categoriesRef, category.id), { categoryName });
+
+      setCategories((prevCategories) =>
+        prevCategories.map((cat) =>
+          cat.id === category.id ? { ...cat, categoryName } : cat
+        )
+      );
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+      setPage("Categories");
+    }
   };
 
   return (
     <form
-      className="bg-[#242424] rounded-lg flex flex-col gap-10 p-5 h-full justify-between"
+      className="bg-[#242424] rounded-lg flex flex-col gap-10 p-5 h-full justify-between relative"
       onSubmit={(e) => {
         e.preventDefault();
         handleSave();
-        setPage("Categories");
       }}
     >
+      {loading && (
+        <div className="absolute top-0 right-0 bg-black/50 w-full h-full flex justify-center items-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-4 border-white"></div>
+        </div>
+      )}
       <div className="w-full cursor-pointer group transition flex justify-between flex-col gap-10">
         <div className="flex gap-5 justify-center items-center w-full">
           <div className="flex flex-col justify-center items-center">

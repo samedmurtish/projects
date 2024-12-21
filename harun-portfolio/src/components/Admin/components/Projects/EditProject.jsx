@@ -17,6 +17,7 @@ export default function Edit({
   const projectsRef = collection(database, "projects");
   const [tempImage, setTempImage] = useState(null);
   const [isDisabled, setIsDisabled] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const renderDetails = () => {
     if (!projectInfo.details) return null;
@@ -118,6 +119,7 @@ export default function Edit({
         <button
           className="bg-rose-600 hover:bg-rose-700 active:bg-rose-800 p-3 w-full px-5 rounded-lg"
           onClick={() => removeDetail(detailIndex)}
+          type="button"
         >
           Remove Detail
         </button>
@@ -150,6 +152,7 @@ export default function Edit({
   const saveChanges = async () => {
     setIsDisabled(true);
     const projectRef = doc(projectsRef, project.id);
+    setLoading(true);
 
     try {
       let newProjectImageUrl = projectInfo.image;
@@ -211,18 +214,32 @@ export default function Edit({
       setProjectData((prev) =>
         prev.map((item) => (item.id === project.id ? updatedProject : item))
       );
-
-      onCancel();
     } catch (error) {
       console.error("Error updating project:", error.message);
+    } finally {
+      setIsDisabled(false);
+      setLoading(false);
+      onCancel();
     }
   };
   return (
-    <div className="p-3">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        saveChanges();
+      }}
+      className="p-3 relative z-[0]"
+    >
+      {loading && (
+        <div className="absolute top-0 right-0 bg-black/50 w-full h-full flex justify-center items-center z-[10000]">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-4 border-white"></div>
+        </div>
+      )}
+
       <div className="flex w-full flex-col">
         <div className="flex flex-col md:flex-row gap-5 items-start">
           {/* Project Image and General Info */}
-          <div className="flex flex-col justify-center items-center w-full md:w-max">
+          <div className="flex flex-col justify-center items-center w-full md:w-full">
             <div className="flex flex-col bg-[#252525] justify-center items-center rounded-2xl w-full h-full">
               {/* Image Section */}
               <div className="pt-5 rounded-lg justify-center items-center md:w-max">
@@ -354,7 +371,7 @@ export default function Edit({
           </div>
 
           {/* Details Section */}
-          <div className="flex flex-col min-w-[20rem] max-w-[40rem] bg-[#252525] rounded-lg p-5 w-full md:w-max">
+          <div className="flex flex-col min-w-[20rem] max-w-[40rem] bg-[#252525] rounded-lg p-5 w-full md:w-full">
             <h1 className="text-2xl font-extrabold pb-5">DETAILS</h1>
             {projectInfo.details.length > 0 && (
               <div className="flex gap-5 overflow-auto p-5">
@@ -375,19 +392,20 @@ export default function Edit({
         <div className="flex gap-5 justify-end pt-5">
           <button
             className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 p-3 px-5 rounded-lg w-full border-b-blue-800 hover:border-b-blue-900 border-b-4 transition"
-            onClick={saveChanges}
+            type="submit"
             disabled={isDisabled}
           >
             Save Changes
           </button>
           <button
             className="bg-gray-600 hover:bg-gray-700 active:bg-gray-800 p-3 px-5 rounded-lg w-full border-b-gray-700 hover:border-b-gray-800 border-b-4 transition"
+            type="button"
             onClick={onCancel}
           >
             Cancel
           </button>
         </div>
       </div>
-    </div>
+    </form>
   );
 }
