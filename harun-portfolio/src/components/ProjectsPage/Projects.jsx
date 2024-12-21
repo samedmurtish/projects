@@ -21,7 +21,6 @@ export default function Projects() {
     try {
       const data = await getDocs(projectsRef);
       setProjects(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-      console.log(data.docs.map((doc) => ({ ...doc.data() })));
     } catch (error) {
       console.error(error);
     }

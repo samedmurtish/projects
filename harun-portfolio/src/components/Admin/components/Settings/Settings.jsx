@@ -99,7 +99,6 @@ export default function Settings({
     } else {
       await setDoc(siteSettingsRef, siteSettingsToSave);
     }
-    console.log(docSnap);
   };
 
   const handleImageUpload = async (file) => {

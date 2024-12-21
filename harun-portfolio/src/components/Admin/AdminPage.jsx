@@ -75,10 +75,6 @@ export default function AdminPage() {
     getCategories();
   }, []);
 
-  useEffect(() => {
-    console.log(categories);
-  }, [categories]);
-
   const options = useMemo(
     () => [
       {

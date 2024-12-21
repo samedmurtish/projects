@@ -63,10 +63,6 @@ export default function NavigationBar({ siteSettings, from }) {
     }
   };
 
-  useEffect(() => {
-    console.log(settings);
-  }, [settings]);
-
   const pages = [
     { link: "about", title: "About Me" },
     { link: "projects", title: "My Projects" },
