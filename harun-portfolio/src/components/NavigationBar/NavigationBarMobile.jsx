@@ -17,6 +17,7 @@ export default function NavigationBarMobile() {
   const pages = [
     { link: "about", title: "About Me" },
     { link: "projects", title: "My Projects" },
+    { link: "admin", title: "Admin Panel" },
   ];
 
   const [menuOpened, setMenuOpened] = useState(false);
@@ -69,7 +70,9 @@ export default function NavigationBarMobile() {
       <Link
         to={`/${value.link}`}
         key={valueIndex}
-        className="flex justify-center items-center px-5 pb-2"
+        className={`flex justify-center items-center px-5 pb-2  ${
+          value.link === "admin" ? (!user ? "hidden" : "") : ""
+        }`}
       >
         <div
           className="p-3 border-b-2 border-b-transparent hover:border-b-white border-b-[#cf5f5f] cursor-pointer w-full transition hover:bg-[#ac002e] bg-[#a0002b] active:bg-[#920127] flex justify-center"
@@ -134,7 +137,7 @@ export default function NavigationBarMobile() {
           >
             <div className="font-semibold py-3">
               {renderNav()}
-              {user && (
+              {user ? (
                 <button
                   onClick={() => {
                     signOut(auth);
@@ -144,6 +147,13 @@ export default function NavigationBarMobile() {
                 >
                   Log Out
                 </button>
+              ) : (
+                <Link
+                  to="/login"
+                  className="bg-[rgba(176,1,46,0.5)] hover:bg-[rgba(176,1,46,0.3)] active:bg-[rgba(176,1,46,0.1)] p-2 px-5 transition rounded-lg text-center w-full flex justify-center items-center"
+                >
+                  Log In
+                </Link>
               )}
             </div>
           </div>

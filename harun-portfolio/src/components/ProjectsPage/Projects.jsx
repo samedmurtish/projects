@@ -21,6 +21,7 @@ export default function Projects() {
     try {
       const data = await getDocs(projectsRef);
       setProjects(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      console.log(data.docs.map((doc) => ({ ...doc.data() })));
     } catch (error) {
       console.error(error);
     }
@@ -48,7 +49,10 @@ export default function Projects() {
 
   const renderProjects = (category) => {
     return projects.map((value, valueIndex) => (
-      <span key={valueIndex}>
+      <span
+        className={`${value.categoryId != category ? "hidden" : ""}`}
+        key={valueIndex}
+      >
         {value.categoryId == category && (
           <div>
             <Link to={`/project/${value.id}`} state={{ project: value }}>

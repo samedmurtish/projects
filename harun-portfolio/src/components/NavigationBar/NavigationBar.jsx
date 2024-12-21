@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import SnackbarShow from "../../MuiElements/SnackbarShow";
-import { collection, doc, getDoc, setDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { auth, database } from "../../database/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 
@@ -70,6 +70,7 @@ export default function NavigationBar({ siteSettings, from }) {
   const pages = [
     { link: "about", title: "About Me" },
     { link: "projects", title: "My Projects" },
+    { link: "admin", title: "Admin Panel" },
   ];
 
   const [categories, setCategories] = useState([]);
@@ -95,7 +96,9 @@ export default function NavigationBar({ siteSettings, from }) {
       <Link
         to={`/${value.link}`}
         key={valueIndex}
-        className="flex justify-center items-center"
+        className={`flex justify-center items-center ${
+          value.link === "admin" ? (!user ? "hidden" : "") : ""
+        }`}
         onClick={() => {
           if (value.link === "projects") getCategories();
         }}
@@ -171,13 +174,20 @@ export default function NavigationBar({ siteSettings, from }) {
             >
               {renderNav()}
             </div>
-            {user && (
+            {user ? (
               <button
                 onClick={() => signOut(auth)}
                 className="bg-[rgba(176,1,46,0.5)] hover:bg-[rgba(176,1,46,0.3)] active:bg-[rgba(176,1,46,0.1)] p-2 px-5 transition rounded-lg"
               >
                 Log Out
               </button>
+            ) : (
+              <Link
+                to="/login"
+                className="bg-[rgba(176,1,46,0.5)] hover:bg-[rgba(176,1,46,0.3)] active:bg-[rgba(176,1,46,0.1)] p-2 px-5 transition rounded-lg flex justify-center items-center"
+              >
+                Log In
+              </Link>
             )}
           </div>
         </div>

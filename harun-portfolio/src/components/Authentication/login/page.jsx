@@ -56,19 +56,19 @@ export default function SignIn() {
             <div className="text-3xl font-light flex w-full justify-center items-center">
               Sign In
             </div>
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3 text-slate-700">
               <input
                 type="text"
                 placeholder="Email"
                 onChange={(e) => setEmail(e.target.value)}
-                className="p-2 px-3 rounded-lg border-[1px]"
+                className="p-2 px-3 rounded-lg border-[1px] text-slate-700"
                 required
               />
               <input
                 type="password"
                 placeholder="Password"
                 onChange={(e) => setPassword(e.target.value)}
-                className="p-2 px-3 rounded-lg border-[1px]"
+                className="p-2 px-3 rounded-lg border-[1px] text-slate-700"
                 required
               />
               <button className="bg-emerald-500 hover:bg-emerald-600 transition w-full h-14 mt-3 text-white rounded-lg text-md">
