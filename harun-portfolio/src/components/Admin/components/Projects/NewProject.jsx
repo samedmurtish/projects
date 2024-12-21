@@ -128,10 +128,10 @@ export default function NewProject({
         <div className="relative w-52 h-52 group">
           {detail.image ? (
             <div className="relative w-52 h-52 group">
-              <div className="absolute cursor-pointer backdrop-blur-sm top-0 left-0 opacity-0 group-hover:opacity-100 transition w-full h-full rounded-xl flex justify-center items-center flex-col">
+              <div className="absolute cursor-pointer backdrop-blur-sm top-0 left-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition w-full h-12 md:h-full rounded-xl flex justify-center items-center md:flex-col">
                 <label
                   htmlFor={`detail-image-${index}`}
-                  className="cursor-pointer bg-blue-500/50 text-white text-xl uppercase font-extrabold hover:bg-blue-600/50 p-5 rounded-t-xl w-full h-full flex justify-center items-center"
+                  className="cursor-pointer bg-blue-500/50 text-white text-md md:text-xl uppercase font-extrabold hover:bg-blue-600/50 p-5 md:rounded-t-xl rounded-tl-xl w-full h-full flex justify-center items-center"
                 >
                   Change
                 </label>
@@ -159,7 +159,8 @@ export default function NewProject({
                       details: updatedDetails,
                     }));
                   }}
-                  className="bg-rose-500/50 text-white text-xl uppercase font-extrabold hover:bg-rose-600/50 p-5 rounded-b-xl w-full h-full flex justify-center items-center"
+                  type="button"
+                  className="bg-rose-500/50 text-white text-md md:text-xl uppercase font-extrabold hover:bg-rose-600/50 p-5 md:rounded-b-xl md:rounded-t-none rounded-tr-xl w-full h-full flex justify-center items-center"
                 >
                   Remove
                 </button>
@@ -206,6 +207,7 @@ export default function NewProject({
           }}
         ></textarea>
         <button
+          type="button"
           className="bg-rose-600 hover:bg-rose-700 p-3 w-full rounded-lg text-white"
           onClick={() => removeDetail(index)}
         >
@@ -222,8 +224,8 @@ export default function NewProject({
       }}
     >
       <div className="flex flex-col w-full h-full">
-        <div className="flex flex-row gap-5 items-start h-full">
-          <div className="flex flex-col gap-3 h-full bg-[#252525] p-5 rounded-2xl justify-center items-center">
+        <div className="flex flex-col md:flex-row gap-5 items-start h-full">
+          <div className="flex flex-col gap-3 w-full h-full bg-[#252525] p-5 rounded-2xl justify-center items-center">
             {/* IMAGE */}
             <h1 className="text-2xl font-extrabold text-center">IMAGE</h1>
             {newProject.image ? (
@@ -233,10 +235,10 @@ export default function NewProject({
                   className="w-52 h-52 object-cover rounded-xl"
                 />
 
-                <div className="absolute cursor-pointer backdrop-blur-sm top-0 left-0 opacity-0 group-hover:opacity-100 transition w-full h-full rounded-xl flex justify-center items-center flex-col">
+                <div className="absolute cursor-pointer backdrop-blur-sm top-0 left-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition w-full h-12 md:h-full rounded-xl flex justify-center items-center md:flex-col">
                   <label
-                    htmlFor={`project-image`}
-                    className="cursor-pointer bg-blue-500/50 text-white text-xl uppercase font-extrabold hover:bg-blue-600/50 p-5 rounded-t-xl w-full h-full flex justify-center items-center"
+                    htmlFor="project-image"
+                    className="cursor-pointer bg-blue-500/50 text-white text-md md:text-xl uppercase font-extrabold hover:bg-blue-600/50 p-5 md:rounded-t-xl rounded-tl-xl w-full h-full flex justify-center items-center"
                   >
                     Change
                   </label>
@@ -257,7 +259,8 @@ export default function NewProject({
                     onClick={() => {
                       handleInputChange("image", null);
                     }}
-                    className="bg-rose-500/50 text-white text-xl uppercase font-extrabold hover:bg-rose-600/50 p-5 rounded-b-xl w-full h-full flex justify-center items-center"
+                    type="button"
+                    className="bg-rose-500/50 text-white text-md md:text-xl uppercase font-extrabold hover:bg-rose-600/50 p-5 md:rounded-b-xl md:rounded-t-none rounded-tr-xl w-full h-full flex justify-center items-center"
                   >
                     Remove
                   </button>
@@ -266,7 +269,7 @@ export default function NewProject({
             ) : (
               <label
                 htmlFor="project-image"
-                className="w-full h-52 bg-blue-600 hover:bg-blue-700 flex justify-center items-center cursor-pointer rounded-xl"
+                className="w-52 h-52 bg-blue-600 hover:bg-blue-700 flex justify-center items-center cursor-pointer rounded-xl"
               >
                 <FiPlus className="text-6xl text-white" />
                 <input
@@ -306,7 +309,7 @@ export default function NewProject({
 
             {/* CATEGORY */}
             <select
-              className="p-3 px-5 rounded-lg text-slate-700 mt-3"
+              className="p-3 px-5 rounded-lg text-slate-700 mt-3 w-full"
               value={newProject.categoryId}
               onChange={(e) => handleInputChange("categoryId", e.target.value)}
               required
@@ -321,7 +324,7 @@ export default function NewProject({
           </div>
 
           {/* DETAILS */}
-          <div className="flex flex-col min-w-[20rem] max-w-[40rem] bg-[#252525] rounded-lg p-5">
+          <div className="flex flex-col min-w-[20rem] w-full md:max-w-[40rem] bg-[#252525] rounded-lg p-5">
             <h1 className="text-2xl font-extrabold pb-5">DETAILS</h1>
             {newProject.details.length > 0 && (
               <div className="flex gap-5 overflow-auto p-5">
@@ -341,13 +344,13 @@ export default function NewProject({
         {/* BUTTONS */}
         <div className="flex justify-end gap-5 mt-5">
           <button
-            className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 p-3 rounded-lg text-white transition"
+            className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 p-3 rounded-lg text-white transition w-full"
             type="submit"
           >
             Add Project
           </button>
           <button
-            className="bg-gray-600 hover:bg-gray-700 active:bg-gray-800 p-3 rounded-lg text-white transition"
+            className="bg-gray-600 hover:bg-gray-700 active:bg-gray-800 p-3 rounded-lg text-white transition w-full"
             type="button"
             onClick={onCancel}
           >

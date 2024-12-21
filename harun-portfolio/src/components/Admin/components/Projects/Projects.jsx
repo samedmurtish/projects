@@ -88,8 +88,8 @@ export default function Projects({
       return (
         <div key={category.id} className="w-full pr-3 transition flex mb-5">
           <div className="flex gap-5 items-center w-full">
-            <div className="flex flex-row w-full gap-3">
-              <div className="flex flex-col justify-center items-center">
+            <div className="flex flex-col md:flex-row w-full gap-3">
+              <div className="hidden md:flex flex-col justify-center items-center">
                 <h1
                   className={`self-start text-2xl transition sticky top-[-1px] ${
                     Math.floor(Math.random() * 9) <= 3
@@ -103,6 +103,11 @@ export default function Projects({
                   {category.categoryName}
                 </h1>
                 <div className="h-full w-[2px] bg-white justify-self-start"></div>
+              </div>
+              <div className="md:hidden flex items-center font-extrabold uppercase">
+                <h1 className="self-start text-2xl transition">
+                  {category.categoryName}
+                </h1>
               </div>
               <div className="w-full">
                 <div className="flex flex-col w-full">
@@ -177,7 +182,13 @@ export default function Projects({
           projects.length > 0 ? "" : "justify-center items-center"
         }`}
       >
-        <div>
+        <div
+          className={`${
+            projects.length > 0
+              ? "pt-5"
+              : "w-full h-full flex justify-center items-center"
+          }`}
+        >
           {projects.length > 0 ? (
             renderProjects()
           ) : (

@@ -5,6 +5,8 @@ import { collection, doc, getDoc, setDoc } from "firebase/firestore";
 import { database } from "../../database/firebase";
 
 export default function NavigationBar({ siteSettings, from }) {
+  const [loading, setLoading] = useState(false);
+
   const [settings, setSettings] = useState({
     borderColor: "#ab012e",
     backgroundColor: "#ab012e",

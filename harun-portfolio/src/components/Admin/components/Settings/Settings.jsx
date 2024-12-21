@@ -159,7 +159,7 @@ export default function Settings({ setSiteSettings, siteSettings }) {
                 <h1 className="text-xl border-b-2 w-1/2 text-center pb-5 border-b-[#ab012f]">
                   General
                 </h1>
-                <div className="flex justify-around flex-wrap w-full ">
+                <div className="flex justify-around flex-wrap gap-5">
                   <div className="bg-[#202020] w-full max-w-52 h-full justify-between rounded-xl flex items-center flex-col gap-3 pb-2">
                     <h1 className="w-full bg-[#ab012f99] px-5 py-2 rounded-t-lg">
                       Text Color
@@ -650,13 +650,13 @@ export default function Settings({ setSiteSettings, siteSettings }) {
                     </div>
                   </div>
                 </div>
-                <div className="px-5 py-3 bg-[rgb(36,36,36)] w-full h-max rounded-xl m-3 flex justify-center items-center gap-5 flex-wrap flex-col border-b-2 border-b-[#ab012f]">
+                <div className="px-3 py-3 bg-[rgb(36,36,36)] w-full h-max rounded-xl m-3 flex justify-center items-center gap-5 flex-wrap flex-col border-b-2 border-b-[#ab012f] pb-10">
                   <h1 className="text-xl border-b-2 w-1/2 text-center pb-5 border-b-[#ab012f]">
                     Image
                   </h1>
-                  <div className="flex justify-around flex-wrap w-96 h-96">
-                    <div className="bg-[#202020] w-full h-full rounded-xl m-3 flex justify-start items-center flex-col gap-3 p-5">
-                      <h1 className="w-full bg-[#ab012f99] px-5 py-2 rounded-lg">
+                  <div className="flex flex-wrap md:w-96 md:h-96">
+                    <div className="bg-[#202020] w-full h-full rounded-xl m-3 flex justify-start items-center flex-col gap-3 md:p-5">
+                      <h1 className="w-full bg-[#ab012f99] px-5 p-2 rounded-lg">
                         Image
                       </h1>
                       {siteSettings.aboutMeImage || tempImage ? (
@@ -665,11 +665,11 @@ export default function Settings({ setSiteSettings, siteSettings }) {
                             <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-white"></div>
                           </div>
                         ) : (
-                          <div className="relative w-64 h-64 group border-2 border-[#ab012f] rounded-2xl">
-                            <div className="absolute cursor-pointer backdrop-blur-sm top-0 left-0 opacity-0 group-hover:opacity-100 transition w-full h-full rounded-xl flex justify-center items-center flex-col">
+                          <div className="relative w-64 h-64 group border-2 border-[#ab012f] rounded-2xl justify-end">
+                            <div className="absolute cursor-pointer backdrop-blur-sm top-0 left-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition w-full h-12 md:h-full rounded-xl flex justify-center items-center md:flex-col">
                               <label
                                 htmlFor="about-me-image"
-                                className="cursor-pointer bg-blue-500/50 text-white text-xl uppercase font-extrabold hover:bg-blue-600/50 p-5 rounded-t-xl w-full h-full flex justify-center items-center"
+                                className="cursor-pointer bg-blue-500/50 text-white text-md md:text-xl uppercase font-extrabold hover:bg-blue-600/50 p-5 rounded-tl-xl w-full h-full flex justify-center items-center"
                               >
                                 Change
                               </label>
@@ -692,7 +692,7 @@ export default function Settings({ setSiteSettings, siteSettings }) {
                                   }));
                                   setTempImage(null);
                                 }}
-                                className="bg-rose-500/50 text-white text-xl uppercase font-extrabold hover:bg-rose-600/50 p-5 rounded-b-xl w-full h-full flex justify-center items-center"
+                                className="bg-rose-500/50 text-white text-md md:text-xl uppercase font-extrabold hover:bg-rose-600/50 p-5 rounded-tr-xl w-full h-full flex justify-center items-center"
                               >
                                 Remove
                               </button>

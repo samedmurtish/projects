@@ -28,10 +28,10 @@ export default function Edit({
       >
         <div className="relative w-52 h-52 group">
           {detail.imageUrl ? (
-            <div className="absolute cursor-pointer backdrop-blur-sm top-0 left-0 opacity-0 group-hover:opacity-100 transition w-full h-full z-[1000] rounded-xl flex justify-center items-center flex-col">
+            <div className="absolute cursor-pointer backdrop-blur-sm top-0 left-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition w-full h-12 md:h-full rounded-xl flex justify-center items-center md:flex-col">
               <label
                 htmlFor={`detail-image-${detailIndex}`}
-                className="cursor-pointer bg-blue-500/50 text-white text-xl uppercase font-extrabold hover:bg-blue-600/50 p-5 rounded-t-xl w-full h-full flex justify-center items-center"
+                className="cursor-pointer bg-blue-500/50 text-white text-md md:text-xl uppercase font-extrabold hover:bg-blue-600/50 p-5 md:rounded-t-xl rounded-tl-xl w-full h-full flex justify-center items-center"
               >
                 Change
               </label>
@@ -61,7 +61,8 @@ export default function Edit({
                     details: updatedDetails,
                   }));
                 }}
-                className="bg-rose-500/50 text-white text-xl uppercase font-extrabold hover:bg-rose-600/50 p-5 rounded-b-xl w-full h-full flex justify-center items-center"
+                type="button"
+                className="bg-rose-500/50 text-white text-md md:text-xl uppercase font-extrabold hover:bg-rose-600/50 p-5 md:rounded-b-xl md:rounded-t-none rounded-tr-xl w-full h-full flex justify-center items-center"
               >
                 Remove
               </button>
@@ -219,12 +220,12 @@ export default function Edit({
   return (
     <div className="p-3">
       <div className="flex w-full flex-col">
-        <div className="flex flex-row gap-5 items-start">
+        <div className="flex flex-col md:flex-row gap-5 items-start">
           {/* Project Image and General Info */}
-          <div className="flex flex-col justify-center items-center">
-            <div className="flex flex-col bg-[#252525] justify-center items-center rounded-2xl h-full">
+          <div className="flex flex-col justify-center items-center w-full md:w-max">
+            <div className="flex flex-col bg-[#252525] justify-center items-center rounded-2xl w-full h-full">
               {/* Image Section */}
-              <div className="pt-5 rounded-lg justify-center items-center w-max">
+              <div className="pt-5 rounded-lg justify-center items-center md:w-max">
                 <h1 className="text-2xl font-extrabold text-center">IMAGE</h1>
                 {projectInfo.image ? (
                   <div className="relative w-52 h-52 group">
@@ -233,10 +234,10 @@ export default function Edit({
                       className="w-52 h-52 object-cover rounded-xl"
                     />
 
-                    <div className="absolute cursor-pointer backdrop-blur-sm top-0 left-0 opacity-0 group-hover:opacity-100 transition w-full h-full rounded-xl flex justify-center items-center flex-col">
+                    <div className="absolute cursor-pointer backdrop-blur-sm top-0 left-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition w-full h-12 md:h-full rounded-xl flex justify-center items-center md:flex-col">
                       <label
-                        htmlFor={`project-image`}
-                        className="cursor-pointer bg-blue-500/50 text-white text-xl uppercase font-extrabold hover:bg-blue-600/50 p-5 rounded-t-xl w-full h-full flex justify-center items-center"
+                        htmlFor="project-image"
+                        className="cursor-pointer bg-blue-500/50 text-white text-md md:text-xl uppercase font-extrabold hover:bg-blue-600/50 p-5 md:rounded-t-xl rounded-tl-xl w-full h-full flex justify-center items-center"
                       >
                         Change
                       </label>
@@ -263,7 +264,8 @@ export default function Edit({
                             image: null,
                           }));
                         }}
-                        className="bg-rose-500/50 text-white text-xl uppercase font-extrabold hover:bg-rose-600/50 p-5 rounded-b-xl w-full h-full flex justify-center items-center"
+                        type="button"
+                        className="bg-rose-500/50 text-white text-md md:text-xl uppercase font-extrabold hover:bg-rose-600/50 p-5 md:rounded-b-xl md:rounded-t-none rounded-tr-xl w-full h-full flex justify-center items-center"
                       >
                         Remove
                       </button>
@@ -352,7 +354,7 @@ export default function Edit({
           </div>
 
           {/* Details Section */}
-          <div className="flex flex-col min-w-[20rem] max-w-[40rem] bg-[#252525] rounded-lg p-5">
+          <div className="flex flex-col min-w-[20rem] max-w-[40rem] bg-[#252525] rounded-lg p-5 w-full md:w-max">
             <h1 className="text-2xl font-extrabold pb-5">DETAILS</h1>
             {projectInfo.details.length > 0 && (
               <div className="flex gap-5 overflow-auto p-5">
