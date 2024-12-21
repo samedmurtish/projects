@@ -88,7 +88,7 @@ export default function NavigationBarMobile() {
   return (
     <>
       <div
-        className={`border-b-2 fixed w-full backdrop-blur-lg shadow-2xl z-[1000000]`}
+        className={`border-b-2 fixed w-full backdrop-blur-lg shadow-2xl z-[1000000000]`}
         style={{
           borderColor: settings.borderColor,
           backgroundColor: `rgba(${parseInt(
