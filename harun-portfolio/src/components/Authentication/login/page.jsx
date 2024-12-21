@@ -38,8 +38,8 @@ export default function SignIn() {
   }
 
   return (
-    <div className="h-screen flex justify-center items-center bg-zinc-100 text-slate-500">
-      <div className="rounded-lg bg-white shadow-2xl min-w-full md:min-w-[400px] max-w-[600px] md:h-max h-full">
+    <div className="h-screen flex justify-center items-center bg-neutral-900 text-white">
+      <div className="rounded-lg bg-neutral-800 shadow-2xl min-w-full md:min-w-[400px] max-w-[600px] md:h-max h-full">
         <form
           onSubmit={(e) => {
             signIn(email, password);
@@ -71,7 +71,7 @@ export default function SignIn() {
                 className="p-2 px-3 rounded-lg border-[1px]"
                 required
               />
-              <button className="bg-emerald-400 hover:bg-emerald-500 transition w-full h-14 mt-3 text-white rounded-lg text-md">
+              <button className="bg-emerald-500 hover:bg-emerald-600 transition w-full h-14 mt-3 text-white rounded-lg text-md">
                 Sign In
               </button>
             </div>

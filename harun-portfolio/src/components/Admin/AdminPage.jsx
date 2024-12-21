@@ -20,11 +20,29 @@ export default function AdminPage() {
   const [projects, setProjects] = useState([]);
   const projectsRef = collection(database, "projects");
 
-  const [navigationBarColor, setNavigationBarColor] = useState("bg-white");
+  const [SiteSettings, setSiteSettings] = useState({
+    borderColor: "#ab012e",
+    backgroundColor: "#ab012e",
+    backgroundOpacity: "33",
+    //
+    buttonsTextColor: "#ffffff",
+    buttonsColor: "#ab012e",
+    buttonsHoverColor: "#a0002b",
+    buttonsActiveColor: "#920127",
+    //
+    logoBackgroundColor: "#ab012e",
+    logoTextColor: "#ffffff",
 
-  useEffect(() => {
-    console.log(navigationBarColor);
-  }, [navigationBarColor]);
+    aboutMeTitleColor: "#ab012e",
+    aboutMeContentColor: "#ab012e",
+    aboutMeContentTextColor: "#ffffff",
+    aboutMeTitleTextColor: "#ffffff",
+    aboutMeOpacity: "55",
+
+    aboutMeImage: null,
+    aboutMeImageName: null,
+  });
+
   const getImages = async () => {
     const { data, error } = await supabase.storage
       .from("project_images")
@@ -115,7 +133,7 @@ export default function AdminPage() {
   return (
     <div>
       <div className="hidden md:block z-[]">
-        <NavigationBar navigationBarColor={navigationBarColor} />
+        <NavigationBar siteSettings={SiteSettings} from="admin" />
       </div>
       <div className="block md:hidden">
         <NavigationBarMobile />
@@ -178,7 +196,10 @@ export default function AdminPage() {
                   />
                 ) : (
                   selectedOption?.name === "Settings" && (
-                    <Settings setNavigationBarColor={setNavigationBarColor} />
+                    <Settings
+                      setSiteSettings={setSiteSettings}
+                      siteSettings={SiteSettings}
+                    />
                   )
                 )}
               </div>

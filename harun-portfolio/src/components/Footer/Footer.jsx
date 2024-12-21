@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BsFillLightningFill } from "react-icons/bs";
+
 export default function Footer({ setBottom }) {
   const currentDate = new Date();
 
