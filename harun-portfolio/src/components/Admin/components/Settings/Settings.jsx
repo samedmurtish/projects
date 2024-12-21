@@ -1,4 +1,4 @@
-import { collection, doc, getDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { database } from "../../../../database/firebase";
 import { FaPlus } from "react-icons/fa";
@@ -31,35 +31,67 @@ export default function Settings({ setSiteSettings, siteSettings }) {
     getSiteSettings();
   }, []);
 
-  const siteSettingsRef = doc(
-    collection(database, "siteSettings"),
-    "barColors"
-  );
+  const siteSettingsRef = doc(collection(database, "siteSettings"), "settings");
 
   const handleSave = async () => {
-    const doc = await getDoc(siteSettingsRef);
-    if (doc.exists()) {
-      await updateDoc(siteSettingsRef, {
-        borderColor: siteSettings.borderColor,
-        backgroundColor: siteSettings.backgroundColor,
-        backgroundOpacity: siteSettings.backgroundOpacity,
-        buttonsTextColor: siteSettings.buttonsTextColor,
-        buttonsColor: siteSettings.buttonsColor,
-        buttonsHoverColor: siteSettings.buttonsHoverColor,
-        buttonsActiveColor: siteSettings.buttonsActiveColor,
-        logoBackgroundColor: siteSettings.logoBackgroundColor,
-        logoTextColor: siteSettings.logoTextColor,
-        aboutMeTitleColor: siteSettings.aboutMeTitleColor,
-        aboutMeContentColor: siteSettings.aboutMeContentColor,
-        aboutMeTitleTextColor: siteSettings.aboutMeTitleTextColor,
-        aboutMeContentTextColor: siteSettings.aboutMeContentTextColor,
-        aboutMeContentOpacity: siteSettings.aboutMeContentOpacity,
-        aboutMeImage: siteSettings.aboutMeImage,
-        aboutMeImageName: siteSettings.aboutMeImageName,
-      });
+    const docSnap = await getDoc(siteSettingsRef);
+    const defaultValues = {
+      borderColor: "#ab012e",
+      backgroundColor: "#ab012e",
+      backgroundOpacity: "33",
+      buttonsTextColor: "#ffffff",
+      buttonsColor: "#ab012e",
+      buttonsHoverColor: "#a0002b",
+      buttonsActiveColor: "#920127",
+      logoBackgroundColor: "#ab012e",
+      logoTextColor: "#ffffff",
+      aboutMeTitleColor: "#ab012e",
+      aboutMeContentColor: "#ab012e",
+      aboutMeContentTextColor: "#ffffff",
+      aboutMeTitleTextColor: "#ffffff",
+      aboutMeContentOpacity: "55",
+      aboutMeImage: null,
+      aboutMeImageName: null,
+    };
+    const siteSettingsToSave = {
+      borderColor: siteSettings.borderColor ?? defaultValues.borderColor,
+      backgroundColor:
+        siteSettings.backgroundColor ?? defaultValues.backgroundColor,
+      backgroundOpacity:
+        siteSettings.backgroundOpacity ?? defaultValues.backgroundOpacity,
+      buttonsTextColor:
+        siteSettings.buttonsTextColor ?? defaultValues.buttonsTextColor,
+      buttonsColor: siteSettings.buttonsColor ?? defaultValues.buttonsColor,
+      buttonsHoverColor:
+        siteSettings.buttonsHoverColor ?? defaultValues.buttonsHoverColor,
+      buttonsActiveColor:
+        siteSettings.buttonsActiveColor ?? defaultValues.buttonsActiveColor,
+      logoBackgroundColor:
+        siteSettings.logoBackgroundColor ?? defaultValues.logoBackgroundColor,
+      logoTextColor: siteSettings.logoTextColor ?? defaultValues.logoTextColor,
+      aboutMeTitleColor:
+        siteSettings.aboutMeTitleColor ?? defaultValues.aboutMeTitleColor,
+      aboutMeContentColor:
+        siteSettings.aboutMeContentColor ?? defaultValues.aboutMeContentColor,
+      aboutMeTitleTextColor:
+        siteSettings.aboutMeTitleTextColor ??
+        defaultValues.aboutMeTitleTextColor,
+      aboutMeContentTextColor:
+        siteSettings.aboutMeContentTextColor ??
+        defaultValues.aboutMeContentTextColor,
+      aboutMeContentOpacity:
+        siteSettings.aboutMeContentOpacity ??
+        defaultValues.aboutMeContentOpacity,
+      aboutMeImage: siteSettings.aboutMeImage ?? defaultValues.aboutMeImage,
+      aboutMeImageName:
+        siteSettings.aboutMeImageName ?? defaultValues.aboutMeImageName,
+    };
+    if (docSnap.exists()) {
+      await updateDoc(siteSettingsRef, siteSettingsToSave);
+    } else {
+      await setDoc(siteSettingsRef, siteSettingsToSave);
     }
-
-    console.log(doc);
+    console.log(docSnap);
   };
 
   const handleImageUpload = async (file) => {

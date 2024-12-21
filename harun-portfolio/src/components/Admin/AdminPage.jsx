@@ -43,32 +43,6 @@ export default function AdminPage() {
     aboutMeImageName: null,
   });
 
-  const getImages = async () => {
-    const { data, error } = await supabase.storage
-      .from("project_images")
-      .list();
-    if (error) console.error(error);
-  };
-
-  useEffect(() => {
-    getImages();
-  }, []);
-
-  // {
-  //   id: 1,
-  //   name: "Econo Car",
-  //   description: "Econo Car Logo Design",
-  //   image: image,
-  //   categoryId: 1,
-  //   details: [
-  //     {
-  //       image: image,
-  //       description:
-  //         "The 'Econo Car' logo was assigned to me during my university studies. I was tasked with animating it using HTML, CSS, and JavaScript. Unfortunately, this is all I got of the logo.",
-  //     },
-  //   ],
-  // },
-
   const navigate = useNavigate();
 
   const getProjects = async () => {

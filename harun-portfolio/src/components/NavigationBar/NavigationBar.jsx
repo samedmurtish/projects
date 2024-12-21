@@ -5,7 +5,7 @@ import { collection, doc, getDoc, setDoc } from "firebase/firestore";
 import { database } from "../../database/firebase";
 
 export default function NavigationBar({ siteSettings, from }) {
-  const [barColors, setBarColors] = useState({
+  const [settings, setSettings] = useState({
     borderColor: "#ab012e",
     backgroundColor: "#ab012e",
     backgroundOpacity: "33",
@@ -17,24 +17,21 @@ export default function NavigationBar({ siteSettings, from }) {
     logoTextColor: "#ffffff",
   });
 
-  const siteSettingsRef = doc(
-    collection(database, "siteSettings"),
-    "barColors"
-  );
+  const siteSettingsRef = doc(collection(database, "siteSettings"), "settings");
 
   useEffect(() => {
     getSiteSettings();
   }, []);
 
   useEffect(() => {
-    if (from === "admin") setBarColors({ ...siteSettings });
+    if (from === "admin") setSettings({ ...siteSettings });
   }, [siteSettings]);
 
   const getSiteSettings = async () => {
     try {
       const docSnap = await getDoc(siteSettingsRef);
       if (docSnap.exists()) {
-        setBarColors(docSnap.data());
+        setSettings(docSnap.data());
       } else {
         await setDoc(siteSettingsRef, {
           borderColor: "#ab012e",
@@ -46,13 +43,6 @@ export default function NavigationBar({ siteSettings, from }) {
           buttonsActiveColor: "#920127",
           logoBackgroundColor: "#ab012e",
           logoTextColor: "#ffffff",
-
-          aboutMeTitleColor: "#ab012e",
-          aboutMeContentColor: "#ab012e",
-          aboutMeTitleTextColor: "#ffffff",
-          aboutMeContentTextColor: "#ffffff",
-          aboutMeOpacity: "55",
-          aboutMeTextColor: "#ffffff",
         });
         console.log("Document initialized with default colors");
       }
@@ -62,8 +52,8 @@ export default function NavigationBar({ siteSettings, from }) {
   };
 
   useEffect(() => {
-    console.log(barColors);
-  }, [barColors]);
+    console.log(settings);
+  }, [settings]);
 
   const pages = [
     { link: "about", title: "About Me" },
@@ -115,12 +105,12 @@ export default function NavigationBar({ siteSettings, from }) {
             setActiveState((prev) => ({ ...prev, [valueIndex]: false }))
           }
           style={{
-            color: barColors.buttonsTextColor,
+            color: settings.buttonsTextColor,
             backgroundColor: hoverState[valueIndex]
-              ? barColors.buttonsHoverColor
+              ? settings.buttonsHoverColor
               : activeState[valueIndex]
-              ? barColors.buttonsActiveColor
-              : barColors.buttonsColor,
+              ? settings.buttonsActiveColor
+              : settings.buttonsColor,
           }}
         >
           <p>{value.title}</p>
@@ -138,16 +128,14 @@ export default function NavigationBar({ siteSettings, from }) {
       <div
         className={`border-b-2 fixed w-full backdrop-blur-lg`}
         style={{
-          borderColor: barColors.borderColor,
+          borderColor: settings.borderColor,
           backgroundColor: `rgba(${parseInt(
-            barColors.backgroundColor.slice(1, 3),
+            settings.backgroundColor.slice(1, 3),
             16
-          )}, ${parseInt(
-            barColors.backgroundColor.slice(3, 5),
+          )}, ${parseInt(settings.backgroundColor.slice(3, 5), 16)}, ${parseInt(
+            settings.backgroundColor.slice(5, 7),
             16
-          )}, ${parseInt(barColors.backgroundColor.slice(5, 7), 16)}, ${
-            barColors.backgroundOpacity / 100
-          })`,
+          )}, ${settings.backgroundOpacity / 100})`,
         }}
       >
         <div className="flex justify-between items-center text-white font-semibold py-5 text-xl mx-auto my-0 w-3/4">
@@ -155,8 +143,8 @@ export default function NavigationBar({ siteSettings, from }) {
             className="py-3 rounded-xl p-3 px-5 min-w-[5rem] mr-5 inline-flex justify-center items-center text-wrap"
             to="/"
             style={{
-              color: barColors.logoTextColor,
-              backgroundColor: barColors.logoBackgroundColor,
+              color: settings.logoTextColor,
+              backgroundColor: settings.logoBackgroundColor,
             }}
           >
             <span className="text-3xl font-extrabold text-center">
@@ -166,8 +154,8 @@ export default function NavigationBar({ siteSettings, from }) {
           <div
             className="flex px-5 rounded-xl"
             style={{
-              backgroundColor: barColors.buttonsColor,
-              color: barColors.buttonsTextColor,
+              backgroundColor: settings.buttonsColor,
+              color: settings.buttonsTextColor,
             }}
           >
             {renderNav()}

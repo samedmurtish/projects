@@ -31,7 +31,7 @@ export default function Content() {
   const siteSettingsRef = collection(database, "siteSettings");
   const getSiteSettings = async () => {
     try {
-      const docRef = doc(siteSettingsRef, "barColors");
+      const docRef = doc(siteSettingsRef, "settings");
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         setSiteSettings(docSnap.data());
