@@ -146,7 +146,7 @@ export default function Settings({
 
   return (
     <form
-      className="flex flex-col justify-between h-[38rem] gap-7"
+      className="flex flex-col justify-between h-full gap-7"
       onSubmit={(e) => {
         e.preventDefault();
         handleSave();

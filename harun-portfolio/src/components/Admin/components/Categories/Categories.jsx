@@ -97,13 +97,15 @@ export default function Categories({
             }`}
           >
             <div className="flex flex-col gap-3">
-              {categories.length > 0
-                ? renderCategories()
-                : !loading && (
-                    <span className="text-center bg-[#242424] rounded-lg p-3 px-5 text-xl">
-                      Couldn't find any category. Please create one.
-                    </span>
-                  )}
+              {categories.length > 0 ? (
+                <>{renderCategories()}</>
+              ) : (
+                !loading && (
+                  <span className="text-center bg-[#242424] rounded-lg p-3 px-5 text-xl">
+                    Couldn't find any category. Please create one.
+                  </span>
+                )
+              )}
             </div>
           </div>
           <div>

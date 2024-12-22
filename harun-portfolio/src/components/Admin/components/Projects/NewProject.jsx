@@ -232,8 +232,8 @@ export default function NewProject({
           <div className="animate-spin rounded-full h-32 w-32 border-b-4 border-white"></div>
         </div>
       )}
-      <div className="flex flex-col w-full h-full">
-        <div className="flex flex-col md:flex-row gap-5 items-start h-full">
+      <div className="flex flex-col w-full h-full justify-between">
+        <div className="flex flex-col md:flex-row gap-5 items-start h-full overflow-y-auto">
           <div className="flex flex-col gap-3 w-full h-full bg-[#252525] p-5 rounded-2xl justify-center items-center">
             {/* IMAGE */}
             <h1 className="text-2xl font-extrabold text-center">IMAGE</h1>

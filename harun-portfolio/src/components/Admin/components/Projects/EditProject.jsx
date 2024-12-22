@@ -228,7 +228,7 @@ export default function Edit({
         e.preventDefault();
         saveChanges();
       }}
-      className="p-3 relative z-[0]"
+      className="p-3 relative z-[0] h-full"
     >
       {loading && (
         <div className="absolute top-0 right-0 bg-black/50 w-full h-full flex justify-center items-center z-[10000]">
@@ -236,8 +236,8 @@ export default function Edit({
         </div>
       )}
 
-      <div className="flex w-full flex-col">
-        <div className="flex flex-col md:flex-row gap-5 items-start">
+      <div className="flex w-full h-full justify-between flex-col">
+        <div className="flex flex-col md:flex-row gap-5 items-start overflow-y-auto">
           {/* Project Image and General Info */}
           <div className="flex flex-col justify-center items-center w-full md:w-full">
             <div className="flex flex-col bg-[#252525] justify-center items-center rounded-2xl w-full h-full">

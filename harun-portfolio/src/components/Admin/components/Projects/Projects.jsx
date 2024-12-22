@@ -181,9 +181,9 @@ export default function Projects({
   };
 
   return page == "Projects" ? (
-    <div>
+    <div className="flex flex-col h-full">
       <div
-        className={`overflow-auto h-[35rem] gap-3 flex flex-col ${
+        className={`overflow-auto h-full gap-3 flex flex-col ${
           projects.length > 0 ? "" : "justify-center items-center"
         }`}
       >
