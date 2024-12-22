@@ -1,6 +1,7 @@
 import { collection, deleteDoc, getDocs } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { database } from "../../../../database/firebase";
+import { FiDivideCircle } from "react-icons/fi";
 
 export default function Statistics({ projects, setLoading }) {
   const [statistics, setStatistics] = useState([]);
@@ -108,7 +109,6 @@ export default function Statistics({ projects, setLoading }) {
             if (selectedProject) {
               return (
                 <div
-                  key={project.id + index}
                   className="flex md:w-[3rem] w-full h-full bg-blue-500/20 justify-center items-end rounded-t-lg relative group"
                   onMouseOver={() => {
                     setMouseOver(true);
@@ -181,15 +181,18 @@ export default function Statistics({ projects, setLoading }) {
               <div className="flex flex-col w-full h-full justify-center items-center gap-5">
                 <div className="flex flex-row justify-center items-center gap-2 relative">
                   <span
-                    className={`text-[${
-                      mostLikedProject.count < 10
-                        ? 16
-                        : mostLikedProject.count < 100
-                        ? 14
-                        : mostLikedProject.count < 1000
-                        ? 12
-                        : 10
-                    }rem] h-[5rem] flex justify-end items-center font-extrabold relative`}
+                    style={{
+                      fontSize: `${
+                        mostLikedProject.count < 10
+                          ? 16
+                          : mostLikedProject.count < 100
+                          ? 14
+                          : mostLikedProject.count < 1000
+                          ? 12
+                          : 10
+                      }rem`,
+                    }}
+                    className="h-[5rem] flex justify-end items-center font-extrabold relative"
                   >
                     {mostLikedProject.count}
                   </span>
@@ -227,31 +230,53 @@ export default function Statistics({ projects, setLoading }) {
       setLoading(false);
     }
   };
-
+  const times = 15;
   return (
     <div className="w-full pt-3 flex justify-between flex-col md:h-full h-screen">
       <div className="w-full h-full flex flex-col">
         <h1 className="text-2xl flex justify-center items-center pb-5">
           Statistics
         </h1>
-        {statistics?.length === 0 ? (
-          <h1 className="text-2xl flex justify-center font-thin items-center h-full pb-5">
-            No statistics found.
-          </h1>
-        ) : (
-          <div
-            className={`flex flex-col flex-nowrap md:flex-row gap-5 justify-start md:items-start items-center pl-[${
-              mostLikedProject.count < 10 ? "md:2rem" : "md:0rem"
-            }] w-full h-full`}
-          >
-            <div className="bg-[#232323] h-96 rounded-xl p-5 w-screen md:w-max">
-              {renderMostLikedProjects()}
-            </div>
-            <div className="bg-[#232323] h-max rounded-xl p-5 w-max">
-              {renderMostLikedProject()}
+        <div
+          className={`flex flex-col flex-nowrap md:flex-row gap-5 justify-start md:items-start items-center pl-[${
+            mostLikedProject.count < 10 ? "md:2rem" : "md:0rem"
+          }] w-full h-full`}
+        >
+          <div className="bg-[#232323] h-96 rounded-xl p-5 w-screen md:w-max">
+            {renderMostLikedProjects()}
+          </div>
+          <div className="bg-[#232323] h-max rounded-xl p-5 w-max relative z-10">
+            {renderMostLikedProject()}
+            <div className="flex flex-col w-full h-full absolute z-[-1] top-0 left-0 overflow-hidden">
+              {Array.from({ length: times }).map((_, outerIndex) => (
+                <div
+                  key={`outer-${outerIndex}`}
+                  className={`flex flex-nowrap w-full text-nowrap`}
+                  style={{
+                    transform: "translateX(-" + outerIndex + "rem)",
+                  }}
+                >
+                  {Array.from({ length: times }).map((_, innerIndex) =>
+                    projects.map((project) => {
+                      if (project.id === mostLikedProject.id) {
+                        return (
+                          <span
+                            key={`${project.id}-${innerIndex}`}
+                            className="pr-2 text-5xl text-[rgba(255,255,255,0.02)] uppercase font-extrabold"
+                          >
+                            {project.name}
+                          </span>
+                        );
+                      } else {
+                        return null;
+                      }
+                    })
+                  )}
+                </div>
+              ))}
             </div>
           </div>
-        )}
+        </div>
       </div>
       <button
         className="bg-rose-600 hover:bg-rose-700 active:bg-rose-800 w-full p-2 px-5 transition rounded-lg"
