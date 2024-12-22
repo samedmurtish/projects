@@ -91,7 +91,7 @@ export default function Projects({
       );
 
       return (
-        <div key={category.id} className="w-full pr-3 transition flex mb-5">
+        <div key={category.id} className="w-full md:pr-3 transition flex mb-5">
           <div className="flex gap-5 items-center w-full">
             <div className="flex flex-col md:flex-row w-full gap-3">
               <div className="hidden md:flex flex-col justify-center items-center">
@@ -148,7 +148,7 @@ export default function Projects({
                         )}
                         <div className="flex flex-col">
                           <h1 className="text-lg transition">{project.name}</h1>
-                          <p className="text-sm transition">
+                          <p className="text-sm transition text-ellipsis overflow-hidden w-44 md:w-96 text-nowrap">
                             {project.description}
                           </p>
                         </div>
@@ -181,12 +181,13 @@ export default function Projects({
   };
 
   return page == "Projects" ? (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full p-5">
       <div
         className={`overflow-auto h-full gap-3 flex flex-col ${
           projects.length > 0 ? "" : "justify-center items-center"
         }`}
       >
+        <p className="text-5xl text-white font-thin">Projects</p>
         <div
           className={`${
             projects.length > 0

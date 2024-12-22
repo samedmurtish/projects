@@ -171,7 +171,7 @@ export default function NavigationBar({ siteSettings, from }) {
               <div className="flex gap-5">
                 <Link
                   to="/admin"
-                  className="bg-[rgba(176,1,46,0.5)] hover:bg-[rgba(176,1,46,0.3)] active:bg-[rgba(176,1,46,0.1)] p-2 px-5 transition rounded-lg flex justify-center items-center"
+                  className="bg-[rgba(176,1,46,0.5)] hover:bg-[rgba(176,1,46,0.3)] active:bg-[rgba(176,1,46,0.1)] p-2 px-5 transition rounded-lg flex justify-center items-center text-center"
                 >
                   Admin Panel
                 </Link>

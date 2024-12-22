@@ -79,7 +79,7 @@ export default function Categories({
   };
 
   return (
-    <div className="h-full">
+    <div className="h-full p-5">
       {page === "New Category" ? (
         <NewCategory setPage={setPage} setCategories={setCategories} />
       ) : page === "Edit" ? (
@@ -96,6 +96,7 @@ export default function Categories({
               categories.length > 0 ? "" : "justify-center items-center"
             }`}
           >
+            <p className="text-5xl text-white font-thin">Categories</p>
             <div className="flex flex-col gap-3">
               {categories.length > 0 ? (
                 <>{renderCategories()}</>

@@ -146,7 +146,7 @@ export default function Settings({
 
   return (
     <form
-      className="flex flex-col justify-between h-full gap-7"
+      className="flex flex-col justify-between h-full gap-7 px-5"
       onSubmit={(e) => {
         e.preventDefault();
         handleSave();
@@ -157,7 +157,7 @@ export default function Settings({
           Settings
         </h1>
         <div>
-          <div className="w-full h-max flex flex-col pr-5 gap-10">
+          <div className="w-full h-max flex flex-col md:pr-5 gap-10">
             <div className="flex flex-wrap bg-[#191919] gap-5 rounded-xl">
               <h1 className="p-5 bg-[#ab012f] text-xl w-full">
                 Navigation Bar

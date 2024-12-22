@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import NavigationBarMobile from "../NavigationBar/NavigationBarMobile";
 import SnackbarShow from "../../MuiElements/SnackbarShow";
 import Footer from "../Footer/Footer";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { database } from "../../database/firebase";
 
 export default function Projects() {
@@ -18,6 +18,38 @@ export default function Projects() {
   const categoriesRef = collection(database, "categories");
 
   const [loading, setLoading] = useState(false);
+
+  const [likedProjects, setLikedProjects] = useState([]);
+
+  const statisticsRef = doc(collection(database, "statistics"), "statistics");
+
+  const sendLikedProjectsToStatistics = async (projectId) => {
+    try {
+      const docSnap = await getDoc(statisticsRef);
+      let existingLikedProjects = [];
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        existingLikedProjects = Array.isArray(data.likedProjects)
+          ? data.likedProjects
+          : [];
+      }
+
+      const mergedLikedProjects = [...existingLikedProjects, projectId];
+
+      //const uniqueLikedProjects = [...new Set(mergedLikedProjects)];
+
+      const itemCount = mergedLikedProjects.length;
+
+      await setDoc(
+        statisticsRef,
+        { likedProjects: mergedLikedProjects, itemCount },
+        { merge: true }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const getProjects = async () => {
     setLoading(true);
@@ -47,12 +79,37 @@ export default function Projects() {
     window.scrollTo(0, 0);
     getProjects();
     getCategories();
+
+    const storedLikedProjects = localStorage.getItem("likedProjects");
+    if (storedLikedProjects) {
+      setLikedProjects(JSON.parse(storedLikedProjects));
+    }
   }, []);
 
   const [showBar, setShowBar] = useState({
     clicked: false,
     message: "Product added to cart successfully!",
   });
+
+  const handleLikeProject = (project) => {
+    setLikedProjects([...likedProjects, project.id]);
+    setShowBar({
+      clicked: true,
+      message: `"${project.name}" successfully added to your liked projects list.`,
+    });
+
+    localStorage.setItem(
+      "likedProjects",
+      JSON.stringify([...likedProjects, project.id])
+    );
+
+    sendLikedProjectsToStatistics(project.id);
+  };
+
+  useEffect(() => {
+    console.log(localStorage.getItem("likedProjects"));
+    console.log(likedProjects);
+  }, [likedProjects]);
 
   const renderProjects = (category) => {
     return projects.map((value, valueIndex) => (
@@ -96,13 +153,9 @@ export default function Projects() {
                 View Project
               </Link>
               <button
-                className="w-1/3 flex justify-center items-center text-3xl hover:text-rose-500 border-4 border-t-0 border-l-0 border-rose-900 bg-rose-950 rounded-br-3xl"
-                onClick={() =>
-                  setShowBar({
-                    clicked: true,
-                    message: `"${value.name}" successfully added to your liked projects list.`,
-                  })
-                }
+                className="w-1/3 flex justify-center items-center text-3xl hover:text-rose-500 border-4 border-t-0 border-l-0 border-rose-900 bg-rose-950 rounded-br-3xl disabled:text-rose-600"
+                onClick={() => handleLikeProject(value)}
+                disabled={likedProjects.includes(value.id)}
               >
                 <MdFavorite />
               </button>

@@ -9,9 +9,11 @@ import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, getDocs } from "firebase/firestore";
 import supabase from "../../database/supabase";
+import Statistics from "./components/Statistics/Statistics";
 
 export default function AdminPage() {
   const [selectedOption, setSelectedOption] = useState(null);
+
   const [user, setUser] = useState(null);
 
   const [categories, setCategories] = useState([]);
@@ -84,6 +86,9 @@ export default function AdminPage() {
         name: "Categories",
       },
       {
+        name: "Statistics",
+      },
+      {
         name: "Settings",
       },
     ],
@@ -120,12 +125,12 @@ export default function AdminPage() {
       {user && (
         <div className="h-[95vh] w-screen md:w-3/4 mx-auto my-0 text-white font-semibold pt-[6rem] md:pt-28 flex align-center justify-center">
           <div className="flex flex-col md:flex-row md:min-h-[40rem] w-full">
-            <div className="bg-gradient-to-tl from-[#8c0327] to-[#8c0327]/50 w-screen h-full md:w-[21rem] p-5 pt-0 overflow-hidden">
+            <div className="bg-gradient-to-tl from-[#8c0327] to-[#8c0327]/50 w-screen min-h-44 md:w-[21rem] p-5 pt-0 overflow-hidden">
               <div className="flex justify-center items-center w-full gap-3 border-b-2 border-b-white p-5">
                 <h1 className="text-2xl">Admin Panel</h1>
               </div>
               <div className="flex flex-row md:flex-col pt-5 justify-center md:justify-start w-full">
-                <div className="flex flex-row md:flex-col justify-center md:justify-start gap-3 md:gap-0">
+                <div className="flex flex-row md:flex-col justify-center md:justify-start md:gap-0">
                   {options.map((option, index) => (
                     <div
                       key={index}
@@ -150,7 +155,7 @@ export default function AdminPage() {
                 </div>
               </div>
             </div>
-            <div className="bg-[#2d2d2d] h-full w-full p-5 pt-2 relative">
+            <div className="bg-[#2d2d2d] h-full w-full md:p-5 pt-2 relative">
               <div className="h-full overflow-auto">
                 {loading && (
                   <div className="absolute top-0 right-0 bg-black/50 w-full h-full flex justify-center items-center z-[1000000] flex-col gap-5">
@@ -176,16 +181,16 @@ export default function AdminPage() {
                     loading={loading}
                     setLoading={setLoading}
                   />
-                ) : (
-                  selectedOption?.name === "Settings" && (
-                    <Settings
-                      setSiteSettings={setSiteSettings}
-                      siteSettings={SiteSettings}
-                      loading={loading}
-                      setLoading={setLoading}
-                    />
-                  )
-                )}
+                ) : selectedOption?.name === "Settings" ? (
+                  <Settings
+                    setSiteSettings={setSiteSettings}
+                    siteSettings={SiteSettings}
+                    loading={loading}
+                    setLoading={setLoading}
+                  />
+                ) : selectedOption?.name === "Statistics" ? (
+                  <Statistics projects={projects} setLoading={setLoading} />
+                ) : null}
               </div>
             </div>
           </div>
