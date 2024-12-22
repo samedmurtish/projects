@@ -17,21 +17,29 @@ export default function Projects() {
   const [categories, setCategories] = useState([]);
   const categoriesRef = collection(database, "categories");
 
+  const [loading, setLoading] = useState(false);
+
   const getProjects = async () => {
+    setLoading(true);
     try {
       const data = await getDocs(projectsRef);
       setProjects(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const getCategories = async () => {
+    setLoading(true);
     try {
       const data = await getDocs(categoriesRef);
       setCategories(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -55,7 +63,7 @@ export default function Projects() {
         {value.categoryId == category && (
           <div>
             <Link to={`/project/${value.id}`} state={{ project: value }}>
-              <div className="w-[320px] h-[400px] bg-[#1b1b1b] flex items-center flex-col p-5 pb-0 rounded-t-3xl justify-center">
+              <div className="w-[18.5rem] h-[400px] bg-[#1b1b1b] flex items-center flex-col p-5 pb-0 rounded-t-3xl justify-center">
                 <img
                   src={value.image}
                   alt={value.name}
@@ -119,6 +127,15 @@ export default function Projects() {
 
   const renderCategories = () => {
     sortCategories();
+    if (sortedCategories.length == 0) {
+      return (
+        <div className="flex flex-col w-full mb-24 justify-center items-center h-full pt-24">
+          <p className="text-5xl text-white font-thin text-center">
+            No projects found.
+          </p>
+        </div>
+      );
+    }
 
     return sortedCategories.map((value, valueIndex) => (
       <div key={valueIndex} className="flex flex-col w-full mb-24">
@@ -141,7 +158,7 @@ export default function Projects() {
   return (
     <div
       className={`flex justify-center items-start md:items-center flex-col ${
-        projects.length == 0 ? "h-screen" : ""
+        projects.length == 0 ? "h-screen" : "h-full"
       }`}
     >
       <SnackbarShow get={showBar} set={setShowBar} />
@@ -154,9 +171,16 @@ export default function Projects() {
       <div className="flex w-full h-full pt-24 text-white  font-semibold">
         <div className="mx-auto my-0 w-3/4 h-max">
           <p className="text-7xl md:text-8xl py-10 font-extrabold">Projects</p>
-          <div className="flex w-full h-full gap-5 justify-start items-center flex-wrap">
-            {renderCategories()}
-          </div>
+          {loading ? (
+            <div className="absolute top-0 right-0 bg-black/50 w-full h-full flex justify-center items-center z-[1000000] flex-col gap-5">
+              <div className="animate-spin rounded-full h-32 w-32 border-b-4 border-white"></div>
+              Loading projects and categories...
+            </div>
+          ) : (
+            <div className="flex w-full h-full gap-5 justify-start items-center flex-wrap">
+              {renderCategories()}
+            </div>
+          )}
         </div>
       </div>
       <div className="self-center justify-self-center bg-neutral-700 w-1/2 h-[2px] mt-16" />
