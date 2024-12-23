@@ -55,6 +55,7 @@ export default function NavigationBar({ siteSettings, from }) {
           buttonsActiveColor: "#920127",
           logoBackgroundColor: "#ab012e",
           logoTextColor: "#ffffff",
+          logoText: "HARUN SPAHO",
         });
         console.log("Document initialized with default colors");
       }
@@ -154,7 +155,7 @@ export default function NavigationBar({ siteSettings, from }) {
             }}
           >
             <span className="text-3xl font-extrabold text-center">
-              HARUN SPAHO
+              {settings.logoText}
             </span>
           </Link>
           <div className="flex gap-5">

@@ -42,62 +42,71 @@ export default function Settings({
   const siteSettingsRef = doc(collection(database, "siteSettings"), "settings");
 
   const handleSave = async () => {
-    const docSnap = await getDoc(siteSettingsRef);
-    const defaultValues = {
-      borderColor: "#ab012e",
-      backgroundColor: "#ab012e",
-      backgroundOpacity: "33",
-      buttonsTextColor: "#ffffff",
-      buttonsColor: "#ab012e",
-      buttonsHoverColor: "#a0002b",
-      buttonsActiveColor: "#920127",
-      logoBackgroundColor: "#ab012e",
-      logoTextColor: "#ffffff",
-      aboutMeTitleColor: "#ab012e",
-      aboutMeContentColor: "#ab012e",
-      aboutMeContentTextColor: "#ffffff",
-      aboutMeTitleTextColor: "#ffffff",
-      aboutMeContentOpacity: "55",
-      aboutMeImage: null,
-      aboutMeImageName: null,
-    };
-    const siteSettingsToSave = {
-      borderColor: siteSettings.borderColor ?? defaultValues.borderColor,
-      backgroundColor:
-        siteSettings.backgroundColor ?? defaultValues.backgroundColor,
-      backgroundOpacity:
-        siteSettings.backgroundOpacity ?? defaultValues.backgroundOpacity,
-      buttonsTextColor:
-        siteSettings.buttonsTextColor ?? defaultValues.buttonsTextColor,
-      buttonsColor: siteSettings.buttonsColor ?? defaultValues.buttonsColor,
-      buttonsHoverColor:
-        siteSettings.buttonsHoverColor ?? defaultValues.buttonsHoverColor,
-      buttonsActiveColor:
-        siteSettings.buttonsActiveColor ?? defaultValues.buttonsActiveColor,
-      logoBackgroundColor:
-        siteSettings.logoBackgroundColor ?? defaultValues.logoBackgroundColor,
-      logoTextColor: siteSettings.logoTextColor ?? defaultValues.logoTextColor,
-      aboutMeTitleColor:
-        siteSettings.aboutMeTitleColor ?? defaultValues.aboutMeTitleColor,
-      aboutMeContentColor:
-        siteSettings.aboutMeContentColor ?? defaultValues.aboutMeContentColor,
-      aboutMeTitleTextColor:
-        siteSettings.aboutMeTitleTextColor ??
-        defaultValues.aboutMeTitleTextColor,
-      aboutMeContentTextColor:
-        siteSettings.aboutMeContentTextColor ??
-        defaultValues.aboutMeContentTextColor,
-      aboutMeContentOpacity:
-        siteSettings.aboutMeContentOpacity ??
-        defaultValues.aboutMeContentOpacity,
-      aboutMeImage: siteSettings.aboutMeImage ?? defaultValues.aboutMeImage,
-      aboutMeImageName:
-        siteSettings.aboutMeImageName ?? defaultValues.aboutMeImageName,
-    };
-    if (docSnap.exists()) {
-      await updateDoc(siteSettingsRef, siteSettingsToSave);
-    } else {
-      await setDoc(siteSettingsRef, siteSettingsToSave);
+    setLoading(true);
+    try {
+      const docSnap = await getDoc(siteSettingsRef);
+      const defaultValues = {
+        borderColor: "#ab012e",
+        backgroundColor: "#ab012e",
+        backgroundOpacity: "33",
+        buttonsTextColor: "#ffffff",
+        buttonsColor: "#ab012e",
+        buttonsHoverColor: "#a0002b",
+        buttonsActiveColor: "#920127",
+        logoBackgroundColor: "#ab012e",
+        logoTextColor: "#ffffff",
+        aboutMeTitleColor: "#ab012e",
+        aboutMeContentColor: "#ab012e",
+        aboutMeContentTextColor: "#ffffff",
+        aboutMeTitleTextColor: "#ffffff",
+        aboutMeContentOpacity: "55",
+        aboutMeImage: null,
+        aboutMeImageName: null,
+      };
+      const siteSettingsToSave = {
+        borderColor: siteSettings.borderColor ?? defaultValues.borderColor,
+        backgroundColor:
+          siteSettings.backgroundColor ?? defaultValues.backgroundColor,
+        backgroundOpacity:
+          siteSettings.backgroundOpacity ?? defaultValues.backgroundOpacity,
+        buttonsTextColor:
+          siteSettings.buttonsTextColor ?? defaultValues.buttonsTextColor,
+        buttonsColor: siteSettings.buttonsColor ?? defaultValues.buttonsColor,
+        buttonsHoverColor:
+          siteSettings.buttonsHoverColor ?? defaultValues.buttonsHoverColor,
+        buttonsActiveColor:
+          siteSettings.buttonsActiveColor ?? defaultValues.buttonsActiveColor,
+        logoBackgroundColor:
+          siteSettings.logoBackgroundColor ?? defaultValues.logoBackgroundColor,
+        logoTextColor:
+          siteSettings.logoTextColor ?? defaultValues.logoTextColor,
+        aboutMeTitleColor:
+          siteSettings.aboutMeTitleColor ?? defaultValues.aboutMeTitleColor,
+        aboutMeContentColor:
+          siteSettings.aboutMeContentColor ?? defaultValues.aboutMeContentColor,
+        aboutMeTitleTextColor:
+          siteSettings.aboutMeTitleTextColor ??
+          defaultValues.aboutMeTitleTextColor,
+        aboutMeContentTextColor:
+          siteSettings.aboutMeContentTextColor ??
+          defaultValues.aboutMeContentTextColor,
+        aboutMeContentOpacity:
+          siteSettings.aboutMeContentOpacity ??
+          defaultValues.aboutMeContentOpacity,
+        aboutMeImage: siteSettings.aboutMeImage ?? defaultValues.aboutMeImage,
+        aboutMeImageName:
+          siteSettings.aboutMeImageName ?? defaultValues.aboutMeImageName,
+        logoText: siteSettings.logoText ?? "HARUN SPAHO",
+      };
+      if (docSnap.exists()) {
+        await updateDoc(siteSettingsRef, siteSettingsToSave);
+      } else {
+        await setDoc(siteSettingsRef, siteSettingsToSave);
+      }
+    } catch (error) {
+      console.error("Error getting document: ", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -291,71 +300,111 @@ export default function Settings({
                   Logo
                 </h1>
                 <div className="flex justify-around flex-wrap">
-                  <div className=" bg-[#202020] w-max h-max rounded-xl m-3 flex justify-center items-center flex-col gap-3 pb-2">
-                    <h1 className="w-full bg-[#ab012f99] px-5 py-2 rounded-lg">
-                      Background Color
-                    </h1>
-                    <input
-                      type="color"
-                      className="p-1 h-10 w-14 blockcursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700"
-                      title="Choose your color"
-                      value={siteSettings.logoBackgroundColor}
-                      onChange={(e) => {
-                        setSiteSettings((prev) => {
-                          return {
-                            ...prev,
-                            logoBackgroundColor: e.target.value,
-                          };
-                        });
-                      }}
-                    />
-                    <button
-                      className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 p-2 px-5 transition rounded-lg py-2 w-[85%]"
-                      type="button"
-                      onClick={() =>
-                        setSiteSettings((prev) => {
-                          return {
-                            ...prev,
-                            logoBackgroundColor: "#AB012F",
-                          };
-                        })
-                      }
-                    >
-                      Default
-                    </button>
-                  </div>
-                  <div className=" bg-[#202020] w-max h-max rounded-xl m-3 flex justify-center items-center flex-col gap-3 pb-2">
-                    <h1 className="w-full bg-[#ab012f99] px-5 py-2 rounded-lg">
-                      Text Color
-                    </h1>
-                    <input
-                      type="color"
-                      className="p-1 h-10 w-14 blockcursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700"
-                      title="Choose your color"
-                      value={siteSettings.logoTextColor}
-                      onChange={(e) => {
-                        setSiteSettings((prev) => {
-                          return {
-                            ...prev,
-                            logoTextColor: e.target.value,
-                          };
-                        });
-                      }}
-                    />
-                    <button
-                      className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 p-2 px-5 transition rounded-lg py-2 w-[85%]"
-                      type="button"
-                      onClick={() =>
-                        setSiteSettings((prev) => {
-                          return {
-                            ...prev,
-                            logoTextColor: "#FFFFFF",
-                          };
-                        })
-                      }
-                    >
-                      Default
-                    </button>
+                  <div className="w-full h-max rounded-xl m-3 flex justify-center items-center gap-3 pb-2 flex-wrap">
+                    <div className="bg-[#202020] w-full max-w-52 h-full justify-between rounded-xl flex items-center flex-col gap-3 pb-2">
+                      <h1 className="w-full bg-[#ab012f99] px-5 py-2 rounded-t-lg">
+                        Logo Text
+                      </h1>
+                      <div className="px-5">
+                        <input
+                          type="text"
+                          className="p-1 h-10 w-full px-3 blockcursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none bg-white text-slate-700 flex justify-center items-center text-center"
+                          title="Choose your color"
+                          value={siteSettings.logoText}
+                          placeholder="Logo Text"
+                          onChange={(e) => {
+                            setSiteSettings((prev) => {
+                              return {
+                                ...prev,
+                                logoText: e.target.value,
+                              };
+                            });
+                          }}
+                        />
+                      </div>
+                      <button
+                        className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 p-2 px-5 transition rounded-lg py-2 w-[85%]"
+                        type="button"
+                        onClick={() =>
+                          setSiteSettings((prev) => {
+                            return {
+                              ...prev,
+                              logoText: "HARUN SPAHO",
+                            };
+                          })
+                        }
+                      >
+                        Default
+                      </button>
+                    </div>
+                    <div className="bg-[#202020] w-full max-w-52 h-full justify-between rounded-xl flex items-center flex-col gap-3 pb-2">
+                      <h1 className="w-full bg-[#ab012f99] px-5 py-2 rounded-lg text-nowrap">
+                        Background Color
+                      </h1>
+                      <input
+                        type="color"
+                        className="p-1 h-10 w-14 blockcursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700"
+                        title="Choose your color"
+                        value={siteSettings.logoBackgroundColor}
+                        onChange={(e) => {
+                          setSiteSettings((prev) => {
+                            return {
+                              ...prev,
+                              logoBackgroundColor: e.target.value,
+                            };
+                          });
+                        }}
+                      />
+                      <button
+                        className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 p-2 px-5 transition rounded-lg py-2 w-[85%]"
+                        type="button"
+                        onClick={() =>
+                          setSiteSettings((prev) => {
+                            return {
+                              ...prev,
+                              logoBackgroundColor: "#AB012F",
+                            };
+                          })
+                        }
+                      >
+                        Default
+                      </button>
+                    </div>
+                    <div className="bg-[#202020] w-full max-w-52 h-max justify-between rounded-xl flex items-center flex-col gap-3">
+                      <div className=" bg-[#202020] w-full h-full rounded-xl flex justify-center items-center flex-col gap-3 pb-2">
+                        <h1 className="w-full bg-[#ab012f99] px-5 py-2 rounded-lg">
+                          Text Color
+                        </h1>
+                        <input
+                          type="color"
+                          className="p-1 h-10 w-14 blockcursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700"
+                          title="Choose your color"
+                          value={siteSettings.logoTextColor}
+                          onChange={(e) => {
+                            setSiteSettings((prev) => {
+                              return {
+                                ...prev,
+                                logoTextColor: e.target.value,
+                              };
+                            });
+                          }}
+                        />
+                        <button
+                          className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 p-2 px-5 transition rounded-lg py-2 w-[85%]"
+                          type="button"
+                          onClick={() =>
+                            setSiteSettings((prev) => {
+                              return {
+                                ...prev,
+                                logoTextColor: "#FFFFFF",
+                              };
+                            })
+                          }
+                        >
+                          Default
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

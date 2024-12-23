@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import NavigationBar from "../NavigationBar/NavigationBar";
 import NavigationBarMobile from "../NavigationBar/NavigationBarMobile";
 
-import { SiAdobeillustrator } from "react-icons/si";
-import { SiAdobephotoshop } from "react-icons/si";
-import { SiAdobexd } from "react-icons/si";
-import { SiFigma } from "react-icons/si";
-import { SiAdobeindesign } from "react-icons/si";
-import { collection, doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  SiAdobeillustrator,
+  SiAdobephotoshop,
+  SiAdobexd,
+  SiFigma,
+  SiAdobeindesign,
+} from "react-icons/si";
+import { collection, doc, getDoc } from "firebase/firestore";
 import { database } from "../../database/firebase";
 
 export default function Content() {
@@ -28,8 +30,12 @@ export default function Content() {
     aboutMeContentOpacity: "55",
   });
 
+  const [loading, setLoading] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   const siteSettingsRef = collection(database, "siteSettings");
   const getSiteSettings = async () => {
+    setLoading(true);
     try {
       const docRef = doc(siteSettingsRef, "settings");
       const docSnap = await getDoc(docRef);
@@ -65,12 +71,7 @@ export default function Content() {
       progress: 70,
       color: "#F33B85",
     },
-    {
-      name: "XD",
-      icon: <SiAdobexd />,
-      progress: 70,
-      color: "#F728BA",
-    },
+    { name: "XD", icon: <SiAdobexd />, progress: 70, color: "#F728BA" },
     {
       name: "Figma",
       icon: <SiFigma />,
@@ -83,7 +84,7 @@ export default function Content() {
     return skills.map((value, valueIndex) => (
       <div key={valueIndex} className="md:w-4/12 w-1/3">
         <div
-          className="flex flex-col justify-center items-center w-full gap-5 "
+          className="flex flex-col justify-center items-center w-full gap-5"
           style={{ color: value.color }}
         >
           <span className="text-7xl">{value.icon}</span>
@@ -101,10 +102,16 @@ export default function Content() {
     ));
   };
 
-  document.title = "Harun Spaho`s Portfolio";
+  document.title = "Harun Spaho's Portfolio";
   return (
     <div className="select-none w-screen">
-      <div className="hidden md:block ">
+      {loading && !imageLoaded && (
+        <div className="absolute top-0 right-0 bg-[#ab012e] w-full h-full flex justify-center items-center gap-5 z-[10000000000] flex-col text-white text-4xl font-extrabold">
+          <div className="border-white/50 h-20 w-20 animate-spin rounded-full border-8 border-t-white" />
+          Loading Page...
+        </div>
+      )}
+      <div className="hidden md:block">
         <NavigationBar />
       </div>
       <div className="block md:hidden">
@@ -116,6 +123,9 @@ export default function Content() {
             <div className="flex flex-col md:flex-row ml-0 mt-20 gap-5 justify-center items-center md:items-start">
               <img
                 src={siteSettings.aboutMeImage + `?t=${Date.now()}`}
+                alt="Harun Spaho"
+                loading="lazy"
+                onLoad={() => setImageLoaded(true)}
                 className="w-4/5 md:w-[35%] h-max rounded-3xl shadow-xl"
               />
               <div className="flex flex-col gap-3">
@@ -140,7 +150,7 @@ export default function Content() {
                   </p>
                   <div className="w-full h-1 bg-[#212121]"></div>
                   <p
-                    className="font-thin text-xl md:text-[1.5vw] h-max p-4 md:p-5 rounded-xl text-justify "
+                    className="font-thin text-xl md:text-[1.5vw] h-max p-4 md:p-5 rounded-xl text-justify"
                     style={{
                       backgroundColor: `rgba(${parseInt(
                         siteSettings.aboutMeContentColor.slice(1, 3),

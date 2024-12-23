@@ -7,40 +7,31 @@ import SnackbarShow from "../../MuiElements/SnackbarShow";
 import Footer from "../Footer/Footer";
 import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { database } from "../../database/firebase";
-
+import { data } from "autoprefixer";
 export default function Projects() {
   document.title = "Harun Spaho`s Portfolio";
-
   const [projects, setProjects] = useState([]);
   const projectsRef = collection(database, "projects");
-
   const [categories, setCategories] = useState([]);
   const categoriesRef = collection(database, "categories");
-
   const [loading, setLoading] = useState(false);
-
+  const [imageLoading, setImageLoading] = useState({});
   const [likedProjects, setLikedProjects] = useState([]);
-
   const statisticsRef = doc(collection(database, "statistics"), "statistics");
+  const [siteSettings, setSiteSettings] = useState({});
 
   const sendLikedProjectsToStatistics = async (projectId) => {
     try {
       const docSnap = await getDoc(statisticsRef);
       let existingLikedProjects = [];
-
       if (docSnap.exists()) {
         const data = docSnap.data();
         existingLikedProjects = Array.isArray(data.likedProjects)
           ? data.likedProjects
           : [];
       }
-
       const mergedLikedProjects = [...existingLikedProjects, projectId];
-
-      //const uniqueLikedProjects = [...new Set(mergedLikedProjects)];
-
       const itemCount = mergedLikedProjects.length;
-
       await setDoc(
         statisticsRef,
         { likedProjects: mergedLikedProjects, itemCount },
@@ -50,7 +41,6 @@ export default function Projects() {
       console.error(error);
     }
   };
-
   const getProjects = async () => {
     setLoading(true);
     try {
@@ -58,11 +48,8 @@ export default function Projects() {
       setProjects(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     } catch (error) {
       console.error(error);
-    } finally {
-      setLoading(false);
     }
   };
-
   const getCategories = async () => {
     setLoading(true);
     try {
@@ -70,6 +57,22 @@ export default function Projects() {
       setCategories(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     } catch (error) {
       console.error(error);
+    } finally {
+      getsiteSettings();
+    }
+  };
+
+  const getsiteSettings = async () => {
+    setLoading(true);
+    try {
+      const siteSettingsRef = doc(collection(database, "siteSettings"));
+      const docSnap = await getDoc(siteSettingsRef);
+      if (docSnap.exists()) {
+        setSiteSettings(docSnap.data());
+      }
+      console.log("Document initialized with default colors");
+    } catch (error) {
+      console.error("Error getting document: ", error);
     } finally {
       setLoading(false);
     }
@@ -79,38 +82,34 @@ export default function Projects() {
     window.scrollTo(0, 0);
     getProjects();
     getCategories();
-
     const storedLikedProjects = localStorage.getItem("likedProjects");
     if (storedLikedProjects) {
       setLikedProjects(JSON.parse(storedLikedProjects));
     }
   }, []);
-
   const [showBar, setShowBar] = useState({
     clicked: false,
     message: "Product added to cart successfully!",
   });
-
   const handleLikeProject = (project) => {
     setLikedProjects([...likedProjects, project.id]);
     setShowBar({
       clicked: true,
       message: `"${project.name}" successfully added to your liked projects list.`,
     });
-
     localStorage.setItem(
       "likedProjects",
       JSON.stringify([...likedProjects, project.id])
     );
-
     sendLikedProjectsToStatistics(project.id);
   };
-
   useEffect(() => {
     console.log(localStorage.getItem("likedProjects"));
     console.log(likedProjects);
   }, [likedProjects]);
-
+  const handleImageLoad = (projectId) => {
+    setImageLoading((prevState) => ({ ...prevState, [projectId]: false }));
+  };
   const renderProjects = (category) => {
     return projects.map((value, valueIndex) => (
       <span
@@ -121,10 +120,16 @@ export default function Projects() {
           <div>
             <Link to={`/project/${value.id}`} state={{ project: value }}>
               <div className="w-[18.5rem] h-[400px] bg-[#1b1b1b] flex items-center flex-col p-5 pb-0 rounded-t-3xl justify-center">
+                {imageLoading[value.id] !== false && (
+                  <div className="w-full h-full bg-neutral-700 animate-pulse rounded-xl"></div>
+                )}
                 <img
                   src={value.image}
                   alt={value.name}
-                  className="justify-self-center self-center rounded-xl w-full h-max overflow-hidden"
+                  className={`justify-self-center self-center rounded-xl w-full h-max overflow-hidden ${
+                    imageLoading[value.id] === false ? "" : "hidden"
+                  }`}
+                  onLoad={() => handleImageLoad(value.id)}
                 />
               </div>
             </Link>
@@ -165,6 +170,7 @@ export default function Projects() {
       </span>
     ));
   };
+
   const [sortedCategories, setSortedCategories] = useState([]);
   const sortCategories = () => {
     projects.map((value) => {
@@ -177,7 +183,6 @@ export default function Projects() {
         setSortedCategories([...sortedCategories, value.categoryId]);
     });
   };
-
   const renderCategories = () => {
     sortCategories();
     if (sortedCategories.length == 0) {
@@ -189,7 +194,6 @@ export default function Projects() {
         </div>
       );
     }
-
     return sortedCategories.map((value, valueIndex) => (
       <div key={valueIndex} className="flex flex-col w-full mb-24">
         <p className="text-5xl text-white font-thin">
@@ -214,26 +218,25 @@ export default function Projects() {
         projects.length == 0 ? "h-screen" : "h-full"
       }`}
     >
+      {loading && (
+        <div className="absolute top-0 right-0 bg-[#ab012e] w-full h-full flex justify-center items-center gap-5 z-[10000000000] flex-col text-white text-4xl font-extrabold">
+          <div className="border-white/50 h-20 w-20 animate-spin rounded-full border-8 border-t-white" />
+          Loading Projects...
+        </div>
+      )}
       <SnackbarShow get={showBar} set={setShowBar} />
       <div className="hidden sm:block md:self-start">
-        <NavigationBar />
+        <NavigationBar siteSettings={siteSettings} from={"projects"} />
       </div>
       <div className="block sm:hidden">
-        <NavigationBarMobile />
+        <NavigationBarMobile siteSettings={siteSettings} from={"projects"} />
       </div>
       <div className="flex w-full h-full pt-24 text-white  font-semibold">
         <div className="mx-auto my-0 w-3/4 h-max">
           <p className="text-7xl md:text-8xl py-10 font-extrabold">Projects</p>
-          {loading ? (
-            <div className="absolute top-0 right-0 bg-black/50 w-full h-full flex justify-center items-center z-[1000000] flex-col gap-5">
-              <div className="animate-spin rounded-full h-32 w-32 border-b-4 border-white"></div>
-              Loading projects and categories...
-            </div>
-          ) : (
-            <div className="flex w-full h-full gap-5 justify-start items-center flex-wrap">
-              {renderCategories()}
-            </div>
-          )}
+          <div className="flex w-full h-full gap-5 justify-start items-center flex-wrap">
+            {renderCategories()}
+          </div>
         </div>
       </div>
       <div className="self-center justify-self-center bg-neutral-700 w-1/2 h-[2px] mt-16" />
