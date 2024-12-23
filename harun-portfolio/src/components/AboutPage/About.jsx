@@ -30,7 +30,7 @@ export default function Content() {
     aboutMeContentOpacity: "55",
   });
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [imageLoaded, setImageLoaded] = useState(false);
 
   const siteSettingsRef = collection(database, "siteSettings");

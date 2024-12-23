@@ -14,7 +14,7 @@ export default function Projects() {
   const projectsRef = collection(database, "projects");
   const [categories, setCategories] = useState([]);
   const categoriesRef = collection(database, "categories");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [imageLoading, setImageLoading] = useState({});
   const [likedProjects, setLikedProjects] = useState([]);
   const statisticsRef = doc(collection(database, "statistics"), "statistics");

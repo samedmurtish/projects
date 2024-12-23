@@ -22,7 +22,7 @@ export default function AdminPage() {
   const [projects, setProjects] = useState([]);
   const projectsRef = collection(database, "projects");
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [SiteSettings, setSiteSettings] = useState({
     borderColor: "#ab012e",
@@ -73,7 +73,6 @@ export default function AdminPage() {
   };
   useEffect(() => {
     getProjects();
-
     getCategories();
   }, []);
 
@@ -114,14 +113,19 @@ export default function AdminPage() {
   }, []);
 
   return (
-    <div>
+    <div className="relative">
       <div className="hidden md:block z-[]">
         <NavigationBar siteSettings={SiteSettings} from="admin" />
       </div>
       <div className="block md:hidden">
         <NavigationBarMobile />
       </div>
-
+      {loading && (
+        <div className="absolute top-0 right-0 bg-[#ab012e] w-screen flex justify-center items-center gap-5 z-[10000000000] flex-col text-white text-4xl font-extrabold h-screen">
+          <div className="border-white/50 h-20 w-20 animate-spin rounded-full border-8 border-t-white" />
+          Loading Page...
+        </div>
+      )}
       {user && (
         <div className="h-[95vh] w-screen md:w-3/4 mx-auto my-0 text-white font-semibold pt-[6rem] md:pt-28 flex align-center justify-center">
           <div className="flex flex-col md:flex-row md:min-h-[40rem] w-full">

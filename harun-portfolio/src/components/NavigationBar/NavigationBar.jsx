@@ -172,13 +172,107 @@ export default function NavigationBar({ siteSettings, from }) {
               <div className="flex gap-5">
                 <Link
                   to="/admin"
-                  className="bg-[rgba(176,1,46,0.5)] hover:bg-[rgba(176,1,46,0.3)] active:bg-[rgba(176,1,46,0.1)] p-2 px-5 transition rounded-lg flex justify-center items-center text-center"
+                  className="hover:bg-[rgba(176,1,46,0.3)] active:bg-[rgba(176,1,46,0.1)] p-2 px-5 transition rounded-lg flex justify-center items-center text-center"
+                  onMouseEnter={() =>
+                    setHoverState((prev) => ({
+                      ...prev,
+                      [hoverState.length]: true,
+                    }))
+                  }
+                  onMouseLeave={() =>
+                    setHoverState((prev) => ({
+                      ...prev,
+                      [hoverState.length]: false,
+                    }))
+                  }
+                  onMouseDown={() =>
+                    setActiveState((prev) => ({
+                      ...prev,
+                      [hoverState.length]: true,
+                    }))
+                  }
+                  onMouseUp={() =>
+                    setActiveState((prev) => ({
+                      ...prev,
+                      [hoverState.length]: false,
+                    }))
+                  }
+                  style={{
+                    color: settings.buttonsTextColor,
+                    backgroundColor: hoverState[hoverState.length]
+                      ? `rgba(${parseInt(
+                          settings.buttonsColor.slice(1, 3),
+                          16
+                        )}, ${parseInt(
+                          settings.buttonsColor.slice(3, 5),
+                          16
+                        )}, ${parseInt(
+                          settings.buttonsColor.slice(5, 7),
+                          16
+                        )}, 0.4)`
+                      : activeState[hoverState.length]
+                      ? `rgba(${parseInt(
+                          settings.buttonsColor.slice(1, 3),
+                          16
+                        )}, ${parseInt(
+                          settings.buttonsColor.slice(3, 5),
+                          16
+                        )}, ${parseInt(
+                          settings.buttonsColor.slice(5, 7),
+                          16
+                        )}, 0.3)`
+                      : `rgba(${parseInt(
+                          settings.buttonsColor.slice(1, 3),
+                          16
+                        )}, ${parseInt(
+                          settings.buttonsColor.slice(3, 5),
+                          16
+                        )}, ${parseInt(
+                          settings.buttonsColor.slice(5, 7),
+                          16
+                        )}, 0.5)`,
+                  }}
                 >
                   Admin Panel
                 </Link>
                 <button
                   onClick={() => signOut(auth)}
-                  className="bg-[rgba(176,1,46,0.5)] hover:bg-[rgba(176,1,46,0.3)] active:bg-[rgba(176,1,46,0.1)] p-2 px-5 transition rounded-lg"
+                  className="hover:bg-[rgba(176,1,46,0.3)] active:bg-[rgba(176,1,46,0.1)] p-2 px-5 transition rounded-lg"
+                  style={{
+                    color: settings.buttonsTextColor,
+                    backgroundColor: hoverState[hoverState.length + 1]
+                      ? `rgba(${parseInt(
+                          settings.buttonsColor.slice(1, 3),
+                          16
+                        )}, ${parseInt(
+                          settings.buttonsColor.slice(3, 5),
+                          16
+                        )}, ${parseInt(
+                          settings.buttonsColor.slice(5, 7),
+                          16
+                        )}, 0.4)`
+                      : activeState[hoverState.length + 1]
+                      ? `rgba(${parseInt(
+                          settings.buttonsColor.slice(1, 3),
+                          16
+                        )}, ${parseInt(
+                          settings.buttonsColor.slice(3, 5),
+                          16
+                        )}, ${parseInt(
+                          settings.buttonsColor.slice(5, 7),
+                          16
+                        )}, 0.3)`
+                      : `rgba(${parseInt(
+                          settings.buttonsColor.slice(1, 3),
+                          16
+                        )}, ${parseInt(
+                          settings.buttonsColor.slice(3, 5),
+                          16
+                        )}, ${parseInt(
+                          settings.buttonsColor.slice(5, 7),
+                          16
+                        )}, 0.5)`,
+                  }}
                 >
                   Log Out
                 </button>
