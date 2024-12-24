@@ -57,7 +57,6 @@ export default function NavigationBar({ siteSettings, from }) {
           logoTextColor: "#ffffff",
           logoText: "HARUN SPAHO",
         });
-        console.log("Document initialized with default colors");
       }
     } catch (error) {
       console.error("Error getting document: ", error);

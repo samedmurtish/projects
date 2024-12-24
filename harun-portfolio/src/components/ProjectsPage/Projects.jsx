@@ -7,7 +7,7 @@ import SnackbarShow from "../../MuiElements/SnackbarShow";
 import Footer from "../Footer/Footer";
 import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { database } from "../../database/firebase";
-import { data } from "autoprefixer";
+
 export default function Projects() {
   document.title = "Harun Spaho`s Portfolio";
   const [projects, setProjects] = useState([]);
@@ -54,15 +54,25 @@ export default function Projects() {
     setLoading(true);
     try {
       const data = await getDocs(categoriesRef);
-      setCategories(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+
+      const fetchedCategories = data.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+        order: doc.data().order, // Make sure `order` is being fetched
+      }));
+
+      // Sort categories by the `order` field
+      fetchedCategories.sort((a, b) => a.order - b.order);
+
+      setCategories(fetchedCategories);
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching categories:", error);
     } finally {
-      getsiteSettings();
+      getSiteSettings();
     }
   };
 
-  const getsiteSettings = async () => {
+  const getSiteSettings = async () => {
     setLoading(true);
     try {
       const siteSettingsRef = doc(collection(database, "siteSettings"));
@@ -70,7 +80,6 @@ export default function Projects() {
       if (docSnap.exists()) {
         setSiteSettings(docSnap.data());
       }
-      console.log("Document initialized with default colors");
     } catch (error) {
       console.error("Error getting document: ", error);
     } finally {
@@ -103,10 +112,6 @@ export default function Projects() {
     );
     sendLikedProjectsToStatistics(project.id);
   };
-  useEffect(() => {
-    console.log(localStorage.getItem("likedProjects"));
-    console.log(likedProjects);
-  }, [likedProjects]);
   const handleImageLoad = (projectId) => {
     setImageLoading((prevState) => ({ ...prevState, [projectId]: false }));
   };
@@ -119,14 +124,14 @@ export default function Projects() {
         {value.categoryId == category && (
           <div>
             <Link to={`/project/${value.id}`} state={{ project: value }}>
-              <div className="w-[18.5rem] h-[400px] bg-[#1b1b1b] flex items-center flex-col p-5 pb-0 rounded-t-3xl justify-center">
+              <div className="w-full md:w-[18.5rem] h-[400px] bg-[#1b1b1b] flex items-center flex-col p-5 pb-0 rounded-t-3xl justify-center">
                 {imageLoading[value.id] !== false && (
                   <div className="w-full h-full bg-neutral-700 animate-pulse rounded-xl"></div>
                 )}
                 <img
                   src={value.image}
                   alt={value.name}
-                  className={`justify-self-center self-center rounded-xl w-full h-max overflow-hidden ${
+                  className={`justify-self-center self-center rounded-xl object-contain w-full h-full overflow-hidden ${
                     imageLoading[value.id] === false ? "" : "hidden"
                   }`}
                   onLoad={() => handleImageLoad(value.id)}
@@ -147,7 +152,7 @@ export default function Projects() {
               <Link
                 to={`/project/${value.id}`}
                 state={{ project: value }}
-                className="w-2/3 bg-rose-600 hover:bg-rose-700 active:bg-rose-800 h-full p-5 transition text-xl flex justify-center items-center"
+                className="w-2/3 bg-rose-600 hover:bg-rose-700 active:bg-rose-800 h-full p-5 transition text-xl flex justify-center items-center rounded-bl-3xl md:rounded-bl-none"
                 onClick={() =>
                   setShowBar({
                     clicked: true,
@@ -173,19 +178,26 @@ export default function Projects() {
 
   const [sortedCategories, setSortedCategories] = useState([]);
   const sortCategories = () => {
-    projects.map((value) => {
-      let matches = false;
-      sortedCategories.forEach((sortedValue) => {
-        if (sortedCategories.length > 0)
-          if (value.categoryId == sortedValue) matches = true;
-      });
-      if (!matches)
-        setSortedCategories([...sortedCategories, value.categoryId]);
-    });
+    // Collect unique category IDs from projects
+    const uniqueCategoryIds = [...new Set(projects.map((p) => p.categoryId))];
+
+    // Sort categories based on their "order" property
+    const sorted = uniqueCategoryIds
+      .map((categoryId) => categories.find((cat) => cat.id === categoryId))
+      .filter(Boolean) // Remove any undefined categories
+      .sort((a, b) => a.order - b.order);
+
+    setSortedCategories(sorted.map((cat) => cat.id));
   };
+
+  useEffect(() => {
+    if (projects.length > 0 && categories.length > 0) {
+      sortCategories();
+    }
+  }, [projects, categories]); // Re-run whenever projects or categories change
+
   const renderCategories = () => {
-    sortCategories();
-    if (sortedCategories.length == 0) {
+    if (sortedCategories.length === 0) {
       return (
         <div className="flex flex-col w-full mb-24 justify-center items-center h-full pt-24">
           <p className="text-5xl text-white font-thin text-center">
@@ -194,22 +206,28 @@ export default function Projects() {
         </div>
       );
     }
-    return sortedCategories.map((value, valueIndex) => (
-      <div key={valueIndex} className="flex flex-col w-full mb-24">
-        <p className="text-5xl text-white font-thin">
-          {categories.find((cat) => cat.id == value).categoryName}
-        </p>
-        <div className="flex">
-          <div className="w-2/3 bg-rose-600 h-1 my-5" />
-          <div className="w-[20%] bg-rose-500 h-1 my-5" />
-          <div className="w-[10%] bg-rose-400 h-1 my-5" />
-          <div className="w-[5%] bg-rose-300 h-1 my-5" />
+
+    return sortedCategories.map((categoryId, valueIndex) => {
+      const category = categories.find((cat) => cat.id === categoryId);
+      if (!category) return null;
+
+      return (
+        <div key={valueIndex} className="flex flex-col w-full mb-24">
+          <p className="text-5xl text-white font-thin w-full">
+            {category.categoryName}
+          </p>
+          <div className="flex">
+            <div className="w-2/3 bg-rose-600 h-1 my-5" />
+            <div className="w-[20%] bg-rose-500 h-1 my-5" />
+            <div className="w-[10%] bg-rose-400 h-1 my-5" />
+            <div className="w-[5%] bg-rose-300 h-1 my-5" />
+          </div>
+          <div className="flex w-full h-full gap-5 justify-center items-center md:justify-start md:items-start flex-wrap">
+            {renderProjects(categoryId)}
+          </div>
         </div>
-        <div className="flex w-full h-full gap-5 justify-start items-start flex-wrap">
-          {renderProjects(value)}
-        </div>
-      </div>
-    ));
+      );
+    });
   };
 
   return (
@@ -233,7 +251,9 @@ export default function Projects() {
       </div>
       <div className="flex w-full h-full pt-24 text-white  font-semibold">
         <div className="mx-auto my-0 w-3/4 h-max">
-          <p className="text-7xl md:text-8xl py-10 font-extrabold">Projects</p>
+          <p className="text-7xl md:text-8xl py-10 font-extrabold text-center md:text-start">
+            Projects
+          </p>
           <div className="flex w-full h-full gap-5 justify-start items-center flex-wrap">
             {renderCategories()}
           </div>

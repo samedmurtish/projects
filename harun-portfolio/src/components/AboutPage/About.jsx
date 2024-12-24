@@ -41,8 +41,6 @@ export default function Content() {
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         setSiteSettings(docSnap.data());
-      } else {
-        console.log("No such document!");
       }
     } catch (error) {
       console.error("Error getting document: ", error);

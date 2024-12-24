@@ -55,7 +55,6 @@ export default function NavigationBarMobile() {
           logoBackgroundColor: "#ab012e",
           logoTextColor: "#ffffff",
         });
-        console.log("Document initialized with default colors");
       }
     } catch (error) {
       console.error("Error getting document: ", error);
@@ -137,24 +136,52 @@ export default function NavigationBarMobile() {
           >
             <div className="font-semibold py-3">
               {renderNav()}
-              {user ? (
-                <button
-                  onClick={() => {
-                    signOut(auth);
-                    window.location.reload();
-                  }}
-                  className="bg-[rgba(176,1,46,0.5)] hover:bg-[rgba(176,1,46,0.3)] active:bg-[rgba(176,1,46,0.1)] p-2 px-5 transition rounded-lg text-center w-full"
-                >
-                  Log Out
-                </button>
-              ) : (
-                <Link
-                  to="/login"
-                  className="bg-[rgba(176,1,46,0.5)] hover:bg-[rgba(176,1,46,0.3)] active:bg-[rgba(176,1,46,0.1)] p-2 px-5 transition rounded-lg text-center w-full flex justify-center items-center"
-                >
-                  Log In
-                </Link>
-              )}
+              <div className="px-5">
+                {user ? (
+                  <button
+                    onClick={() => {
+                      signOut(auth);
+                      window.location.reload();
+                    }}
+                    className="p-2 transition rounded-lg text-center w-full"
+                    style={{
+                      color: settings.buttonsTextColor,
+                      backgroundColor: `rgba(${parseInt(
+                        settings.buttonsColor.slice(1, 3),
+                        16
+                      )}, ${parseInt(
+                        settings.buttonsColor.slice(3, 5),
+                        16
+                      )}, ${parseInt(
+                        settings.buttonsColor.slice(5, 7),
+                        16
+                      )}, 0.5)`,
+                    }}
+                  >
+                    Log Out
+                  </button>
+                ) : (
+                  <Link
+                    to="/login"
+                    className="p-2 px-5 transition rounded-lg text-center w-full flex justify-center items-center"
+                    style={{
+                      color: settings.buttonsTextColor,
+                      backgroundColor: `rgba(${parseInt(
+                        settings.buttonsColor.slice(1, 3),
+                        16
+                      )}, ${parseInt(
+                        settings.buttonsColor.slice(3, 5),
+                        16
+                      )}, ${parseInt(
+                        settings.buttonsColor.slice(5, 7),
+                        16
+                      )}, 0.5)`,
+                    }}
+                  >
+                    Log In
+                  </Link>
+                )}
+              </div>
             </div>
           </div>
         )}

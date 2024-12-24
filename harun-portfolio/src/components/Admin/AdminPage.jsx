@@ -64,13 +64,24 @@ export default function AdminPage() {
     setLoading(true);
     try {
       const data = await getDocs(categoriesRef);
-      setCategories(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+
+      const fetchedCategories = data.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+        order: doc.data().order, // Make sure `order` is being fetched
+      }));
+
+      // Sort categories by the `order` field
+      fetchedCategories.sort((a, b) => a.order - b.order);
+
+      setCategories(fetchedCategories);
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching categories:", error);
     } finally {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     getProjects();
     getCategories();

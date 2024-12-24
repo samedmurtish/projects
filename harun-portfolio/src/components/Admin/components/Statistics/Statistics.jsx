@@ -88,7 +88,6 @@ export default function Statistics({ projects, setLoading }) {
   const [mouseOverID, setMouseOverID] = useState("");
 
   const renderMostLikedProjects = () => {
-    console.log(statistics);
     const remaining = 5 - (statistics.length ? statistics.length : 0);
     const tempArray = [];
     for (let i = 0; i < remaining; i++) {
@@ -223,7 +222,6 @@ export default function Statistics({ projects, setLoading }) {
       querySnapshot.forEach((doc) => {
         deleteDoc(doc.ref);
       });
-      console.log("Statistics reset successfully.");
     } catch (error) {
       console.error("Error resetting statistics:", error);
     } finally {

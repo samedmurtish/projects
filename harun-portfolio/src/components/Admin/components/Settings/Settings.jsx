@@ -125,7 +125,6 @@ export default function Settings({
         aboutMeImage: newImageUrl,
         aboutMeImageName: fileName,
       });
-      console.log("Image uploaded:", newImageUrl);
     } catch (error) {
       console.error("Error uploading image:", error);
     } finally {
@@ -144,7 +143,6 @@ export default function Settings({
           .update(`images/${siteSettings.aboutMeImageName}`, file);
         if (error) throw error;
         setTempImage(URL.createObjectURL(file));
-        console.log("Image updated successfully");
       }
     } catch (error) {
       console.error("Error updating image:", error);

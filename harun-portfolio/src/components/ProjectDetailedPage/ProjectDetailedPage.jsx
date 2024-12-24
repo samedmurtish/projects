@@ -38,9 +38,6 @@ export default function ProjectDetailedPage() {
 
   const location = useLocation();
 
-  useEffect(() => {
-    console.log(project);
-  }, [project]);
   const [screenWidth, setScreenWidth] = useState(screen.width);
 
   useEffect(() => {
@@ -49,85 +46,92 @@ export default function ProjectDetailedPage() {
   }, [screenWidth]);
 
   const renderProductDetails = (isOnMobile) => {
-    return !isOnMobile ? (
-      <div>
-        <div className="mb-32 bg-[#272727] flex-col">
-          <div className="flex flex-row w-full h-max">
+    return (
+      <div className="md:mb-32 flex-col">
+        <div className="flex flex-col md:flex-row w-full h-full mb-20 bg-[#272727]">
+          <div className="flex flex-col md:flex-row w-full h-full">
             <img
               src={project.image}
               className="w-[400px] h-[400px] object-contain"
             />
-            <div className="flex flex-row w-full h-max items-start">
-              <div className="flex flex-col h-full w-full mt-0 mx-10 items-start">
-                <p className="text-[3vw]">{project.name}</p>
-                <p className="text-justify">{project.description}</p>
+            <div className="flex flex-col md:flex-row w-full md:h-max h-full items-start">
+              <div className="flex flex-col h-full w-full mt-0 md:mx-10 p-5 items-start gap-5">
+                <p className="text-[8vw] md:text-[3vw] md:text-start w-full text-center">
+                  {project.name}
+                </p>
+                <p className="text-justify w-full">{project.description}</p>
               </div>
             </div>
           </div>
           <div className="w-full h-1 bg-rose-700"></div>
         </div>
-        {project.details.map((value, valueIndex) => {
-          return (
-            <div className="mb-32 bg-[#272727]">
-              <div
-                className="flex flex-row w-full h-max"
-                style={{
-                  alignItems: value.text == "" ? "center" : "start",
-                }}
-                key={valueIndex}
-              >
-                {valueIndex % 2 != 0 && (
-                  <img
-                    src={value.imageUrl}
-                    className="w-[400px] h-[400px] object-contain"
-                  />
-                )}
-                <div
-                  className="flex flex-col h-full w-full mt-0 mx-10"
-                  style={{
-                    alignItems: valueIndex % 2 == 0 ? "" : "flex-end",
-                  }}
-                >
-                  <p className="text-[3vw]">{project.name}</p>
-                  <p className="text-justify">{value.description}</p>
+        {!isOnMobile ? (
+          <div>
+            {project.details.map((value, valueIndex) => {
+              return (
+                <div className="mb-32 bg-[#272727]">
+                  <div
+                    className="flex flex-row w-full h-max"
+                    style={{
+                      alignItems: value.text == "" ? "center" : "start",
+                    }}
+                    key={valueIndex}
+                  >
+                    {valueIndex % 2 != 0 && (
+                      <img
+                        src={value.imageUrl}
+                        className="w-[400px] h-[400px] object-contain"
+                      />
+                    )}
+                    <div
+                      className="flex flex-col h-full w-full mt-0 mx-10 gap-5"
+                      style={{
+                        alignItems: valueIndex % 2 == 0 ? "" : "flex-end",
+                      }}
+                    >
+                      <p className="text-[3vw]">{project.name}</p>
+                      <p className="text-justify">{value.description}</p>
+                    </div>
+                    {valueIndex % 2 == 0 && (
+                      <img
+                        src={value.imageUrl}
+                        className="w-[400px] h-[400px] object-contain"
+                      />
+                    )}
+                  </div>
+                  <div className="w-full h-1 bg-rose-700"></div>
                 </div>
-                {valueIndex % 2 == 0 && (
-                  <img
-                    src={value.imageUrl}
-                    className="w-[400px] h-[400px] object-contain"
-                  />
-                )}
-              </div>
-              <div className="w-full h-1 bg-rose-700"></div>
-            </div>
-          );
-        })}
-      </div>
-    ) : (
-      project.details.map((value, valueIndex) => (
-        <div
-          className="flex flex-col md:flex-row mb-32 w-full h-max justify-center items-center"
-          key={valueIndex}
-        >
-          {isOnMobile && <img src={value.img} className="w-[400px] h-full" />}
-          <div className="flex flex-col h-full w-full mt-5 md:mt-0 mx-0 md:mx-10 gap-2 md:gap-0">
-            <p className="text-[8vw] self-center  md:self-start md:text-[3vw] text-center">
-              {value.title}
-            </p>
-            <p className="text-justify">{value.text}</p>
+              );
+            })}
           </div>
-        </div>
-      ))
+        ) : (
+          project.details.map((value, valueIndex) => (
+            <div
+              className="flex flex-col md:flex-row mb-32 w-full h-full justify-center items-center bg-[#272727]"
+              key={valueIndex}
+            >
+              <img
+                src={value.imageUrl}
+                className="w-[400px] h-[400px] object-contain"
+              />
+              <div className="flex flex-col md:flex-row w-full md:h-max h-full items-start">
+                <div className="flex flex-col h-full w-full mt-0 md:mx-10 p-5 items-start gap-5">
+                  <p className="text-[8vw] md:text-[3vw] md:text-start w-full text-center">
+                    {project.name}
+                  </p>
+                  <p className="text-justify w-full">{value.description}</p>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
     );
   };
-  /*
-            
-	            
-	*/
   window.scrollTo(0, 0);
   return (
-    <div className={`select-none ${project ? "h-full" : "h-screen"}`}>
-      <div className="hidden md:block ">
+    <div className={`select-none h-full w-full`}>
+      <div className="hidden md:block">
         <NavigationBar />
       </div>
       <div className="block md:hidden">
